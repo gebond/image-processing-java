@@ -1,6 +1,6 @@
 package com.gebond.ip.math.func.transform;
 
-import static com.gebond.ip.math.common.util.ArrayUtil.arrayCopy;
+import static com.gebond.ip.math.commons.util.ArrayUtil.arrayCopy;
 
 /**
  * Created by Gleb on 17.10.2017.

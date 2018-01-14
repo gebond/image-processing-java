@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>ip-parent</artifactId>
-        <groupId>image.processing</groupId>
+        <groupId>com.gebond.ip</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -14,8 +14,8 @@
     <dependencies>
         <!-- Project -->
         <dependency>
-            <groupId>image.processing</groupId>
-            <artifactId>math-common</artifactId>
+            <groupId>com.gebond.ip</groupId>
+            <artifactId>math-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

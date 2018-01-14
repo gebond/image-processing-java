@@ -9,7 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ip-frontend</artifactId>
+    <artifactId>ip-commons</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.gebond.ip</groupId>
+            <artifactId>math-func</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

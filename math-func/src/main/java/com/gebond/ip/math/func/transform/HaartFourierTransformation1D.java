@@ -1,9 +1,7 @@
 package com.gebond.ip.math.func.transform;
 
-import com.gebond.ip.math.func.util.Functions;
-
-import static com.gebond.ip.math.common.util.MathUtil.getCenters;
-import static com.gebond.ip.math.common.util.MathUtil.intPow;
+import static com.gebond.ip.math.commons.util.MathUtil.getCenters;
+import static com.gebond.ip.math.commons.util.MathUtil.intPow;
 import static com.gebond.ip.math.func.util.Functions.haart;
 import static org.apache.commons.math3.util.FastMath.log;
 
@@ -39,7 +37,7 @@ public class HaartFourierTransformation1D extends FourierTransformation {
         for (int i = 0; i < n; i++) {
             double fun_ith = 0.0;
             for (int j = 0; j < n; j++) {
-                double haart = Functions.haart(j, x[i]);
+                double haart = haart(j, x[i]);
                 fun_ith += array[j] * haart;
             }
             fun_values[i] = fun_ith;

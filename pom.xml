@@ -9,10 +9,9 @@
     <name>ip-parent</name>
 
     <modules>
-        <module>ip-common</module>
-        <module>ip-domain</module>
+        <module>ip-commons</module>
         <module>math-func</module>
-        <module>math-common</module>
+        <module>math-commons</module>
         <module>ip-backend</module>
         <module>ip-frontend</module>
     </modules>

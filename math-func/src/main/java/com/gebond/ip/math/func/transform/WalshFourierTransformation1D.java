@@ -1,7 +1,7 @@
 package com.gebond.ip.math.func.transform;
 
-import static com.gebond.ip.math.common.util.ArrayUtil.arrayCopy;
-import static com.gebond.ip.math.common.util.MathUtil.getCenters;
+import static com.gebond.ip.math.commons.util.ArrayUtil.arrayCopy;
+import static com.gebond.ip.math.commons.util.MathUtil.getCenters;
 import static com.gebond.ip.math.func.util.Functions.walsh;
 
 /**

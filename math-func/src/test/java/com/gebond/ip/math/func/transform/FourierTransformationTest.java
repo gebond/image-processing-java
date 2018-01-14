@@ -10,8 +10,8 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.gebond.ip.math.common.util.ArrayUtil.arrayCopy;
-import static com.gebond.ip.math.common.util.MathUtil.intPow;
+import static com.gebond.ip.math.commons.util.ArrayUtil.arrayCopy;
+import static com.gebond.ip.math.commons.util.MathUtil.intPow;
 import static org.apache.commons.math3.util.FastMath.pow;
 import static org.junit.jupiter.api.Assertions.*;
 
