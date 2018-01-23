@@ -3,6 +3,7 @@ package com.gebond.ip.math.func.transform;
 import static com.gebond.ip.math.commons.util.MathUtil.getCenters;
 import static com.gebond.ip.math.commons.util.MathUtil.intPow;
 import static com.gebond.ip.math.func.util.Functions.haart;
+import static java.lang.System.arraycopy;
 import static org.apache.commons.math3.util.FastMath.log;
 
 /**
@@ -18,7 +19,7 @@ public class HaartFourierTransformation1D extends FourierTransformation {
         int k = (int) log(2, len);
         while (k > 0) {
             double[] copy = new double[len];
-            System.arraycopy(input, 0, copy, 0, len);
+            arraycopy(input, 0, copy, 0, len);
             for (int j = 0; j < intPow(2, k - 1); j++) {
                 input[j] = 0.5 * (copy[2 * j] + copy[2 * j + 1]);
                 input[intPow(2, k - 1) + j] = 0.5 * (copy[2 * j] - copy[2 * j + 1]);

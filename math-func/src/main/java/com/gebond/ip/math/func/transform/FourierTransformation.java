@@ -13,25 +13,25 @@ public abstract class FourierTransformation {
 
     public void analysis(FourierData fourierData) {
         validateData(fourierData);
-        if (fourierData.getDimension() == 1) {
-            analysis1D(fourierData);
-            return;
-        }
-        if (fourierData.getDimension() == 2) {
-            analysis2D(fourierData);
-            return;
+        switch (fourierData.getDimension()) {
+            case DIMENSION_1D:
+                analysis1D(fourierData);
+                break;
+            case DIMENSION_2D:
+                analysis2D(fourierData);
+                break;
         }
     }
 
     public void synthesis(FourierData fourierData) {
         validateData(fourierData);
-        if (fourierData.getDimension() == 1) {
-            synthesis1D(fourierData);
-            return;
-        }
-        if (fourierData.getDimension() == 2) {
-            synthesis2D(fourierData);
-            return;
+        switch (fourierData.getDimension()) {
+            case DIMENSION_1D:
+                synthesis1D(fourierData);
+                break;
+            case DIMENSION_2D:
+                synthesis2D(fourierData);
+                break;
         }
     }
 
@@ -88,15 +88,13 @@ public abstract class FourierTransformation {
     }
 
     protected void validateData(FourierData fourierData) {
-        if (fourierData.getDimension() == 1) {
-            validate1D(fourierData.getArray1D());
-            return;
-        }
-        if (fourierData.getDimension() == 2) {
-            validate2D(fourierData.getArray2D());
-            return;
-        } else {
-            throw new IllegalArgumentException("incorrect dimension");
+        switch (fourierData.getDimension()) {
+            case DIMENSION_1D:
+                validate1D(fourierData.getArray1D());
+                break;
+            case DIMENSION_2D:
+                validate2D(fourierData.getArray2D());
+                break;
         }
     }
 

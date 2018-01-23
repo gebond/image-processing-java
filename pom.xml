@@ -12,8 +12,8 @@
         <module>ip-commons</module>
         <module>math-func</module>
         <module>math-commons</module>
-        <module>ip-backend</module>
-        <module>ip-frontend</module>
+        <!--<module>ip-backend</module>-->
+        <!--<module>ip-frontend</module>-->
     </modules>
 
     <properties>
