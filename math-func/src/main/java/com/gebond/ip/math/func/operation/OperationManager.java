@@ -1,5 +1,6 @@
 package com.gebond.ip.math.func.operation;
 
+import javax.xml.bind.ValidationException;
 import java.util.List;
 
 /**
@@ -13,11 +14,14 @@ public abstract class OperationManager<T extends OperationContext> {
             if (context.isClosed()) {
                 return context;
             }
-            if (!operation.isValid(context)) {
+            try {
+                operation.validate(context);
+            } catch (ValidationException e) {
+                e.printStackTrace();
                 context.close();
-            } else {
-                operation.apply(context);
+                break;
             }
+            operation.apply(context);
         }
         return context;
     }

@@ -5,36 +5,45 @@ import com.gebond.ip.math.func.transform.FourierData;
 /**
  * Created by Gleb on 18.10.2017.
  */
-public class FourierContext extends OperationContext {
-    private FourierData fourierData;
+public abstract class FourierContext<T extends FourierData> extends OperationContext {
 
-    private FourierContext() {
+    public abstract T getFourierData();
 
+    public static FourierContext1D fromArray(double[] array) {
+        return new FourierContext1D(Dimension.DIMENSION_1D, array);
     }
 
-    public static FourierContextBuilder startBuild() {
-        return new FourierContextBuilder();
+    public static FourierContext2D fromArray(double[][] array) {
+        return new FourierContext2D(Dimension.DIMENSION_2D, array);
     }
 
-    public FourierData getFourierData() {
-        return fourierData;
+    protected Dimension dimension;
+    protected T fourierData;
+
+    public enum Dimension {
+        DIMENSION_1D,
+        DIMENSION_2D
     }
 
-    public static class FourierContextBuilder {
-        private FourierContext fourierContext = new FourierContext();
-
-        public FourierContextBuilder withArray(double[] array1D) {
-            fourierContext.fourierData = new FourierData(array1D);
-            return this;
+    public static class FourierContext1D extends FourierContext<FourierData.FourierData1D> {
+        public FourierContext1D(Dimension dimension, double[] array) {
+            this.dimension = dimension;
+            this.fourierData = new FourierData.FourierData1D(array);
         }
 
-        public FourierContextBuilder withArray(double[][] array2D) {
-            fourierContext.fourierData = new FourierData(array2D);
-            return this;
+        @Override
+        public FourierData.FourierData1D getFourierData() {
+            return super.fourierData;
+        }
+    }
+
+    public static class FourierContext2D extends FourierContext<FourierData.FourierData2D> {
+        public FourierContext2D(Dimension dimension, double[][] array) {
         }
 
-        public FourierContext build() {
-            return fourierContext;
+        @Override
+        public FourierData.FourierData2D getFourierData() {
+            return super.fourierData;
         }
     }
 }
