@@ -1,7 +1,8 @@
 package com.gebond.ip.math.func.transform;
 
-import com.gebond.ip.math.commons.util.ArrayUtil;
 import com.sun.istack.internal.NotNull;
+
+import java.util.Arrays;
 
 import static com.gebond.ip.math.commons.util.MathUtil.getCenters;
 import static com.gebond.ip.math.commons.util.MathUtil.intPow;
@@ -20,8 +21,7 @@ public class FourierTransform {
     public static class HaartFourierTransform {
         public static double[] doAnalysis(@NotNull double[] input) {
             int len = input.length;
-            double[] result = new double[len];
-            ArrayUtil.arrayCopy(input, result); // after copy no use of input of array
+            double[] result = Arrays.copyOf(input, len); // after copy no use of input of array
 
             int k = (int) log(2, len);
             while (k > 0) {
@@ -56,8 +56,7 @@ public class FourierTransform {
     public static class WalshFourierTransform {
         public static double[] doAnalysis(@NotNull double[] input) {
             int len = input.length;
-            double[] result = new double[len];
-            ArrayUtil.arrayCopy(input, result); // after copy no use of input of array
+            double[] result = Arrays.copyOf(input, len); // after copy no use of input of array
 
             int k = (int) log(2, len);
             while (k > 0) {

@@ -8,13 +8,14 @@ import static org.apache.commons.math3.util.FastMath.abs;
 /**
  * Created by Gleb on 17.10.2017.
  */
+@Deprecated
 public class HuffmanCompression2D extends Compression<Array2DSetting> {
 
     @Override
     protected Array2DSetting doCompress(Array2DSetting compressionSetting) {
         double[][] target = compressionSetting.getTarget();
 
-        int maxDeleteCounter = (int) (target.length * target[0].length * (1.0 - (compressionSetting.compressionRate / 100.0)));
+        int maxDeleteCounter = (int) (target.length * target[0].length * (1.0 - (compressionSetting.getCompressionRate() / 100.0)));
 
         List<Value> values = new ArrayList<>();
         for (int i = 0; i < target.length; i++) {

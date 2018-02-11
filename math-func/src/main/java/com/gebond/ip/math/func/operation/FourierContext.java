@@ -1,13 +1,24 @@
 package com.gebond.ip.math.func.operation;
 
-import com.gebond.ip.math.func.transform.FourierData;
+import com.gebond.ip.math.func.array.Array1D;
+import com.gebond.ip.math.func.array.Array2D;
+import com.gebond.ip.math.func.array.ArrayContainer;
+import com.gebond.ip.math.func.compression.CompressionSetting;
 
 /**
  * Created by Gleb on 18.10.2017.
  */
-public abstract class FourierContext<T extends FourierData> extends OperationContext {
+public abstract class FourierContext<
+        T extends ArrayContainer,
+        C extends CompressionSetting> extends OperationContext {
+
+    @Deprecated
+    protected Dimension dimension;
+    protected T fourierData;
+    protected C compressionSetting;
 
     public abstract T getFourierData();
+    public abstract C getCompressionSetting();
 
     public static FourierContext1D fromArray(double[] array) {
         return new FourierContext1D(Dimension.DIMENSION_1D, array);
@@ -17,33 +28,84 @@ public abstract class FourierContext<T extends FourierData> extends OperationCon
         return new FourierContext2D(Dimension.DIMENSION_2D, array);
     }
 
-    protected Dimension dimension;
-    protected T fourierData;
+    public static FourierContext1DBuilder start1DBuilder(double[] array){
+        return new FourierContext1DBuilder(array);
+    }
+
+    public static FourierContext2DBuilder start2DBuilder(double[][] array){
+        return new FourierContext2DBuilder(array);
+    }
+
+    public static class FourierContext1DBuilder {
+        FourierContext1D fourierContext;
+
+        public FourierContext1DBuilder(double[] array) {
+            fourierContext = new FourierContext1D(Dimension.DIMENSION_1D, array);
+        }
+
+        public FourierContext1DBuilder withCompression(CompressionSetting compression) {
+            fourierContext.compressionSetting = compression;
+            return this;
+        }
+
+        public FourierContext1D build() {
+            return fourierContext;
+        }
+    }
+
+    public static class FourierContext2DBuilder {
+        FourierContext2D fourierContext;
+
+        public FourierContext2DBuilder(double[][] array) {
+            fourierContext = new FourierContext2D(Dimension.DIMENSION_2D, array);
+        }
+
+        public FourierContext2DBuilder withCompression(CompressionSetting compression) {
+            fourierContext.compressionSetting = compression;
+            return this;
+        }
+
+        public FourierContext2D build() {
+            return fourierContext;
+        }
+    }
 
     public enum Dimension {
         DIMENSION_1D,
         DIMENSION_2D
     }
 
-    public static class FourierContext1D extends FourierContext<FourierData.FourierData1D> {
+    public static class FourierContext1D extends FourierContext<Array1D, CompressionSetting> {
+        @Deprecated
         public FourierContext1D(Dimension dimension, double[] array) {
             this.dimension = dimension;
-            this.fourierData = new FourierData.FourierData1D(array);
+            this.fourierData = new Array1D(array);
         }
 
         @Override
-        public FourierData.FourierData1D getFourierData() {
+        public Array1D getFourierData() {
             return super.fourierData;
+        }
+
+        @Override
+        public CompressionSetting getCompressionSetting() {
+            return super.compressionSetting;
         }
     }
 
-    public static class FourierContext2D extends FourierContext<FourierData.FourierData2D> {
+    public static class FourierContext2D extends FourierContext<Array2D, CompressionSetting> {
+        @Deprecated
         public FourierContext2D(Dimension dimension, double[][] array) {
         }
 
         @Override
-        public FourierData.FourierData2D getFourierData() {
+        public Array2D getFourierData() {
             return super.fourierData;
+        }
+
+        @Override
+        public CompressionSetting getCompressionSetting() {
+            return super.compressionSetting;
         }
     }
 }

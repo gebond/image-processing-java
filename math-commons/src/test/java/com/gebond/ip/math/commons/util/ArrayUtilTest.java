@@ -13,39 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @DisplayName("Array util tests")
 class ArrayUtilTest {
-
-    @Nested
-    @DisplayName("1D arrays")
-    class Array1D {
-
-        @Test
-        @DisplayName("1D array copied")
-        void arrayCopyTest() {
-            double[] source = new double[]{1.0, 2.0, 3.0, 4.0, 5.0};
-            double[] target = new double[source.length];
-
-            arrayCopy(source, target);
-
-            assertEquals(source.length, target.length);
-            assertArrayEquals(source, target);
-        }
-
-        @Test
-        @DisplayName("1D array copied and not changed after target's changes")
-        void arrayCopyChangedSourceTest() {
-            double[] source = new double[]{1.0, 2.0, 3.0, 4.0, 5.0};
-            double[] source_copy = new double[]{1.0, 2.0, 3.0, 4.0, 5.0};
-            double[] target = new double[source.length];
-
-            arrayCopy(source, target);
-
-            source[0] = 10;
-            source[1] = -100;
-            assertEquals(source.length, target.length);
-            assertArrayEquals(source_copy, target);
-        }
-    }
-
     @Nested
     @DisplayName("2D arrays")
     class Array2D {
@@ -53,9 +20,8 @@ class ArrayUtilTest {
         @DisplayName("2D array copied")
         void arrayCopyTest() {
             double[][] source = new double[][]{{1.0, 2.0, 3.0}, {3.0, 4.0, 6.0}};
-            double[][] target = new double[source.length][source[0].length];
 
-            arrayCopy(source, target);
+            double[][] target = arrayCopy(source);
 
             assertEquals(source.length, target.length);
             assertEquals(source[0].length, target[0].length);
@@ -63,13 +29,12 @@ class ArrayUtilTest {
         }
 
         @Test
-        @DisplayName("2D array copied and not changed after target's changes")
-        void arrayCopyChangedSourceTest() {
+        @DisplayName("not changed after source's changes")
+        void arrayCopy_changeSourceArray() {
             double[][] source = new double[][]{{1.0, 2.0, 3.0}, {3.0, 4.0, 6.0}};
             double[][] source_copy = new double[][]{{1.0, 2.0, 3.0}, {3.0, 4.0, 6.0}};
-            double[][] target = new double[source.length][source[0].length];
 
-            arrayCopy(source, target);
+            double[][] target = arrayCopy(source);
             source[1][0] = -10.0;
             source[0][1] = 100.0;
 

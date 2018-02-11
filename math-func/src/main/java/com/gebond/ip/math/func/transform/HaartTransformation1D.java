@@ -1,4 +1,10 @@
-package com.gebond.ip.math.func.operation;
+package com.gebond.ip.math.func.transform;
+
+import com.gebond.ip.math.func.compression.CompressionOperation1D;
+import com.gebond.ip.math.func.operation.FourierContext;
+import com.gebond.ip.math.func.operation.Operation;
+import com.gebond.ip.math.func.operation.Operation1D;
+import com.gebond.ip.math.func.operation.OperationManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,9 +18,10 @@ import static com.gebond.ip.math.func.transform.FourierTransform.HaartFourierTra
  */
 public class HaartTransformation1D extends OperationManager<FourierContext.FourierContext1D> {
     @Override
-    List<Operation<FourierContext.FourierContext1D>> getOperations() {
+    public List<Operation<FourierContext.FourierContext1D>> getOperations() {
         return Arrays.asList(
                 new HaartAnalysis1D(),
+                new CompressionOperation1D(),
                 new HaartSynthesis1D());
     }
 
@@ -22,7 +29,7 @@ public class HaartTransformation1D extends OperationManager<FourierContext.Fouri
         @Override
         public void apply(FourierContext.FourierContext1D context) {
             double[] result = doAnalysis(context.getFourierData().getArray1D());
-            context.getFourierData().setArray1D(result);
+            context.getFourierData().setArray(result);
         }
     }
 
@@ -30,7 +37,7 @@ public class HaartTransformation1D extends OperationManager<FourierContext.Fouri
         @Override
         public void apply(FourierContext.FourierContext1D context) {
             double[] result = doSynthesis(context.getFourierData().getArray1D());
-            context.getFourierData().setArray1D(result);
+            context.getFourierData().setArray(result);
         }
     }
 }

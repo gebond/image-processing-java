@@ -3,13 +3,28 @@ package com.gebond.ip.math.func.compression;
 /**
  * Created by Gleb on 17.10.2017.
  */
-public abstract class CompressionSetting {
+public class CompressionSetting {
 
-    protected double compressionRate;
+    public static final double MAX_COMPRESSION_RATE = 100.0;
+    public static final double MIN_COMPRESSION_RATE = 0.0;
 
-    abstract Object getTarget();
+    /**
+     * Compression rate means remaining
+     * Example:
+     * compressionRate = 0 - nothing to compress
+     * compressionRate = 50 - half of input array will be zero
+     * compressionRate = 100 - whole input array will be zero
+     */
+    private double compressionRate;
+
+    public static CompressionSetting of(double compressionRate) {
+        return new CompressionSetting(compressionRate);
+    }
 
     CompressionSetting(double compressionRate) {
+        if (compressionRate < MIN_COMPRESSION_RATE || compressionRate > MAX_COMPRESSION_RATE) {
+            throw new IllegalArgumentException("Compression rate is illegal. Found: " + compressionRate);
+        }
         this.compressionRate = compressionRate;
     }
 

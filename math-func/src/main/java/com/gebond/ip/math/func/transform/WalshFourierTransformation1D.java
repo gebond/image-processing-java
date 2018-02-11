@@ -3,6 +3,7 @@ package com.gebond.ip.math.func.transform;
 /**
  * Created by Gleb on 08.11.2017.
  */
+@Deprecated
 public class WalshFourierTransformation1D extends FourierTransformation {
 
 //    @Override

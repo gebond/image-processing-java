@@ -1,13 +1,12 @@
 package com.gebond.ip.math.func.operation;
 
-import javax.xml.bind.ValidationException;
 import java.util.List;
 
 /**
  * Created by Gleb on 21.01.2018.
  */
 public abstract class OperationManager<T extends OperationContext> {
-    abstract List<Operation<T>> getOperations();
+    public abstract List<Operation<T>> getOperations();
 
     public T process(T context) {
         for (Operation<T> operation : getOperations()) {
@@ -16,7 +15,7 @@ public abstract class OperationManager<T extends OperationContext> {
             }
             try {
                 operation.validate(context);
-            } catch (ValidationException e) {
+            } catch (IllegalArgumentException e) {
                 e.printStackTrace();
                 context.close();
                 break;

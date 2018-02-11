@@ -3,6 +3,7 @@ package com.gebond.ip.math.func.compression;
 /**
  * Created by Gleb on 22.10.2017.
  */
+@Deprecated
 public class Array1DSetting extends CompressionSetting {
 
     private double[] target;

@@ -3,6 +3,7 @@ package com.gebond.ip.math.func.transform;
 /**
  * Created by Gleb on 17.10.2017.
  */
+@Deprecated
 public abstract class FourierTransformation {
 
 //    abstract void analysis1D(FourierData fourierData);

@@ -1,5 +1,7 @@
 package com.gebond.ip.math.commons.util;
 
+import java.util.Arrays;
+
 /**
  * Created by Gleb on 22.10.2017.
  */
@@ -8,14 +10,14 @@ public class ArrayUtil {
     private ArrayUtil() {
     }
 
-    public static void arrayCopy(double[] source, double[] target) {
-        System.arraycopy(source, 0, target, 0, source.length);
-    }
-
-    public static void arrayCopy(double[][] source, double[][] target) {
+    /**
+     * produces NPE if source array is null, or sub-array is null
+     */
+    public static double[][] arrayCopy(double[][] source) {
+        double[][] target = new double[source.length][source[0].length];
         for (int i = 0; i < source.length; i++) {
-            target[i] = new double[target[0].length];
-            arrayCopy(source[i], target[i]);
+            target[i] = Arrays.copyOf(source[i], source[i].length);
         }
+        return target;
     }
 }

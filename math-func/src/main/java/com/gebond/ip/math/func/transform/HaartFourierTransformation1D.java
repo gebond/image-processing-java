@@ -3,6 +3,7 @@ package com.gebond.ip.math.func.transform;
 /**
  * Created by Gleb on 21.10.2017.
  */
+@Deprecated
 public class HaartFourierTransformation1D extends FourierTransformation {
 
 //    @Override

@@ -1,4 +1,9 @@
-package com.gebond.ip.math.func.operation;
+package com.gebond.ip.math.func.transform;
+
+import com.gebond.ip.math.func.operation.FourierContext;
+import com.gebond.ip.math.func.operation.Operation;
+import com.gebond.ip.math.func.operation.Operation2D;
+import com.gebond.ip.math.func.operation.OperationManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,7 +13,7 @@ import java.util.List;
  */
 public class HaartTransformation2D extends OperationManager<FourierContext.FourierContext2D> {
     @Override
-    List<Operation<FourierContext.FourierContext2D>> getOperations() {
+    public List<Operation<FourierContext.FourierContext2D>> getOperations() {
         return Arrays.asList(
                 new HaartAnalysis2D(),
                 new HaartSynthesis2D());
