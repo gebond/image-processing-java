@@ -1,6 +1,7 @@
 package com.gebond.ip.math.func.operation;
 
 import com.gebond.ip.math.func.compression.CompressionSetting;
+import com.gebond.ip.math.func.context.FourierContext;
 import com.gebond.ip.math.func.transform.HaartTransformation1D;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Created by Gleb on 21.01.2018.
  */
-@DisplayName("Haart Operations tests")
+@DisplayName("Haart Operations")
 class HaartTransformation1DTest {
     @Nested
     @DisplayName("1D")
@@ -34,14 +35,15 @@ class HaartTransformation1DTest {
 
             FourierContext.FourierContext1D context = testee.process(FourierContext
                     .start1DBuilder(array)
-                    .withCompression(CompressionSetting.of(10.0))
+                    .withCompression(CompressionSetting.of(CompressionSetting.MIN_COMPRESSION_RATE))
                     .build());
 
             assertNotNull(context);
             assertFalse(context.isClosed());
-            assertNotNull(context.getFourierData().getArray1D(), "array 1d mut be not null");
-            assertEquals(array.length, context.getFourierData().getSize(), "result array must have the same size");
-            assertArrayEquals(array, context.getFourierData().getArray1D());
+            double[] result = context.getFourierData().getArray1DCopy();
+            assertNotNull(result, "array 1d mut be not null");
+            assertEquals(array.length, result.length, "result array must have the same size");
+            assertArrayEquals(array, result);
         }
 
         @Test
@@ -51,14 +53,15 @@ class HaartTransformation1DTest {
 
             FourierContext.FourierContext1D context = testee.process(FourierContext
                     .start1DBuilder(array)
-                    .withCompression(CompressionSetting.of(10.0))
+                    .withCompression(CompressionSetting.of(CompressionSetting.MIN_COMPRESSION_RATE))
                     .build());
 
             assertNotNull(context);
             assertFalse(context.isClosed());
-            assertNotNull(context.getFourierData().getArray1D(), "array 1d mut be not null");
-            assertEquals(array.length, context.getFourierData().getSize(), "result array must have the same size");
-            assertArrayEquals(array, context.getFourierData().getArray1D());
+            double[] result = context.getFourierData().getArray1DCopy();
+            assertNotNull(result, "array 1d mut be not null");
+            assertEquals(array.length, result.length, "result array must have the same size");
+            assertArrayEquals(array, result);
         }
 
         @Test
@@ -84,22 +87,22 @@ class HaartTransformation1DTest {
         }
 
         @Test
-        @DisplayName("complete with compression, len = 8")
+        @DisplayName("complete with max compression, len = 8")
         void testProcess_compression() {
             double[] array = new double[]{1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0};
 
             FourierContext.FourierContext1D context = testee.process(FourierContext
                     .start1DBuilder(array)
-                    .withCompression(CompressionSetting.of(50.0))
+                    .withCompression(CompressionSetting.of(CompressionSetting.MAX_COMPRESSION_RATE))
                     .build());
-
-//            double[] array = new double[]{0};
 
             assertNotNull(context);
             assertFalse(context.isClosed());
-            assertNotNull(context.getFourierData().getArray1D(), "array 1d mut be not null");
-            assertEquals(array.length, context.getFourierData().getSize(), "result array must have the same size");
-            assertArrayEquals(array, context.getFourierData().getArray1D());
+
+            double[] result = context.getFourierData().getArray1DCopy();
+            assertNotNull(result, "array 1d mut be not null");
+            assertEquals(array.length, result.length, "result array must have the same size");
+            assertArrayEquals(new double[]{0, 0, 0, 0, 0, 0, 0, 0}, result);
         }
     }
 }

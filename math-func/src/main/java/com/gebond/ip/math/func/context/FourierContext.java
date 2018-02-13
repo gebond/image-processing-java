@@ -1,4 +1,4 @@
-package com.gebond.ip.math.func.operation;
+package com.gebond.ip.math.func.context;
 
 import com.gebond.ip.math.func.array.Array1D;
 import com.gebond.ip.math.func.array.Array2D;
@@ -96,6 +96,8 @@ public abstract class FourierContext<
     public static class FourierContext2D extends FourierContext<Array2D, CompressionSetting> {
         @Deprecated
         public FourierContext2D(Dimension dimension, double[][] array) {
+            this.dimension = dimension;
+            this.fourierData = new Array2D(array);
         }
 
         @Override

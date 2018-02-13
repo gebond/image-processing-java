@@ -5,18 +5,11 @@ package com.gebond.ip.math.func.array;
  */
 public abstract class ArrayContainer {
 
-    private int size;
-
-    public int getSize() {
-        return size;
-    }
-
-    public abstract Object getArray();
+    public abstract int getSize();
+    public abstract Object getArrayCopy();
+    protected abstract void setArrayAsCopyOf(Object array);
 
     public void setArray(Object array) {
-        size = ((double[]) array).length;
         setArrayAsCopyOf(array);
     }
-
-    protected abstract void setArrayAsCopyOf(Object array);
 }

@@ -1,5 +1,7 @@
 package com.gebond.ip.math.func.operation;
 
+import com.gebond.ip.math.func.context.OperationContext;
+
 /**
  * Created by Gleb on 21.01.2018.
  */

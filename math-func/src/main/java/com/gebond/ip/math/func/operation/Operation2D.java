@@ -1,12 +1,14 @@
 package com.gebond.ip.math.func.operation;
 
+import com.gebond.ip.math.func.context.FourierContext;
+
 /**
  * Created by Gleb on 27.01.2018.
  */
 public abstract class Operation2D implements Operation<FourierContext.FourierContext2D> {
     @Override
     public void validate(FourierContext.FourierContext2D context) throws IllegalArgumentException {
-        double[][] array2D = context.getFourierData().getArray2D();
+        double[][] array2D = context.getFourierData().getArray2DCopy();
         if (array2D == null) {
             throw new IllegalArgumentException("input array is null");
         }

@@ -1,5 +1,6 @@
 package com.gebond.ip.math.func.compression;
 
+import com.gebond.ip.math.func.context.FourierContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -9,22 +10,14 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 /**
  * Created by Gleb on 22.10.2017.
  */
-@DisplayName("compression tests")
+@DisplayName("Compression Operations")
 public class CompressionTest {
-
-    private static Array1DSetting newSetting(double[] array, double rate) {
-        return new Array1DSetting(array, rate);
-    }
-
-    private static Array2DSetting newSetting(double[][] array, double rate) {
-        return new Array2DSetting(array, rate);
-    }
 
     @Nested
     @DisplayName("huffman 1D")
     class Huffman1DTests {
 
-        private Compression<Array1DSetting> compression = new HuffmanCompression1D();
+        private CompressionOperation1D compression = new CompressionOperation1D();
 
         @Test
         @DisplayName("compress rate = 50")
@@ -33,51 +26,57 @@ public class CompressionTest {
                     1.0, 2.0, 3.0,
                     1.0, 2.0, 3.0,
                     1.0, 2.0, 3.0};
+            FourierContext.FourierContext1D context1D = FourierContext.start1DBuilder(input)
+                    .withCompression(CompressionSetting.of(50.0))
+                    .build();
 
-            Array1DSetting setting = newSetting(input, 50.0);
-            double[] result = compression.compress(setting).getTarget();
+            compression.apply(context1D);
+
             double[] answer = new double[]{
                     0.0, 0.0, 3.0,
                     0.0, 2.0, 3.0,
                     0.0, 2.0, 3.0};
-
-            assertArrayEquals(answer, result);
+            assertArrayEquals(answer, context1D.getFourierData().getArray1DCopy());
         }
 
         @Test
-        @DisplayName("compress rate = 12")
-        public void compression_less_half() {
-            double[] input = new double[]{
-                    1.0, 2.0, 3.0,
-                    1.0, 2.0, 3.0,
-                    1.0, 2.0, 3.0};
-
-            Array1DSetting setting = newSetting(input, 12.0);
-            double[] result = compression.compress(setting).getTarget();
-            double[] answer = new double[]{
-                    0.0, 0.0, 0.0,
-                    0.0, 0.0, 3.0,
-                    0.0, 0.0, 3.0};
-
-            assertArrayEquals(answer, result);
-        }
-
-        @Test
-        @DisplayName("compress rate = 85")
+        @DisplayName("compress rate = 88")
         public void compression_more_half() {
             double[] input = new double[]{
                     1.0, 2.0, 3.0,
                     1.0, 2.0, 3.0,
                     1.0, 2.0, 3.0};
+            FourierContext.FourierContext1D context1D = FourierContext.start1DBuilder(input)
+                    .withCompression(CompressionSetting.of(88.0))
+                    .build();
 
-            Array1DSetting setting = newSetting(input, 85.0);
-            double[] result = compression.compress(setting).getTarget();
+            compression.apply(context1D);
+
+            double[] answer = new double[]{
+                    0.0, 0.0, 0.0,
+                    0.0, 0.0, 3.0,
+                    0.0, 0.0, 3.0};
+            assertArrayEquals(answer, context1D.getFourierData().getArray1DCopy());
+        }
+
+        @Test
+        @DisplayName("compress rate = 15")
+        public void compression_less_half() {
+            double[] input = new double[]{
+                    1.0, 2.0, 3.0,
+                    1.0, 2.0, 3.0,
+                    1.0, 2.0, 3.0};
+            FourierContext.FourierContext1D context1D = FourierContext.start1DBuilder(input)
+                    .withCompression(CompressionSetting.of(15.0))
+                    .build();
+
+            compression.apply(context1D);
+
             double[] answer = new double[]{
                     0.0, 2.0, 3.0,
                     1.0, 2.0, 3.0,
                     1.0, 2.0, 3.0};
-
-            assertArrayEquals(answer, result);
+            assertArrayEquals(answer, context1D.getFourierData().getArray1DCopy());
         }
     }
 
@@ -85,7 +84,7 @@ public class CompressionTest {
     @DisplayName("huffman 2D")
     class Huffman2DTests {
 
-        private Compression<Array2DSetting> compression = new HuffmanCompression2D();
+        private CompressionOperation2D compression = new CompressionOperation2D();
 
         @Test
         @DisplayName("compress rate = 50")
@@ -94,15 +93,17 @@ public class CompressionTest {
                     {1.0, 2.0, 3.0},
                     {1.0, 2.0, 3.0},
                     {1.0, 2.0, 3.0}};
+            FourierContext.FourierContext2D context2D = FourierContext.start2DBuilder(input)
+                    .withCompression(CompressionSetting.of(50.0))
+                    .build();
 
-            Array2DSetting setting = newSetting(input, 50.0);
-            double[][] result = compression.compress(setting).getTarget();
+            compression.apply(context2D);
+
             double[][] answer = new double[][]{
                     {0.0, 0.0, 3.0},
                     {0.0, 2.0, 3.0},
                     {0.0, 2.0, 3.0}};
-
-            assertArrayEquals(answer, result);
+            assertArrayEquals(answer, context2D.getFourierData().getArray2DCopy());
         }
 
         @Test
@@ -112,15 +113,17 @@ public class CompressionTest {
                     {1.0, 2.0, 3.0},
                     {1.0, 2.0, 3.0},
                     {1.0, 2.0, 3.0}};
+            FourierContext.FourierContext2D context2D = FourierContext.start2DBuilder(input)
+                    .withCompression(CompressionSetting.of(12.0))
+                    .build();
 
-            Array2DSetting setting = newSetting(input, 12.0);
-            double[][] result = compression.compress(setting).getTarget();
+            compression.apply(context2D);
+
             double[][] answer = new double[][]{
-                    {0.0, 0.0, 0.0},
-                    {0.0, 0.0, 3.0},
-                    {0.0, 0.0, 3.0}};
-
-            assertArrayEquals(answer, result);
+                    {0.0, 2.0, 3.0},
+                    {1.0, 2.0, 3.0},
+                    {1.0, 2.0, 3.0}};
+            assertArrayEquals(answer, context2D.getFourierData().getArray2DCopy());
         }
 
         @Test
@@ -130,15 +133,17 @@ public class CompressionTest {
                     {1.0, 2.0, 3.0},
                     {1.0, 2.0, 3.0},
                     {1.0, 2.0, 3.0}};
+            FourierContext.FourierContext2D context2D = FourierContext.start2DBuilder(input)
+                    .withCompression(CompressionSetting.of(85.0))
+                    .build();
 
-            Array2DSetting setting = newSetting(input, 85.0);
-            double[][] result = compression.compress(setting).getTarget();
+            compression.apply(context2D);
+
             double[][] answer = new double[][]{
-                    {0.0, 2.0, 3.0},
-                    {1.0, 2.0, 3.0},
-                    {1.0, 2.0, 3.0}};
-
-            assertArrayEquals(answer, result);
+                    {0.0, 0.0, 0.0},
+                    {0.0, 0.0, 3.0},
+                    {0.0, 0.0, 3.0}};
+            assertArrayEquals(answer, context2D.getFourierData().getArray2DCopy());
         }
     }
 }

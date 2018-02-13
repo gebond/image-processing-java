@@ -9,17 +9,22 @@ public class Array1D extends ArrayContainer {
 
     private double[] array1D;
 
-    public Array1D(double[] array){
+    public Array1D(double[] array) {
         setArray(array);
     }
 
-    public double[] getArray1D() {
-        return (double[]) getArray();
+    public double[] getArray1DCopy() {
+        return Arrays.copyOf(array1D, array1D.length);
     }
 
     @Override
-    public Object getArray() {
-        return array1D;
+    public int getSize() {
+        return array1D.length;
+    }
+
+    @Override
+    public Object getArrayCopy() {
+        return getArray1DCopy();
     }
 
     @Override

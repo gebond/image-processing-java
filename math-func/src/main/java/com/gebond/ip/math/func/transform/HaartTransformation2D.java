@@ -1,6 +1,6 @@
 package com.gebond.ip.math.func.transform;
 
-import com.gebond.ip.math.func.operation.FourierContext;
+import com.gebond.ip.math.func.context.FourierContext;
 import com.gebond.ip.math.func.operation.Operation;
 import com.gebond.ip.math.func.operation.Operation2D;
 import com.gebond.ip.math.func.operation.OperationManager;

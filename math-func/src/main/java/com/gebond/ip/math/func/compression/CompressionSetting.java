@@ -15,13 +15,13 @@ public class CompressionSetting {
      * compressionRate = 50 - half of input array will be zero
      * compressionRate = 100 - whole input array will be zero
      */
-    private double compressionRate;
+    private final double compressionRate;
 
     public static CompressionSetting of(double compressionRate) {
         return new CompressionSetting(compressionRate);
     }
 
-    CompressionSetting(double compressionRate) {
+    private CompressionSetting(double compressionRate) {
         if (compressionRate < MIN_COMPRESSION_RATE || compressionRate > MAX_COMPRESSION_RATE) {
             throw new IllegalArgumentException("Compression rate is illegal. Found: " + compressionRate);
         }
@@ -30,9 +30,5 @@ public class CompressionSetting {
 
     public double getCompressionRate() {
         return compressionRate;
-    }
-
-    public void setCompressionRate(double compressionRate) {
-        this.compressionRate = compressionRate;
     }
 }
