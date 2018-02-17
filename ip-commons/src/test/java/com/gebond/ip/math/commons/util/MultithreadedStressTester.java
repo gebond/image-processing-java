@@ -1,6 +1,10 @@
 package com.gebond.ip.math.commons.util;
 
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -55,14 +59,12 @@ public class MultithreadedStressTester {
         final CountDownLatch finished = new CountDownLatch(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
-            executor.execute(new Runnable() {
-                public void run() {
-                    try {
-                        repeat(action);
-                    }
-                    finally {
-                        finished.countDown();
-                    }
+            executor.execute(() -> {
+                try {
+                    repeat(action);
+                }
+                finally {
+                    finished.countDown();
                 }
             });
         }

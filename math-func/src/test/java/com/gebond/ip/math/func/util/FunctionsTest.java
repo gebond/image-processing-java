@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static com.gebond.ip.math.func.util.Functions.haart;
 import static com.gebond.ip.math.func.util.Functions.rademacher;
 import static com.gebond.ip.math.func.util.Functions.walsh;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**

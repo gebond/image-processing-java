@@ -70,6 +70,7 @@ public abstract class FourierContext<
         }
     }
 
+    @Deprecated
     public enum Dimension {
         DIMENSION_1D,
         DIMENSION_2D

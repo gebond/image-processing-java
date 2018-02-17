@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import static com.gebond.ip.math.func.util.TestHelper.DELTA;
-import static com.gebond.ip.math.func.util.TestHelper.assertArrayEqualsWithDelta;
-import static com.gebond.ip.math.func.util.TestHelper.randomDoubles;
-import static com.gebond.ip.math.func.util.TestHelper.randomDoubles2D;
+import static com.gebond.ip.math.commons.util.TestHelper.DELTA;
+import static com.gebond.ip.math.commons.util.TestHelper.assertArrayEqualsWithDelta;
+import static com.gebond.ip.math.commons.util.TestHelper.randomDoubles;
+import static com.gebond.ip.math.commons.util.TestHelper.randomDoubles2D;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Created by Gleb on 21.01.2018.
  */
 @DisplayName("Haart Operations")
-class HaartTransformationTest {
+public class HaartTransformationTest {
     @Nested
     @DisplayName("1D")
     class Transformation1D {

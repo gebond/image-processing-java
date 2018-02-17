@@ -17,36 +17,51 @@
     </modules>
 
     <properties>
+        <!-- System -->
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Common -->
+        <apache.common>3.6.1</apache.common>
+        <!-- Testing -->
         <junit.jupiter.version>5.0.1</junit.jupiter.version>
         <jmockit.version>1.8</jmockit.version>
+        <!-- Plugins -->
         <junit.surefire.provider.version>1.0.1</junit.surefire.provider.version>
         <plugin.maven.surfire.version>2.19.1</plugin.maven.surfire.version>
     </properties>
 
-    <dependencies>
-        <!--  Testing-->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jmockit</groupId>
-            <artifactId>jmockit</artifactId>
-            <version>${jmockit.version}</version>
-            <scope>test</scope>
-        </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <!-- Common -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-math3</artifactId>
+                <version>${apache.common}</version>
+            </dependency>
 
-        <!-- Runtime -->
-        <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-native-platform</artifactId>
-            <version>0.9.1</version>
-        </dependency>
-    </dependencies>
+            <!--  Testing-->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jmockit</groupId>
+                <artifactId>jmockit</artifactId>
+                <version>${jmockit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Runtime -->
+            <!--<dependency>-->
+                <!--<groupId>org.nd4j</groupId>-->
+                <!--<artifactId>nd4j-native-platform</artifactId>-->
+                <!--<version>0.9.1</version>-->
+            <!--</dependency>-->
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <plugins>
             <!-- Maven compilation -->

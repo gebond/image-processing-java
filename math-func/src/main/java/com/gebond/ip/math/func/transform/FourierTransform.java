@@ -1,7 +1,5 @@
 package com.gebond.ip.math.func.transform;
 
-import com.sun.istack.internal.NotNull;
-
 import static com.gebond.ip.math.commons.util.ArrayUtil.copyOf;
 import static com.gebond.ip.math.commons.util.MathUtil.getCenters;
 import static com.gebond.ip.math.commons.util.MathUtil.intPow;
@@ -12,13 +10,14 @@ import static org.apache.commons.math3.util.FastMath.log;
 /**
  * Created by Gleb on 28.01.2018.
  */
+@Deprecated
 public class FourierTransform {
 
     private FourierTransform() {
     }
 
     public static class HaartFourierTransform {
-        public static double[] doAnalysis(@NotNull double[] input) {
+        public static double[] doAnalysis(double[] input) {
             double[] result = copyOf(input); // after copy no use of input of array
             int len = result.length;
 
@@ -34,7 +33,7 @@ public class FourierTransform {
             return result;
         }
 
-        public static double[] doSynthesis(@NotNull double[] input) {
+        public static double[] doSynthesis(double[] input) {
             double[] inputCopy = copyOf(input); // after copy no use of input of array
             int len = inputCopy.length;
 
@@ -54,7 +53,7 @@ public class FourierTransform {
     }
 
     public static class WalshFourierTransform {
-        public static double[] doAnalysis(@NotNull double[] input) {
+        public static double[] doAnalysis(double[] input) {
             double[] result = copyOf(input); // after copy no use of input of array
             int len = input.length;
 
@@ -71,7 +70,7 @@ public class FourierTransform {
             return result;
         }
 
-        public static double[] doSynthesis(@NotNull double[] input) {
+        public static double[] doSynthesis(double[] input) {
             double[] inputCopy = copyOf(input);
             int len = input.length;
 

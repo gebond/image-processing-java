@@ -1,15 +1,13 @@
 package com.gebond.ip.math.func.transform;
 
-import mockit.integration.junit4.JMockit;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
 
 
 /**
  * Created by Gleb on 21.10.2017.
  */
 @DisplayName("fourier transformation tests")
-@RunWith(JMockit.class)
+@Deprecated
 class FourierTransformationTest {
 //
 //    @Nested

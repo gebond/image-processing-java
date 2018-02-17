@@ -1,7 +1,13 @@
 package gebond.ip.domain.manager;
 
+import com.gebond.ip.math.func.compression.CompressionSetting;
+import com.gebond.ip.math.func.context.FourierContext;
+import com.gebond.ip.math.func.transform.HaartTransformation2D;
+
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static com.gebond.ip.math.func.compression.CompressionSetting.MIN_COMPRESSION_RATE;
 
 /**
  * Created by Gleb on 22.10.2017.
@@ -9,49 +15,47 @@ import java.util.concurrent.ThreadLocalRandom;
 public class LoadManager {
 
     static int TEST_RUNS = 10;
+
     static int ARRAY_SIZE = 16;
+
     static double MAX_DOUBLE = 1;
     static double MIN_DOUBLE = 0;
+
     static double PERIODS = 100;
     static double BOUND_50 = 50;
     static double BOUND_85 = 85;
     static double BOUND_95 = 95;
 
-    static HaartFourierTransformation1D transformation1D = new HaartFourierTransformation1D();
+    static HaartTransformation2D haartTransformation2D= new HaartTransformation2D();
 
     public static void main(String[] args) {
-        double[] times = new double[TEST_RUNS];
-        long startTime;
-        long endTime;
+        double[] counts = new double[TEST_RUNS];
 
+        // FILL BENCHMARK INFO
         for (int i = 0; i < TEST_RUNS; i++) {
-            FourierData fourierData = newFourierData();
-            startTime = System.currentTimeMillis();
-            transformation1D.analysis(fourierData);
-            transformation1D.synthesis(fourierData);
-            endTime = System.currentTimeMillis();
-            times[i] = (endTime - startTime);
+            long startTime = System.currentTimeMillis();
+            haartTransformation2D.process(newFourierContext2D());
+            long endTime = System.currentTimeMillis();
+            counts[i] = (endTime - startTime);
         }
 
-//        times = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        times = new double[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
         // ANALYSIS
-        Arrays.sort(times);
-        double min = times[0];
-        double max = times[times.length - 1];
+        Arrays.sort(counts);
+        double min = counts[0];
+        double max = counts[counts.length - 1];
 
-        double step = (max - min) / PERIODS;
+        double step = (max - min) / 100.0;
 
         double pcnt50_val = 0.0;
         double pcnt85_val = 0.0;
         double pcnt95_val = 0.0;
 
         for (int i = 0; i < TEST_RUNS; i++) {
-            if (i <= (int) (TEST_RUNS * BOUND_50 / PERIODS)) {
+            if (i <= (int) (TEST_RUNS * BOUND_50 / 100)) {
                 continue;
-            } else if (i <= (int) (TEST_RUNS * BOUND_85 / PERIODS)) {
+            } else if (i <= (int) (TEST_RUNS * BOUND_85 / 100)) {
                 pcnt50_val = i * step;
-            } else if (i <= (int) (TEST_RUNS * BOUND_95 / PERIODS)) {
+            } else if (i <= (int) (TEST_RUNS * BOUND_95 / 100)) {
                 pcnt85_val = i * step;
             } else {
                 pcnt95_val = i * step;
@@ -64,13 +68,15 @@ public class LoadManager {
 
     }
 
-    private static FourierData newFourierData() {
+    private static FourierContext.FourierContext2D newFourierContext2D() {
         double[][] result = new double[ARRAY_SIZE][ARRAY_SIZE];
         for (int i = 0; i < ARRAY_SIZE; i++) {
             for (int j = 0; j < ARRAY_SIZE; j++) {
                 result[i][j] = ThreadLocalRandom.current().nextDouble(MIN_DOUBLE, MAX_DOUBLE);
             }
         }
-        return new FourierData(result);
+        return FourierContext.start2DBuilder(result)
+                .withCompression(CompressionSetting.of(MIN_COMPRESSION_RATE))
+                .build();
     }
 }

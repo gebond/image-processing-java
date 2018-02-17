@@ -12,6 +12,7 @@
     <artifactId>ip-commons</artifactId>
 
     <dependencies>
+        <!-- Project -->
         <dependency>
             <groupId>com.gebond.ip</groupId>
             <artifactId>math-func</artifactId>
