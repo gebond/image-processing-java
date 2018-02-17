@@ -2,7 +2,7 @@ package com.gebond.ip.math.func.array;
 
 import com.gebond.ip.math.commons.util.ArrayUtil;
 
-import static com.gebond.ip.math.commons.util.ArrayUtil.arrayCopy;
+import static com.gebond.ip.math.commons.util.ArrayUtil.copyOf;
 
 /**
  * Created on 10/02/18.
@@ -16,7 +16,7 @@ public class Array2D extends ArrayContainer {
     }
 
     public double[][] getArray2DCopy() {
-        return ArrayUtil.arrayCopy(array2D);
+        return ArrayUtil.copyOf(array2D);
     }
 
     @Override
@@ -31,6 +31,6 @@ public class Array2D extends ArrayContainer {
 
     @Override
     protected void setArrayAsCopyOf(Object array) {
-        array2D = arrayCopy((double[][]) array);
+        array2D = copyOf((double[][]) array);
     }
 }

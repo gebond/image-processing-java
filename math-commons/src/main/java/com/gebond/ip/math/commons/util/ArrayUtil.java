@@ -11,12 +11,28 @@ public class ArrayUtil {
     }
 
     /**
-     * produces NPE if source array is null, or sub-array is null
+     * produces exception if source array is null
      */
-    public static double[][] arrayCopy(double[][] source) {
+    public static double[] copyOf(double[] source) {
+        if (source == null) {
+            throw new IllegalArgumentException();
+        }
+        return Arrays.copyOf(source, source.length);
+    }
+
+    /**
+     * produces exception if source array is null, or sub-array is null
+     */
+    public static double[][] copyOf(double[][] source) {
+        if (source == null) {
+            throw new IllegalArgumentException();
+        }
+        if (source.length == 0) {
+            throw new IllegalArgumentException();
+        }
         double[][] target = new double[source.length][source[0].length];
         for (int i = 0; i < source.length; i++) {
-            target[i] = Arrays.copyOf(source[i], source[i].length);
+            target[i] = copyOf(source[i]);
         }
         return target;
     }

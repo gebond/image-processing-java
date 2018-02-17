@@ -8,10 +8,10 @@ import com.gebond.ip.math.func.context.FourierContext;
 public abstract class Operation1D implements Operation<FourierContext.FourierContext1D> {
     @Override
     public void validate(FourierContext.FourierContext1D context) throws IllegalArgumentException {
-        if (context.fourierData.getArray1DCopy() == null) {
+        if (context.getFourierData().getArray1DCopy() == null) {
             throw new IllegalArgumentException("Input array is null");
         }
-        int len = context.fourierData.getSize();
+        int len = context.getFourierData().getSize();
         if (len == 0) {
             throw new IllegalArgumentException("Input array size must be > 0");
         }

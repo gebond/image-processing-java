@@ -1,12 +1,9 @@
 package com.gebond.ip.math.commons.util;
 
-import com.gebond.ip.math.func.transform.FourierData;
 import com.gebond.ip.math.func.transform.FourierTransformation;
-import com.gebond.ip.math.func.transform.HaartFourierTransformation1D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.gebond.ip.math.commons.util.ArrayUtil.arrayCopy;
 import static org.apache.commons.math3.util.FastMath.pow;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.gebond.ip.math.commons.util.ArrayUtil.arrayCopy;
+import static com.gebond.ip.math.commons.util.ArrayUtil.copyOf;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,7 +21,7 @@ class ArrayUtilTest {
         void arrayCopyTest() {
             double[][] source = new double[][]{{1.0, 2.0, 3.0}, {3.0, 4.0, 6.0}};
 
-            double[][] target = arrayCopy(source);
+            double[][] target = copyOf(source);
 
             assertEquals(source.length, target.length);
             assertEquals(source[0].length, target[0].length);
@@ -34,7 +34,7 @@ class ArrayUtilTest {
             double[][] source = new double[][]{{1.0, 2.0, 3.0}, {3.0, 4.0, 6.0}};
             double[][] source_copy = new double[][]{{1.0, 2.0, 3.0}, {3.0, 4.0, 6.0}};
 
-            double[][] target = arrayCopy(source);
+            double[][] target = copyOf(source);
             source[1][0] = -10.0;
             source[0][1] = 100.0;
 

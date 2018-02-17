@@ -1,8 +1,5 @@
 package gebond.ip.domain.manager;
 
-import com.gebond.ip.math.func.transform.FourierData;
-import com.gebond.ip.math.func.transform.HaartFourierTransformation1D;
-
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 

@@ -2,8 +2,7 @@ package com.gebond.ip.math.func.transform;
 
 import com.sun.istack.internal.NotNull;
 
-import java.util.Arrays;
-
+import static com.gebond.ip.math.commons.util.ArrayUtil.copyOf;
 import static com.gebond.ip.math.commons.util.MathUtil.getCenters;
 import static com.gebond.ip.math.commons.util.MathUtil.intPow;
 import static com.gebond.ip.math.func.util.Functions.haart;
@@ -20,13 +19,12 @@ public class FourierTransform {
 
     public static class HaartFourierTransform {
         public static double[] doAnalysis(@NotNull double[] input) {
-            int len = input.length;
-            double[] result = Arrays.copyOf(input, len); // after copy no use of input of array
+            double[] result = copyOf(input); // after copy no use of input of array
+            int len = result.length;
 
             int k = (int) log(2, len);
             while (k > 0) {
-                double[] copy = new double[len];
-                arraycopy(result, 0, copy, 0, len);
+                double[] copy = copyOf(result);
                 for (int j = 0; j < intPow(2, k - 1); j++) {
                     result[j] = 0.5 * (copy[2 * j] + copy[2 * j + 1]);
                     result[intPow(2, k - 1) + j] = 0.5 * (copy[2 * j] - copy[2 * j + 1]);
@@ -37,7 +35,9 @@ public class FourierTransform {
         }
 
         public static double[] doSynthesis(@NotNull double[] input) {
-            int len = input.length;
+            double[] inputCopy = copyOf(input); // after copy no use of input of array
+            int len = inputCopy.length;
+
             double[] result = new double[len];
             double[] centers = getCenters(len);
 
@@ -45,7 +45,7 @@ public class FourierTransform {
                 double fun_ith = 0.0;
                 for (int j = 0; j < len; j++) {
                     double haart = haart(j, centers[i]);
-                    fun_ith += input[j] * haart;
+                    fun_ith += inputCopy[j] * haart;
                 }
                 result[i] = fun_ith;
             }
@@ -55,8 +55,8 @@ public class FourierTransform {
 
     public static class WalshFourierTransform {
         public static double[] doAnalysis(@NotNull double[] input) {
+            double[] result = copyOf(input); // after copy no use of input of array
             int len = input.length;
-            double[] result = Arrays.copyOf(input, len); // after copy no use of input of array
 
             int k = (int) log(2, len);
             while (k > 0) {
@@ -72,7 +72,9 @@ public class FourierTransform {
         }
 
         public static double[] doSynthesis(@NotNull double[] input) {
+            double[] inputCopy = copyOf(input);
             int len = input.length;
+
             double[] result = new double[len];
             double[] centers = getCenters(len);
 
@@ -80,7 +82,7 @@ public class FourierTransform {
                 double fun_ith = 0.0;
                 for (int j = 0; j < len; j++) {
                     double haart = haart(j, centers[i]);
-                    fun_ith += input[j] * haart;
+                    fun_ith += inputCopy[j] * haart;
                 }
                 result[i] = fun_ith;
             }
