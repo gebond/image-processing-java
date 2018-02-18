@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Created by Gleb on 21.01.2018.
@@ -94,9 +94,8 @@ public class HaartTransformationTest {
             FourierContext.FourierContext1D fourierContext = FourierContext.fromArray(new double[]{1.0, 2.0});
             fourierContext.getFourierData().setArray(new double[]{1.0, 2.0, 3.0});
 
-            testee.process(fourierContext);
-
-            assertTrue(fourierContext.isClosed());
+            assertThrows(IllegalArgumentException.class,
+                    () -> testee.process(fourierContext));
         }
 
         @Test
@@ -105,9 +104,8 @@ public class HaartTransformationTest {
             FourierContext.FourierContext1D fourierContext = FourierContext.fromArray(new double[]{1.0, 2.0});
             fourierContext.getFourierData().setArray(new double[]{});
 
-            testee.process(fourierContext);
-
-            assertTrue(fourierContext.isClosed());
+            assertThrows(IllegalArgumentException.class,
+                    () -> testee.process(fourierContext));
         }
 
         @Test
@@ -204,9 +202,8 @@ public class HaartTransformationTest {
                     fromArray(new double[][]{{1.0, 2.0}, {1.0, 2.0}});
             fourierContext.getFourierData().setArray(new double[][]{{1.0}, {3.0}});
 
-            testee.process(fourierContext);
-
-            assertTrue(fourierContext.isClosed());
+            assertThrows(IllegalArgumentException.class,
+                    () -> testee.process(fourierContext));
         }
 
         @Test
@@ -216,9 +213,8 @@ public class HaartTransformationTest {
                     fromArray(new double[][]{{1.0, 2.0}, {1.0, 2.0}});
             fourierContext.getFourierData().setArray(new double[][]{{1.0, 2.0, 3.0}, {1.0, 2.0, 3.0}});
 
-            testee.process(fourierContext);
-
-            assertTrue(fourierContext.isClosed());
+            assertThrows(IllegalArgumentException.class,
+                    () -> testee.process(fourierContext));
         }
 
         @Test
@@ -227,9 +223,8 @@ public class HaartTransformationTest {
             FourierContext.FourierContext2D fourierContext = FourierContext.fromArray(new double[][]{{1.0, 2.0}, {1.0, 2.0}});
             fourierContext.getFourierData().setArray(new double[][]{{}});
 
-            testee.process(fourierContext);
-
-            assertTrue(fourierContext.isClosed());
+            assertThrows(IllegalArgumentException.class,
+                    () -> testee.process(fourierContext));
         }
 
         @Test

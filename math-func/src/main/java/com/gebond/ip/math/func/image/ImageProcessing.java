@@ -24,18 +24,17 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     }
 
     public static class SplittingOperation implements Operation<ImageContext> {
-        // todo maybe true false + exception
         @Override
         public boolean validate(ImageContext context) throws IllegalArgumentException {
             if (context.getImage() == null || context.getImageSetting() == null) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Image or setting is null");
             }
             if (context.getImageSetting().getSegmentSize() == null) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Segment size is null");
             }
             if (context.getImage().getHeight() < context.getImageSetting().getSegmentSize().getValue()
                     || context.getImage().getWidth() < context.getImageSetting().getSegmentSize().getValue()) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Height or Width must be more than segment size");
             }
             return true;
         }
@@ -50,44 +49,43 @@ public class ImageProcessing extends OperationManager<ImageContext> {
 
             for (int i = 0; i < context.getRowCount(); i++) {
                 for (int j = 0; j < context.getColumnCount(); j++) {
-                    context.getPixelList().add(buildVector(bufferedImage, i, j, size));
+                    context.getPixelList().add(buildVector(bufferedImage, i, j, context.getRowCount(), context.getColumnCount(), size));
                 }
             }
         }
 
-        private Vector<Array2D> buildVector(BufferedImage bufferedImage, int row, int column, int size) {
-            double[][] arrayX = new double[size][size];
-            double[][] arrayY = new double[size][size];
-            double[][] arrayZ = new double[size][size];
+        private Vector<Array2D> buildVector(BufferedImage bufferedImage, int rowCurrent, int columnCurrent, int rowMax, int columnMax, int size) {
+            double[][] arrayReds = new double[size][size];
+            double[][] arrayGreens = new double[size][size];
+            double[][] arrayBlues = new double[size][size];
             // x -> column, y -> row
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
-                    Color color = new Color(bufferedImage.getRGB(x * column, y * row));
-                    arrayX[x][y] = color.getRed();
-                    arrayY[x][y] = color.getGreen();
-                    arrayZ[x][y] = color.getBlue();
+                    Color color = new Color(bufferedImage.getRGB(columnMax * columnCurrent + x, rowMax * rowCurrent + y));
+                    arrayReds[x][y] = color.getRed();
+                    arrayGreens[x][y] = color.getGreen();
+                    arrayBlues[x][y] = color.getBlue();
                 }
             }
-            Vector<Array2D> vector = new Vector<>();
-            vector.setX(new Array2D(arrayX));
-            vector.setY(new Array2D(arrayY));
-            vector.setZ(new Array2D(arrayZ));
+            Vector<Array2D> vector = new Vector<>(
+                    new Array2D(arrayReds),
+                    new Array2D(arrayGreens),
+                    new Array2D(arrayBlues));
             return vector;
         }
     }
 
     public static class BuildingOperation implements Operation<ImageContext> {
-        // todo maybe true false + exception
         @Override
         public boolean validate(ImageContext context) throws IllegalArgumentException {
             if (context.getImageSetting().getSegmentSize() == null) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Image setting segment is null");
             }
             if (context.getPixelList() == null || context.getPixelList().isEmpty()) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("List of pixel vector arrays is null or empty");
             }
             if (context.getColumnCount() == 0 || context.getRowCount() == 0) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Column/Row count is null");
             }
             return true;
         }
@@ -97,7 +95,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
             BufferedImage newImage = new BufferedImage(
                     context.getColumnCount() * context.getImageSetting().getSegmentSize().getValue(),
                     context.getRowCount() * context.getImageSetting().getSegmentSize().getValue(),
-                    BufferedImage.TYPE_INT_ARGB);
+                    BufferedImage.TYPE_INT_RGB);
 
             for (int i = 0; i < context.getRowCount(); i++) {
                 for (int j = 0; j < context.getColumnCount(); j++) {
@@ -112,15 +110,15 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         }
 
         private void applyVector(BufferedImage image, Vector<Array2D> vector, int startX, int startY, int size) {
-            double[][] arrayX = vector.getX().getArray2DCopy();
-            double[][] arrayY = vector.getY().getArray2DCopy();
-            double[][] arrayZ = vector.getZ().getArray2DCopy();
+            double[][] arrayReds = vector.getX().getArray2DCopy();
+            double[][] arrayGreens = vector.getY().getArray2DCopy();
+            double[][] arrayBlues = vector.getZ().getArray2DCopy();
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
                     Color color = new Color(
-                            (int) arrayX[x][y],
-                            (int) arrayY[x][y],
-                            (int) arrayZ[x][y]);
+                            (int) arrayReds[x][y],
+                            (int) arrayGreens[x][y],
+                            (int) arrayBlues[x][y]);
                     image.setRGB(startX * size + x, startY * size + y, color.getRGB());
                 }
             }

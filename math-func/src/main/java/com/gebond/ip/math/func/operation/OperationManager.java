@@ -15,14 +15,8 @@ public abstract class OperationManager<T extends OperationContext> {
             if (context.isClosed()) {
                 return context;
             }
-            try {
-                if (operation.validate(context)) {
-                    operation.apply(context);
-                }
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-                context.close();
-                break;
+            if (operation.validate(context)) {
+                operation.apply(context);
             }
         }
         return context;

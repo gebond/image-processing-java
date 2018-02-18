@@ -9,6 +9,12 @@ public class Vector<T> {
     private T y;
     private T z;
 
+    public Vector(T x, T y, T z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
     public T getX() {
         return x;
     }
