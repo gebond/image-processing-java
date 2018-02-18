@@ -16,6 +16,9 @@ public class ImageContext extends OperationContext {
     private ImageSetting imageSetting;
     private int columnCount = 0;
     private int rowCount = 0;
+    /**
+     * list of vectors where vector contains (x-red, y-green, z-blue)
+     */
     private List<Vector<Array2D>> pixelList = new ArrayList<>();
 
     public BufferedImage getImage() {
