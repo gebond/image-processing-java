@@ -15,13 +15,14 @@ import static org.apache.commons.math3.util.FastMath.abs;
 public abstract class CompressingOperation<T extends FourierContext> implements Operation<T> {
 
     @Override
-    public void validate(T context) throws IllegalArgumentException {
+    public boolean validate(T context) throws IllegalArgumentException {
         if (context.getFourierData() == null) {
             throw new IllegalArgumentException("FourierData must be set to proceed.");
         }
         if (context.getCompressionSetting() == null) {
             throw new IllegalArgumentException("CompressionSetting must be set to proceed.");
         }
+        return true;
     }
 
     protected interface ValueGetterSetter {

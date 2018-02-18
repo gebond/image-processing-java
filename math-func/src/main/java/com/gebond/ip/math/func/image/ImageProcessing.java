@@ -26,7 +26,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     public static class SplittingOperation implements Operation<ImageContext> {
         // todo maybe true false + exception
         @Override
-        public void validate(ImageContext context) throws IllegalArgumentException {
+        public boolean validate(ImageContext context) throws IllegalArgumentException {
             if (context.getImage() == null || context.getImageSetting() == null) {
                 throw new IllegalArgumentException();
             }
@@ -37,6 +37,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
                     || context.getImage().getWidth() < context.getImageSetting().getSegmentSize().getValue()) {
                 throw new IllegalArgumentException();
             }
+            return true;
         }
 
         @Override
@@ -78,7 +79,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     public static class BuildingOperation implements Operation<ImageContext> {
         // todo maybe true false + exception
         @Override
-        public void validate(ImageContext context) throws IllegalArgumentException {
+        public boolean validate(ImageContext context) throws IllegalArgumentException {
             if (context.getImageSetting().getSegmentSize() == null) {
                 throw new IllegalArgumentException();
             }
@@ -88,6 +89,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
             if (context.getColumnCount() == 0 || context.getRowCount() == 0) {
                 throw new IllegalArgumentException();
             }
+            return true;
         }
 
         @Override
@@ -95,7 +97,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
             BufferedImage newImage = new BufferedImage(
                     context.getColumnCount() * context.getImageSetting().getSegmentSize().getValue(),
                     context.getRowCount() * context.getImageSetting().getSegmentSize().getValue(),
-                    context.getImage().getType());
+                    BufferedImage.TYPE_INT_ARGB);
 
             for (int i = 0; i < context.getRowCount(); i++) {
                 for (int j = 0; j < context.getColumnCount(); j++) {

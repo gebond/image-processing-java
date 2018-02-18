@@ -7,7 +7,7 @@ import com.gebond.ip.math.func.context.FourierContext;
  */
 public abstract class Operation1D implements Operation<FourierContext.FourierContext1D> {
     @Override
-    public void validate(FourierContext.FourierContext1D context) throws IllegalArgumentException {
+    public boolean validate(FourierContext.FourierContext1D context) throws IllegalArgumentException {
         if (context.getFourierData().getArray1DCopy() == null) {
             throw new IllegalArgumentException("Input array is null");
         }
@@ -18,5 +18,6 @@ public abstract class Operation1D implements Operation<FourierContext.FourierCon
         if ((len & 1) != 0) {
             throw new IllegalArgumentException("Input array size must be 2^k , k~Z");
         }
+        return true;
     }
 }

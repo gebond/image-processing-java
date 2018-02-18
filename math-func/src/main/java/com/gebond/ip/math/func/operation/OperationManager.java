@@ -16,13 +16,14 @@ public abstract class OperationManager<T extends OperationContext> {
                 return context;
             }
             try {
-                operation.validate(context);
+                if (operation.validate(context)) {
+                    operation.apply(context);
+                }
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
                 context.close();
                 break;
             }
-            operation.apply(context);
         }
         return context;
     }
