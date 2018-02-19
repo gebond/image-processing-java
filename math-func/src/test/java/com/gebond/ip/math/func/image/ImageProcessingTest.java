@@ -117,6 +117,27 @@ public class ImageProcessingTest {
     }
 
     @Test
+    @DisplayName("complete, 64x64.png, x8")
+    void testProcess_64x64() throws IOException {
+        BufferedImage input = getImageUsingFileName("64x64.png");
+        ImageContext imageContext = buildImageContext(input, ImageSetting.SegmentSize.X8);
+
+        testee.process(imageContext);
+
+        assertEquals(imageContext.getColumnCount() * imageContext.getRowCount(), imageContext.getPixelList().size());
+        assertEquals(64, imageContext.getPixelList().size());
+
+
+        assertEquals(input.getRGB(10, 10), imageContext.getImage().getRGB(10, 10));
+        assertEquals(input.getRGB(35, 15), imageContext.getImage().getRGB(35, 15));
+        assertEquals(input.getRGB(31, 31), imageContext.getImage().getRGB(31, 31));
+        assertEquals(input.getRGB(15, 35), imageContext.getImage().getRGB(15, 35));
+        assertEquals(input.getRGB(55, 55), imageContext.getImage().getRGB(55, 55));
+
+        saveImage(imageContext.getImage(), "64x64");
+    }
+
+    @Test
     @DisplayName("complete, 6x5.png, x4")
     void testProcess_6x5_x4() throws IOException {
         BufferedImage input = getImageUsingFileName("6x5.png");

@@ -2,9 +2,11 @@ package com.gebond.ip.math.func.image;
 
 import com.gebond.ip.math.func.array.Array2D;
 import com.gebond.ip.math.func.array.Vector;
+import com.gebond.ip.math.func.context.FourierContext;
 import com.gebond.ip.math.func.context.ImageContext;
 import com.gebond.ip.math.func.operation.Operation;
 import com.gebond.ip.math.func.operation.OperationManager;
+import com.gebond.ip.math.func.transform.HaartTransformation2D;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,6 +21,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     public List<Operation<ImageContext>> getOperations() {
         return Arrays.asList(
                 new SplittingOperation(),
+                new ConsistentOperation(),
                 new BuildingOperation()
         );
     }
@@ -124,4 +127,49 @@ public class ImageProcessing extends OperationManager<ImageContext> {
             }
         }
     }
+
+    public static class ConcurrentOperation implements Operation<ImageContext> {
+        @Override
+        public boolean validate(ImageContext context) throws IllegalArgumentException {
+            if(context.getPixelList() == null || context.getPixelList().isEmpty()){
+                throw new IllegalArgumentException("Pixel array = null or empty");
+            }
+            return true;
+        }
+
+        @Override
+        public void apply(ImageContext context) {
+        }
+
+    }
+
+    public static class ConsistentOperation implements Operation<ImageContext> {
+        @Override
+        public boolean validate(ImageContext context) throws IllegalArgumentException {
+            if(context.getPixelList() == null || context.getPixelList().isEmpty()){
+                throw new IllegalArgumentException("Pixel array = null or empty");
+            }
+            return true;
+        }
+
+        @Override
+        public void apply(ImageContext context) {
+            HaartTransformation2D haartTransformation2D = new HaartTransformation2D();
+            for(Vector<Array2D> vector: context.getPixelList()){
+                vector.setX(new Array2D(haartTransformation2D
+                        .process(FourierContext
+                                .fromArray(vector.getX().getArray2DCopy()))
+                        .getFourierData().getArray2DCopy()));
+                vector.setY(new Array2D(haartTransformation2D
+                        .process(FourierContext
+                                .fromArray(vector.getY().getArray2DCopy()))
+                        .getFourierData().getArray2DCopy()));
+                vector.setZ(new Array2D(haartTransformation2D
+                        .process(FourierContext
+                                .fromArray(vector.getZ().getArray2DCopy()))
+                        .getFourierData().getArray2DCopy()));
+            }
+        }
+    }
+
 }
