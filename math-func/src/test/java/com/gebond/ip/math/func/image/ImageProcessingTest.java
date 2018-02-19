@@ -117,6 +117,26 @@ public class ImageProcessingTest {
     }
 
     @Test
+    @DisplayName("complete, 6x5.png, x4")
+    void testProcess_6x5_x4() throws IOException {
+        BufferedImage input = getImageUsingFileName("6x5.png");
+        ImageContext imageContext = buildImageContext(input, ImageSetting.SegmentSize.X4);
+
+        testee.process(imageContext);
+
+        assertEquals(imageContext.getColumnCount() * imageContext.getRowCount(), imageContext.getPixelList().size());
+        assertEquals(1, imageContext.getPixelList().size());
+
+        saveImage(imageContext.getImage(), "6x5_x4");
+
+        assertEquals(input.getRGB(0, 0), imageContext.getImage().getRGB(0, 0));
+        assertEquals(input.getRGB(3, 3), imageContext.getImage().getRGB(3, 3));
+        assertEquals(input.getRGB(0, 3), imageContext.getImage().getRGB(0, 3));
+        assertEquals(input.getRGB(3, 3), imageContext.getImage().getRGB(3, 3));
+        assertEquals(input.getRGB(2, 2), imageContext.getImage().getRGB(2, 2));
+    }
+
+    @Test
     @DisplayName("complete, 8x8.png, x4")
     void testProcess_8x8_x4() throws IOException {
         BufferedImage input = getImageUsingFileName("8x8.png");
@@ -128,6 +148,12 @@ public class ImageProcessingTest {
         assertEquals(4, imageContext.getPixelList().size());
 
         saveImage(imageContext.getImage(), "8x8_x4");
+
+        assertEquals(input.getRGB(0, 0), imageContext.getImage().getRGB(0, 0));
+        assertEquals(input.getRGB(7, 7), imageContext.getImage().getRGB(7, 7));
+        assertEquals(input.getRGB(0, 7), imageContext.getImage().getRGB(0, 7));
+        assertEquals(input.getRGB(7, 7), imageContext.getImage().getRGB(7, 7));
+        assertEquals(input.getRGB(3, 6), imageContext.getImage().getRGB(3, 6));
     }
 
     @Test

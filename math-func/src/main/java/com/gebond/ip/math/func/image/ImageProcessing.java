@@ -101,15 +101,15 @@ public class ImageProcessing extends OperationManager<ImageContext> {
                 for (int j = 0; j < context.getColumnCount(); j++) {
                     applyVector(newImage,
                             context.getPixelList().get(i * context.getColumnCount() + j),
-                            j,
-                            i,
+                            i, j,
+                            context.getRowCount(), context.getColumnCount(),
                             context.getImageSetting().getSegmentSize().getValue());
                 }
             }
             context.setImage(newImage);
         }
 
-        private void applyVector(BufferedImage image, Vector<Array2D> vector, int startX, int startY, int size) {
+        private void applyVector(BufferedImage image, Vector<Array2D> vector, int rowCurrent, int columnCurrent, int rowMax, int columnMax, int size) {
             double[][] arrayReds = vector.getX().getArray2DCopy();
             double[][] arrayGreens = vector.getY().getArray2DCopy();
             double[][] arrayBlues = vector.getZ().getArray2DCopy();
@@ -119,7 +119,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
                             (int) arrayReds[x][y],
                             (int) arrayGreens[x][y],
                             (int) arrayBlues[x][y]);
-                    image.setRGB(startX * size + x, startY * size + y, color.getRGB());
+                    image.setRGB(columnMax * columnCurrent + x, rowMax * rowCurrent + y, color.getRGB());
                 }
             }
         }
