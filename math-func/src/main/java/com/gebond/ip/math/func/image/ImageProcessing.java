@@ -49,19 +49,19 @@ public class ImageProcessing extends OperationManager<ImageContext> {
 
             for (int i = 0; i < context.getRowCount(); i++) {
                 for (int j = 0; j < context.getColumnCount(); j++) {
-                    context.getPixelList().add(buildVector(bufferedImage, i, j, context.getRowCount(), context.getColumnCount(), size));
+                    context.getPixelList().add(buildVector(bufferedImage, i, j, size));
                 }
             }
         }
 
-        private Vector<Array2D> buildVector(BufferedImage bufferedImage, int rowCurrent, int columnCurrent, int rowMax, int columnMax, int size) {
+        private Vector<Array2D> buildVector(BufferedImage bufferedImage, int rowCurrent, int columnCurrent, int size) {
             double[][] arrayReds = new double[size][size];
             double[][] arrayGreens = new double[size][size];
             double[][] arrayBlues = new double[size][size];
             // x -> column, y -> row
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
-                    Color color = new Color(bufferedImage.getRGB(columnMax * columnCurrent + x, rowMax * rowCurrent + y));
+                    Color color = new Color(bufferedImage.getRGB(size * columnCurrent + x, size * rowCurrent + y));
                     arrayReds[x][y] = color.getRed();
                     arrayGreens[x][y] = color.getGreen();
                     arrayBlues[x][y] = color.getBlue();
@@ -96,20 +96,20 @@ public class ImageProcessing extends OperationManager<ImageContext> {
                     context.getColumnCount() * context.getImageSetting().getSegmentSize().getValue(),
                     context.getRowCount() * context.getImageSetting().getSegmentSize().getValue(),
                     BufferedImage.TYPE_INT_RGB);
-
             for (int i = 0; i < context.getRowCount(); i++) {
                 for (int j = 0; j < context.getColumnCount(); j++) {
-                    applyVector(newImage,
+                    applyVector(
+                            newImage,
                             context.getPixelList().get(i * context.getColumnCount() + j),
-                            i, j,
-                            context.getRowCount(), context.getColumnCount(),
+                            i,
+                            j,
                             context.getImageSetting().getSegmentSize().getValue());
                 }
             }
             context.setImage(newImage);
         }
 
-        private void applyVector(BufferedImage image, Vector<Array2D> vector, int rowCurrent, int columnCurrent, int rowMax, int columnMax, int size) {
+        private void applyVector(BufferedImage image, Vector<Array2D> vector, int rowCurrent, int columnCurrent, int size) {
             double[][] arrayReds = vector.getX().getArray2DCopy();
             double[][] arrayGreens = vector.getY().getArray2DCopy();
             double[][] arrayBlues = vector.getZ().getArray2DCopy();
@@ -119,7 +119,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
                             (int) arrayReds[x][y],
                             (int) arrayGreens[x][y],
                             (int) arrayBlues[x][y]);
-                    image.setRGB(columnMax * columnCurrent + x, rowMax * rowCurrent + y, color.getRGB());
+                    image.setRGB(size * columnCurrent + x, size * rowCurrent + y, color.getRGB());
                 }
             }
         }
