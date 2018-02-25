@@ -14,6 +14,7 @@ public class ImageContext extends OperationContext {
 
     private BufferedImage image;
     private ImageSetting imageSetting;
+    private TransformSetting transformSetting;
     private int columnCount = 0;
     private int rowCount = 0;
     /**
@@ -53,6 +54,14 @@ public class ImageContext extends OperationContext {
         this.rowCount = rowCount;
     }
 
+    public TransformSetting getTransformSetting() {
+        return transformSetting;
+    }
+
+    public void setTransformSetting(TransformSetting transformSetting) {
+        this.transformSetting = transformSetting;
+    }
+
     public List<Vector<Array2D>> getPixelList() {
         return pixelList;
     }
@@ -82,6 +91,12 @@ public class ImageContext extends OperationContext {
             imageContext.setImageSetting(imageSetting);
             return this;
         }
+
+        public ImageContextBuilder withSetting(TransformSetting transformSetting) {
+            imageContext.setTransformSetting(transformSetting);
+            return this;
+        }
+
 
         public ImageContext build() {
             return imageContext;

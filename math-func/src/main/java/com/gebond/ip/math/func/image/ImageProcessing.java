@@ -128,48 +128,57 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         }
     }
 
-    public static class ConcurrentOperation implements Operation<ImageContext> {
-        @Override
-        public boolean validate(ImageContext context) throws IllegalArgumentException {
-            if(context.getPixelList() == null || context.getPixelList().isEmpty()){
-                throw new IllegalArgumentException("Pixel array = null or empty");
-            }
-            return true;
-        }
-
+    public static class ConcurrentOperation extends TransformationOperation {
         @Override
         public void apply(ImageContext context) {
-        }
 
-    }
-
-    public static class ConsistentOperation implements Operation<ImageContext> {
-        @Override
-        public boolean validate(ImageContext context) throws IllegalArgumentException {
-            if(context.getPixelList() == null || context.getPixelList().isEmpty()){
-                throw new IllegalArgumentException("Pixel array = null or empty");
-            }
-            return true;
-        }
-
-        @Override
-        public void apply(ImageContext context) {
-            HaartTransformation2D haartTransformation2D = new HaartTransformation2D();
-            for(Vector<Array2D> vector: context.getPixelList()){
-                vector.setX(new Array2D(haartTransformation2D
-                        .process(FourierContext
-                                .fromArray(vector.getX().getArray2DCopy()))
-                        .getFourierData().getArray2DCopy()));
-                vector.setY(new Array2D(haartTransformation2D
-                        .process(FourierContext
-                                .fromArray(vector.getY().getArray2DCopy()))
-                        .getFourierData().getArray2DCopy()));
-                vector.setZ(new Array2D(haartTransformation2D
-                        .process(FourierContext
-                                .fromArray(vector.getZ().getArray2DCopy()))
-                        .getFourierData().getArray2DCopy()));
-            }
         }
     }
 
+    public static abstract class TransformationOperation implements Operation<ImageContext> {
+        @Override
+        public boolean validate(ImageContext context) throws IllegalArgumentException {
+            if (context.getPixelList() == null || context.getPixelList().isEmpty()) {
+                throw new IllegalArgumentException("Pixel array = null or empty");
+            }
+            if (context.getTransformSetting().getType() == null) {
+                throw new IllegalArgumentException("Transformation type is null");
+            }
+            if (context.getTransformSetting().getCompressionSetting() == null) {
+                throw new IllegalArgumentException("Compression is null");
+            }
+            return true;
+        }
+    }
+
+    public static class ConsistentOperation extends TransformationOperation {
+        @Override
+        public void apply(ImageContext context) {
+            OperationManager<FourierContext.FourierContext2D> transformation2D = null;
+            switch (context.getTransformSetting().getType()) {
+                case HAART_TRANSFORM:
+                    transformation2D = new HaartTransformation2D();
+            }
+            for (Vector<Array2D> vector : context.getPixelList()) {
+                vector.setX(new Array2D(transformation2D
+                        .process(FourierContext
+                                .start2DBuilder(vector.getX().getArray2DCopy())
+                                .withCompression(context.getTransformSetting().getCompressionSetting())
+                                .build())
+                        .getFourierData().getArray2DCopy()));
+                vector.setY(new Array2D(transformation2D
+                        .process(FourierContext
+                                .start2DBuilder(vector.getY().getArray2DCopy())
+                                .withCompression(context.getTransformSetting().getCompressionSetting())
+                                .build())
+                        .getFourierData().getArray2DCopy()));
+                vector.setZ(new Array2D(transformation2D
+                        .process(FourierContext
+                                .start2DBuilder(vector.getZ().getArray2DCopy())
+                                .withCompression(context.getTransformSetting().getCompressionSetting())
+                                .build())
+                        .getFourierData().getArray2DCopy()));
+            }
+        }
+    }
 }
