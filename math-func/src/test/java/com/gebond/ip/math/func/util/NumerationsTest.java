@@ -11,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 /**
  * Created by Gleb on 18.10.2017.
  */
-@DisplayName("numerations tests")
+@DisplayName("Numerations")
 public class NumerationsTest {
 
     @Nested
-    @DisplayName("paley")
+    @DisplayName("Paley")
     class PaleyTests {
 
         @Test

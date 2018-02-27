@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Created by Gleb on 18.10.2017.
  */
-@DisplayName("core math function tests")
+@DisplayName("Core math functions")
 public class FunctionsTest {
 
     @Nested
-    @DisplayName("rademacher")
+    @DisplayName("Rademacher")
     class RademacherTests {
 
         @Test
@@ -130,7 +130,7 @@ public class FunctionsTest {
     }
 
     @Nested
-    @DisplayName("walsh")
+    @DisplayName("Walsh")
     class WalshTests {
 
         @Test
@@ -212,7 +212,7 @@ public class FunctionsTest {
     }
 
     @Nested
-    @DisplayName("haart")
+    @DisplayName("Haart")
     class HaartTests {
 
         @Test

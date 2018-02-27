@@ -177,6 +177,32 @@ public class WalshTransformationTest {
             assertArrayEqualsWithDelta(array, result);
         }
 
+        @Test
+        @DisplayName("complete, len = {8, 8}")
+        void testProcess_doubledSize_2() {
+            double[][] array = new double[][]{
+                    {1.0, 2.0, -1.5, 4.5, 10.5, 2.0, -1.9, 4.5},
+                    {10.5, 2.0, -1.9, 4.5, 10.5, 2.0, -1.9, 4.5},
+                    {1.0, 20.0, -1.5, -4.5, 1.0, 2.0, -1.5, 4.5},
+                    {1.0, 2.5, -10.5, 4.5, -1.5, -4.5, 10.5, 2.0},
+                    {1.0, 2.0, -1.5, 4.5, 1.0, 2.0, -1.5, 4.5},
+                    {10.5, 2.0, -1.9, 4.5, -1.5, -4.5, 1.0, 2.0},
+                    {1.0, 20.0, -1.5, -4.5, 10.5, 2.0, -1.9, 4.5},
+                    {1.0, 2.5, -10.5, 4.5, 10.5, 2.0, -1.9, 4.5}};
+
+            FourierContext.FourierContext2D context = testee.process(FourierContext
+                    .start2DBuilder(array)
+                    .withCompression(CompressionSetting.of(CompressionSetting.MIN_COMPRESSION_RATE))
+                    .build());
+
+            assertNotNull(context);
+            assertFalse(context.isClosed());
+            double[][] result = context.getFourierData().getArray2DCopy();
+            assertNotNull(result, "array 1d mut be not null");
+            assertEquals(array.length, result.length, "result array must have the same size");
+            assertArrayEqualsWithDelta(array, result);
+        }
+
         @RepeatedTest(10)
         @DisplayName("complete, random array2d")
         void testProcess_random() {
