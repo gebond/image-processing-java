@@ -5,7 +5,7 @@ import com.gebond.ip.math.func.context.FourierContext;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.gebond.ip.math.func.compression.CompressionSetting.MIN_COMPRESSION_RATE;
+import static com.gebond.ip.model.setting.CompressionSetting.MIN_COMPRESSION_RATE;
 
 /**
  * Created on 10/02/18.

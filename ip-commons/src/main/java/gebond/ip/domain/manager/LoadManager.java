@@ -1,13 +1,13 @@
 package gebond.ip.domain.manager;
 
-import com.gebond.ip.math.func.compression.CompressionSetting;
+import com.gebond.ip.model.setting.CompressionSetting;
 import com.gebond.ip.math.func.context.FourierContext;
 import com.gebond.ip.math.func.transform.HaartTransformation2D;
 
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.gebond.ip.math.func.compression.CompressionSetting.MIN_COMPRESSION_RATE;
+import static com.gebond.ip.model.setting.CompressionSetting.MIN_COMPRESSION_RATE;
 
 /**
  * Created by Gleb on 22.10.2017.

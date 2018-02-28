@@ -1,15 +1,16 @@
 package com.gebond.ip.math.func.image;
 
-import com.gebond.ip.math.func.array.Array2D;
-import com.gebond.ip.math.func.array.Vector;
 import com.gebond.ip.math.func.context.FourierContext;
 import com.gebond.ip.math.func.context.ImageContext;
 import com.gebond.ip.math.func.operation.Operation;
 import com.gebond.ip.math.func.operation.OperationManager;
 import com.gebond.ip.math.func.transform.HaartTransformation2D;
+import com.gebond.ip.math.func.transform.WalshTransformation2D;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import com.gebond.ip.model.array.Array2D;
+import com.gebond.ip.model.array.Vector;
 import java.util.Arrays;
 import java.util.List;
 
@@ -158,6 +159,10 @@ public class ImageProcessing extends OperationManager<ImageContext> {
             switch (context.getTransformSetting().getType()) {
                 case HAART_TRANSFORM:
                     transformation2D = new HaartTransformation2D();
+                    break;
+                case WALSH_TRANSFORM:
+                    transformation2D = new WalshTransformation2D();
+                    break;
             }
             for (Vector<Array2D> vector : context.getPixelList()) {
                 vector.setX(new Array2D(transformation2D

@@ -5,6 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import com.gebond.ip.model.setting.CompressionSetting;
+
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 /**

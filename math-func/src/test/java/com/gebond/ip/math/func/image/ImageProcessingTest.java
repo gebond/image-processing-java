@@ -1,13 +1,13 @@
 package com.gebond.ip.math.func.image;
 
-import com.gebond.ip.math.func.array.Array2D;
-import com.gebond.ip.math.func.array.Vector;
-import com.gebond.ip.math.func.compression.CompressionSetting;
 import com.gebond.ip.math.func.context.ImageContext;
-import com.gebond.ip.math.func.context.ImageSetting;
-import com.gebond.ip.math.func.context.TransformSetting;
 import com.gebond.ip.math.func.operation.Operation;
 import com.gebond.ip.math.func.operation.OperationManager;
+import com.gebond.ip.model.array.Array2D;
+import com.gebond.ip.model.array.Vector;
+import com.gebond.ip.model.setting.CompressionSetting;
+import com.gebond.ip.model.setting.ImageSetting;
+import com.gebond.ip.model.setting.TransformSetting;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -275,6 +275,7 @@ public class ImageProcessingTest {
     public class ConsistentOperations {
 
         OperationManager<ImageContext> testee;
+        ImageContext imageContext;
 
         @BeforeEach
         void init() {
@@ -287,29 +288,70 @@ public class ImageProcessingTest {
             };
         }
 
-        @Test
-        @DisplayName("complete, 2x2, haart, min")
-        void testProcess() {
-            ImageContext imageContext = buildImageContext(
-                    TransformSetting.TransformationType.HAART_TRANSFORM,
-                    CompressionSetting.MIN_COMPRESSION_RATE);
+        @Nested
+        @DisplayName("Walsh")
+        public class WalshTransform {
 
-            double[][] array1 = new double[][]{{3.0, 2.0}, {3.0, 2.0}};
-            double[][] array2 = new double[][]{{1.0, 3.0}, {2.0, 1.0}};
-            double[][] array3 = new double[][]{{2.0, 3.0}, {1.0, 3.0}};
+            @BeforeEach
+            void init() {
+                imageContext = buildImageContext(
+                        TransformSetting.TransformationType.WALSH_TRANSFORM,
+                        CompressionSetting.MIN_COMPRESSION_RATE);
+            }
 
-            imageContext.setPixelList(Arrays.asList(
-                    new Vector<>(
-                            new Array2D(array1),
-                            new Array2D(array2),
-                            new Array2D(array3))
-            ));
+            @Test
+            @DisplayName("complete, 2x2x3, haart, min")
+            void testProcess() {
+                double[][] array1 = new double[][]{{3.0, 2.0}, {3.0, 2.0}};
+                double[][] array2 = new double[][]{{1.0, 3.0}, {2.0, 1.0}};
+                double[][] array3 = new double[][]{{2.0, 3.0}, {1.0, 3.0}};
 
-            testee.process(imageContext);
+                imageContext.setPixelList(Arrays.asList(
+                        new Vector<>(
+                                new Array2D(array1),
+                                new Array2D(array2),
+                                new Array2D(array3))
+                ));
 
-            assertArrayEquals(array1, imageContext.getPixelList().get(0).getX().getArray2DCopy());
-            assertArrayEquals(array2, imageContext.getPixelList().get(0).getY().getArray2DCopy());
-            assertArrayEquals(array3, imageContext.getPixelList().get(0).getZ().getArray2DCopy());
+                testee.process(imageContext);
+
+                assertArrayEquals(array1, imageContext.getPixelList().get(0).getX().getArray2DCopy());
+                assertArrayEquals(array2, imageContext.getPixelList().get(0).getY().getArray2DCopy());
+                assertArrayEquals(array3, imageContext.getPixelList().get(0).getZ().getArray2DCopy());
+            }
+        }
+
+        @Nested
+        @DisplayName("Haart")
+        public class HaartTransform {
+
+            @BeforeEach
+            void init() {
+                imageContext = buildImageContext(
+                        TransformSetting.TransformationType.HAART_TRANSFORM,
+                        CompressionSetting.MIN_COMPRESSION_RATE);
+            }
+
+            @Test
+            @DisplayName("complete, 2x2x3, haart, min")
+            void testProcess() {
+                double[][] array1 = new double[][]{{3.0, 2.0}, {3.0, 2.0}};
+                double[][] array2 = new double[][]{{1.0, 3.0}, {2.0, 1.0}};
+                double[][] array3 = new double[][]{{2.0, 3.0}, {1.0, 3.0}};
+
+                imageContext.setPixelList(Arrays.asList(
+                        new Vector<>(
+                                new Array2D(array1),
+                                new Array2D(array2),
+                                new Array2D(array3))
+                ));
+
+                testee.process(imageContext);
+
+                assertArrayEquals(array1, imageContext.getPixelList().get(0).getX().getArray2DCopy());
+                assertArrayEquals(array2, imageContext.getPixelList().get(0).getY().getArray2DCopy());
+                assertArrayEquals(array3, imageContext.getPixelList().get(0).getZ().getArray2DCopy());
+            }
         }
     }
 

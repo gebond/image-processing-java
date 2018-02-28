@@ -5,8 +5,8 @@ import com.gebond.ip.math.func.operation.Operation;
 
 import java.util.List;
 
-import static com.gebond.ip.math.func.compression.CompressionSetting.MAX_COMPRESSION_RATE;
-import static com.gebond.ip.math.func.compression.CompressionSetting.MIN_COMPRESSION_RATE;
+import static com.gebond.ip.model.setting.CompressionSetting.MAX_COMPRESSION_RATE;
+import static com.gebond.ip.model.setting.CompressionSetting.MIN_COMPRESSION_RATE;
 import static org.apache.commons.math3.util.FastMath.abs;
 
 /**

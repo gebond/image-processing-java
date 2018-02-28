@@ -1,9 +1,9 @@
 package com.gebond.ip.math.func.context;
 
-import com.gebond.ip.math.func.array.Array1D;
-import com.gebond.ip.math.func.array.Array2D;
-import com.gebond.ip.math.func.array.ArrayContainer;
-import com.gebond.ip.math.func.compression.CompressionSetting;
+import com.gebond.ip.model.array.Array1D;
+import com.gebond.ip.model.array.Array2D;
+import com.gebond.ip.model.array.ArrayContainer;
+import com.gebond.ip.model.setting.CompressionSetting;
 
 /**
  * Created by Gleb on 18.10.2017.

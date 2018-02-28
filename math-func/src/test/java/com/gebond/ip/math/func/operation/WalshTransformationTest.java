@@ -1,6 +1,5 @@
 package com.gebond.ip.math.func.operation;
 
-import com.gebond.ip.math.func.compression.CompressionSetting;
 import com.gebond.ip.math.func.context.FourierContext;
 import com.gebond.ip.math.func.transform.WalshTransformation1D;
 import com.gebond.ip.math.func.transform.WalshTransformation2D;
@@ -9,6 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+
+import com.gebond.ip.model.setting.CompressionSetting;
 
 import static com.gebond.ip.math.commons.util.TestHelper.DELTA;
 import static com.gebond.ip.math.commons.util.TestHelper.assertArrayEqualsWithDelta;

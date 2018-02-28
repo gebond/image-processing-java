@@ -1,6 +1,6 @@
 package com.gebond.ip.math.commons.util;
 
-import com.gebond.ip.math.func.compression.CompressionSetting;
+import com.gebond.ip.model.setting.CompressionSetting;
 import com.gebond.ip.math.func.context.FourierContext;
 import com.gebond.ip.math.func.transform.HaartTransformation2D;
 import org.junit.jupiter.api.Disabled;
