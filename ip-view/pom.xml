@@ -11,5 +11,12 @@
 
     <artifactId>ip-frontend</artifactId>
 
+    <dependencies>
+        <!-- Common -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
