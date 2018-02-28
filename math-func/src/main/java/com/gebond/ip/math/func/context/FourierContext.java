@@ -12,27 +12,26 @@ public abstract class FourierContext<
         T extends ArrayContainer,
         C extends CompressionSetting> extends OperationContext {
 
-    @Deprecated
-    protected Dimension dimension;
     protected T fourierData;
     protected C compressionSetting;
 
     public abstract T getFourierData();
+
     public abstract C getCompressionSetting();
 
     public static FourierContext1D fromArray(double[] array) {
-        return new FourierContext1D(Dimension.DIMENSION_1D, array);
+        return new FourierContext1D(array);
     }
 
     public static FourierContext2D fromArray(double[][] array) {
-        return new FourierContext2D(Dimension.DIMENSION_2D, array);
+        return new FourierContext2D(array);
     }
 
-    public static FourierContext1DBuilder start1DBuilder(double[] array){
+    public static FourierContext1DBuilder start1DBuilder(double[] array) {
         return new FourierContext1DBuilder(array);
     }
 
-    public static FourierContext2DBuilder start2DBuilder(double[][] array){
+    public static FourierContext2DBuilder start2DBuilder(double[][] array) {
         return new FourierContext2DBuilder(array);
     }
 
@@ -40,7 +39,7 @@ public abstract class FourierContext<
         FourierContext1D fourierContext;
 
         public FourierContext1DBuilder(double[] array) {
-            fourierContext = new FourierContext1D(Dimension.DIMENSION_1D, array);
+            fourierContext = new FourierContext1D(array);
         }
 
         public FourierContext1DBuilder withCompression(CompressionSetting compression) {
@@ -57,7 +56,7 @@ public abstract class FourierContext<
         FourierContext2D fourierContext;
 
         public FourierContext2DBuilder(double[][] array) {
-            fourierContext = new FourierContext2D(Dimension.DIMENSION_2D, array);
+            fourierContext = new FourierContext2D(array);
         }
 
         public FourierContext2DBuilder withCompression(CompressionSetting compression) {
@@ -70,16 +69,9 @@ public abstract class FourierContext<
         }
     }
 
-    @Deprecated
-    public enum Dimension {
-        DIMENSION_1D,
-        DIMENSION_2D
-    }
-
     public static class FourierContext1D extends FourierContext<Array1D, CompressionSetting> {
-        @Deprecated
-        public FourierContext1D(Dimension dimension, double[] array) {
-            this.dimension = dimension;
+
+        public FourierContext1D(double[] array) {
             this.fourierData = new Array1D(array);
         }
 
@@ -95,9 +87,8 @@ public abstract class FourierContext<
     }
 
     public static class FourierContext2D extends FourierContext<Array2D, CompressionSetting> {
-        @Deprecated
-        public FourierContext2D(Dimension dimension, double[][] array) {
-            this.dimension = dimension;
+
+        public FourierContext2D(double[][] array) {
             this.fourierData = new Array2D(array);
         }
 
