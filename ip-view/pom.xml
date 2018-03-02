@@ -12,10 +12,23 @@
     <artifactId>ip-frontend</artifactId>
 
     <dependencies>
+        <!-- Project -->
+        <dependency>
+            <groupId>com.gebond.ip</groupId>
+            <artifactId>math-func</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Common -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
     </dependencies>
 

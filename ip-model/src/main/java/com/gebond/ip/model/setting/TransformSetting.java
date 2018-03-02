@@ -6,6 +6,7 @@ package com.gebond.ip.model.setting;
 public class TransformSetting {
 
     private TransformationType type;
+    @Deprecated
     private CompressionSetting compressionSetting;
 
     public TransformationType getType() {
@@ -16,6 +17,7 @@ public class TransformSetting {
         this.type = type;
     }
 
+    @Deprecated
     public CompressionSetting getCompressionSetting() {
         return compressionSetting;
     }
@@ -47,6 +49,7 @@ public class TransformSetting {
             return this;
         }
 
+        @Deprecated
         public TransformSettingBuilder withCompression(CompressionSetting compression) {
             this.transformSetting.compressionSetting = compression;
             return this;

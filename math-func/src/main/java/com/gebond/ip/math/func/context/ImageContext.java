@@ -20,7 +20,7 @@ public class ImageContext extends OperationContext {
     private int columnCount = 0;
     private int rowCount = 0;
     /**
-     * list of vectors where vector contains (x-red, y-green, z-blue)
+     * list of vectors where vector contains (x-red, y-green, z-blue, ...)
      */
     private List<Vector<Array2D>> pixelList = new ArrayList<>();
 
@@ -81,12 +81,6 @@ public class ImageContext extends OperationContext {
 
         public ImageContextBuilder() {
             this.imageContext = new ImageContext();
-        }
-
-        public ImageContextBuilder withImage(BufferedImage image) {
-            imageContext.setImage(image);
-//            imageContext.setImage(ImageUtil.toBufferedImage(image));
-            return this;
         }
 
         public ImageContextBuilder withSetting(ImageSetting imageSetting) {

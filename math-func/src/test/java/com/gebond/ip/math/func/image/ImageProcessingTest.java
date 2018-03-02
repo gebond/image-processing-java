@@ -18,8 +18,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static com.gebond.ip.math.func.image.ImageTestHelper.assertImageEqualsWithSizes;
+import static com.gebond.ip.math.func.image.ImageTestHelper.getImageUsingFileName;
+import static com.gebond.ip.model.setting.CompressionSetting.MIN_COMPRESSION_RATE;
+import static com.gebond.ip.model.setting.ImageSetting.ImageSchema.RGB;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -69,11 +75,8 @@ public class ImageProcessingTest {
                     imageContext.getRowCount() * imageContext.getImageSetting().getSegmentSize().getValue(),
                     imageContext.getImage().getHeight());
             saveImage(imageContext.getImage(), "8x8");
-            assertEquals(input.getRGB(0, 0), imageContext.getImage().getRGB(0, 0));
-            assertEquals(input.getRGB(7, 7), imageContext.getImage().getRGB(7, 7));
-            assertEquals(input.getRGB(0, 7), imageContext.getImage().getRGB(0, 7));
-            assertEquals(input.getRGB(7, 7), imageContext.getImage().getRGB(7, 7));
-            assertEquals(input.getRGB(3, 6), imageContext.getImage().getRGB(3, 6));
+
+            assertImageEqualsWithSizes(input, imageContext.getImage());
         }
 
         @Test
@@ -120,6 +123,7 @@ public class ImageProcessingTest {
 
             assertEquals(imageContext.getColumnCount() * imageContext.getRowCount(), imageContext.getPixelList().size());
             assertEquals(2, imageContext.getPixelList().size());
+            assertImageEqualsWithSizes(input, imageContext.getImage());
 
             saveImage(imageContext.getImage(), "8x16");
         }
@@ -134,6 +138,7 @@ public class ImageProcessingTest {
 
             assertEquals(imageContext.getColumnCount() * imageContext.getRowCount(), imageContext.getPixelList().size());
             assertEquals(2, imageContext.getPixelList().size());
+            assertImageEqualsWithSizes(input, imageContext.getImage());
 
             saveImage(imageContext.getImage(), "16x8");
         }
@@ -148,13 +153,7 @@ public class ImageProcessingTest {
 
             assertEquals(imageContext.getColumnCount() * imageContext.getRowCount(), imageContext.getPixelList().size());
             assertEquals(64, imageContext.getPixelList().size());
-
-
-            assertEquals(input.getRGB(10, 10), imageContext.getImage().getRGB(10, 10));
-            assertEquals(input.getRGB(35, 15), imageContext.getImage().getRGB(35, 15));
-            assertEquals(input.getRGB(31, 31), imageContext.getImage().getRGB(31, 31));
-            assertEquals(input.getRGB(15, 35), imageContext.getImage().getRGB(15, 35));
-            assertEquals(input.getRGB(55, 55), imageContext.getImage().getRGB(55, 55));
+            assertImageEqualsWithSizes(input, imageContext.getImage());
 
             saveImage(imageContext.getImage(), "64x64");
         }
@@ -192,11 +191,7 @@ public class ImageProcessingTest {
 
             saveImage(imageContext.getImage(), "8x8_x4");
 
-            assertEquals(input.getRGB(0, 0), imageContext.getImage().getRGB(0, 0));
-            assertEquals(input.getRGB(7, 7), imageContext.getImage().getRGB(7, 7));
-            assertEquals(input.getRGB(0, 7), imageContext.getImage().getRGB(0, 7));
-            assertEquals(input.getRGB(7, 7), imageContext.getImage().getRGB(7, 7));
-            assertEquals(input.getRGB(3, 6), imageContext.getImage().getRGB(3, 6));
+            assertImageEqualsWithSizes(input, imageContext.getImage());
         }
 
         @Test
@@ -251,6 +246,7 @@ public class ImageProcessingTest {
 
             assertEquals(imageContext.getColumnCount() * imageContext.getRowCount(), imageContext.getPixelList().size());
             assertEquals(8, imageContext.getPixelList().size());
+            assertImageEqualsWithSizes(input, imageContext.getImage());
 
             saveImage(imageContext.getImage(), "8x16_x4");
         }
@@ -265,6 +261,7 @@ public class ImageProcessingTest {
 
             assertEquals(imageContext.getColumnCount() * imageContext.getRowCount(), imageContext.getPixelList().size());
             assertEquals(8, imageContext.getPixelList().size());
+            assertImageEqualsWithSizes(input, imageContext.getImage());
 
             saveImage(imageContext.getImage(), "16x8_x4");
         }
@@ -296,11 +293,17 @@ public class ImageProcessingTest {
             void init() {
                 imageContext = buildImageContext(
                         TransformSetting.TransformationType.WALSH_TRANSFORM,
-                        CompressionSetting.MIN_COMPRESSION_RATE);
+                        new HashMap<Integer, CompressionSetting>() {
+                            {
+                                put(0, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                                put(1, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                                put(2, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                            }
+                        });
             }
 
             @Test
-            @DisplayName("complete, 2x2x3, haart, min")
+            @DisplayName("complete, 2x2x3, walsh, min")
             void testProcess() {
                 double[][] array1 = new double[][]{{3.0, 2.0}, {3.0, 2.0}};
                 double[][] array2 = new double[][]{{1.0, 3.0}, {2.0, 1.0}};
@@ -329,7 +332,13 @@ public class ImageProcessingTest {
             void init() {
                 imageContext = buildImageContext(
                         TransformSetting.TransformationType.HAART_TRANSFORM,
-                        CompressionSetting.MIN_COMPRESSION_RATE);
+                        new HashMap<Integer, CompressionSetting>() {
+                            {
+                                put(0, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                                put(1, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                                put(2, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                            }
+                        });
             }
 
             @Test
@@ -377,7 +386,13 @@ public class ImageProcessingTest {
         void testProcess() {
             ImageContext imageContext = buildImageContext(
                     TransformSetting.TransformationType.HAART_TRANSFORM,
-                    CompressionSetting.MIN_COMPRESSION_RATE);
+                    new HashMap<Integer, CompressionSetting>() {
+                        {
+                            put(0, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                            put(1, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                            put(2, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                        }
+                    });
 
             double[][] array1 = new double[][]{{3.0, 2.0}, {3.0, 2.0}};
             double[][] array2 = new double[][]{{2.0, 3.0}, {2.0, 1.0}};
@@ -398,27 +413,28 @@ public class ImageProcessingTest {
         }
     }
 
-    private ImageContext buildImageContext(TransformSetting.TransformationType transformationType, double compressionRate) {
+    private ImageContext buildImageContext(TransformSetting.TransformationType transformationType,
+                                           Map<Integer, CompressionSetting> compressions) {
         return ImageContext.startBuilder()
+                .withSetting(ImageSetting.startBuilder()
+                        .withSchema(RGB)
+                        .withCompressions(compressions)
+                        .build())
                 .withSetting(TransformSetting.startBuilder()
                         .withType(transformationType)
-                        .withCompression(CompressionSetting.of(compressionRate))
                         .build())
                 .build();
     }
 
     private ImageContext buildImageContext(BufferedImage bufferedImage, ImageSetting.SegmentSize segmentSize) {
         return ImageContext.startBuilder()
-                .withImage(bufferedImage)
                 .withSetting(ImageSetting.startBuilder()
+                        .withImage(bufferedImage)
                         .withSegmentSize(segmentSize)
                         .build())
                 .build();
     }
 
-    private BufferedImage getImageUsingFileName(String imageName) throws IOException {
-        return ImageIO.read(new File(getClass().getClassLoader().getResource("images/" + imageName).getFile()));
-    }
 
     private void saveImage(BufferedImage image, String imageName) throws IOException {
         File outputfile = new File("target/OUT-" + imageName + ".png");

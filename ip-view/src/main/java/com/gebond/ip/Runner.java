@@ -1,6 +1,7 @@
 package com.gebond.ip;
 
 import com.gebond.ip.controller.MainFormController;
+import com.gebond.ip.controller.ResultsFormController;
 
 /**
  * Created on 28/02/18.
@@ -8,7 +9,10 @@ import com.gebond.ip.controller.MainFormController;
 public class Runner {
 
     public static void main(String[] args) {
-        MainFormController controller = new MainFormController();
-        controller.show();
+        ResultsFormController resultsFormController = new ResultsFormController();
+        MainFormController mainFormController = new MainFormController(resultsFormController);
+
+        resultsFormController.show();
+        mainFormController.show();
     }
 }

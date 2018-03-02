@@ -1,5 +1,6 @@
 package com.gebond.ip.model.setting;
 
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,8 +9,10 @@ import java.util.Map;
  */
 public class ImageSetting {
 
+    private BufferedImage sourceImage;
     private ImageSchema imageSchema;
-    private Map<RGB, Double> imageValues = new HashMap<>();
+    // Example: { 85, 15, 35}
+    private final Map<Integer, CompressionSetting> imageValues = new HashMap<>();
     private SegmentSize segmentSize;
 
 
@@ -21,12 +24,8 @@ public class ImageSetting {
         this.imageSchema = imageSchema;
     }
 
-    public Map<RGB, Double> getImageValues() {
+    public Map<Integer, CompressionSetting> getImageValues() {
         return imageValues;
-    }
-
-    public void setImageValues(Map<RGB, Double> imageValues) {
-        this.imageValues = imageValues;
     }
 
     public SegmentSize getSegmentSize() {
@@ -35,6 +34,14 @@ public class ImageSetting {
 
     public void setSegmentSize(SegmentSize segmentSize) {
         this.segmentSize = segmentSize;
+    }
+
+    public BufferedImage getSourceImage() {
+        return sourceImage;
+    }
+
+    public void setSourceImage(BufferedImage sourceImage) {
+        this.sourceImage = sourceImage;
     }
 
     public enum SegmentSize {
@@ -80,20 +87,78 @@ public class ImageSetting {
     }
 
     public enum ImageSchema {
-        RGB,
-        YCRCB
+        RGB {
+            @Override
+            public int getAmount() {
+                return 3;
+            }
+        },
+        YCRCB {
+            @Override
+            public int getAmount() {
+                return 3;
+            }
+        };
+
+        int amount;
+
+        public int getAmount() {
+            return amount;
+        }
     }
 
     public enum RGB {
-        RED,
-        GREEN,
-        BLUE
+        RED {
+            @Override
+            public int getOrder() {
+                return 0;
+            }
+        },
+        GREEN {
+            @Override
+            public int getOrder() {
+                return 1;
+            }
+        },
+        BLUE {
+            @Override
+            public int getOrder() {
+                return 2;
+            }
+        };
+
+        int order;
+
+        public int getOrder() {
+            return order;
+        }
     }
 
     public enum YCRCB {
-        Y,
-        CR,
-        CB
+        Y {
+            @Override
+            public int getOrder() {
+                return 0;
+            }
+        },
+        CR {
+            @Override
+            public int getOrder() {
+                return 1;
+            }
+        },
+        CB {
+            @Override
+            public int getOrder() {
+                return 2;
+            }
+        };
+
+        int order;
+
+        public int getOrder() {
+            return order;
+        }
     }
 
     public static ImageSettingBuilder startBuilder() {
@@ -107,21 +172,23 @@ public class ImageSetting {
             imageSetting = new ImageSetting();
         }
 
-        public ImageSettingBuilder withRGB(double red, double green, double blue) {
-            imageSetting.imageSchema = ImageSchema.RGB;
-            imageSetting.imageValues.put(RGB.RED, red);
-            imageSetting.imageValues.put(RGB.GREEN, green);
-            imageSetting.imageValues.put(RGB.BLUE, blue);
+        public ImageSettingBuilder withSchema(ImageSchema imageSchema) {
+            imageSetting.imageSchema = imageSchema;
+            return this;
+        }
+
+        public ImageSettingBuilder withCompressions(Map<Integer, CompressionSetting> compressions) {
+            imageSetting.imageValues.putAll(compressions);
+            return this;
+        }
+
+        public ImageSettingBuilder withImage(BufferedImage bufferedImage) {
+            imageSetting.sourceImage = bufferedImage;
             return this;
         }
 
         public ImageSettingBuilder withSegmentSize(SegmentSize segmentSize) {
             imageSetting.segmentSize = segmentSize;
-            return this;
-        }
-
-        public ImageSettingBuilder withYCrCb(double y, double cr, double cb) {
-            imageSetting.imageSchema = ImageSchema.YCRCB;
             return this;
         }
 
