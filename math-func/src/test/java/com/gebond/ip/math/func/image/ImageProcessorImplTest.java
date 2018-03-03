@@ -16,6 +16,7 @@ import static com.gebond.ip.math.func.image.ImageTestHelper.getImageUsingFileNam
 import static com.gebond.ip.model.setting.CompressionSetting.MIN_COMPRESSION_RATE;
 import static com.gebond.ip.model.setting.ImageSetting.ImageSchema.RGB;
 import static com.gebond.ip.model.setting.TransformSetting.TransformationType.HAART_TRANSFORM;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Created on 02/03/18.
@@ -78,5 +79,30 @@ class ImageProcessorImplTest {
                         .build());
 
         assertImageEqualsWithSizes(inputImage, resultImage);
+    }
+
+    @DisplayName("processed, 8x8, rgb, x8, 50%")
+    @Test
+    void processTest_2() throws IOException {
+        BufferedImage inputImage = getImageUsingFileName("64x64.png");
+
+        BufferedImage resultImage = imageProcessor.processImage(
+                ImageSetting.startBuilder()
+                        .withImage(inputImage)
+                        .withSegmentSize(ImageSetting.SegmentSize.X8)
+                        .withSchema(RGB)
+                        .withCompressions(new HashMap<Integer, CompressionSetting>() {
+                            {
+                                put(0, CompressionSetting.of(50.0));
+                                put(1, CompressionSetting.of(50.0));
+                                put(2, CompressionSetting.of(50.0));
+                            }
+                        })
+                        .build(),
+                TransformSetting.startBuilder()
+                        .withType(HAART_TRANSFORM)
+                        .build());
+
+        assertNotNull(resultImage);
     }
 }

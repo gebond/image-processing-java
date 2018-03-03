@@ -25,6 +25,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
                 new ValidationOperation(),
                 new SplittingOperation(),
                 new ConsistentOperation(),
+                new PreBuildingOperation(),
                 new BuildingOperation()
         );
     }
@@ -39,19 +40,19 @@ public class ImageProcessing extends OperationManager<ImageContext> {
 
         @Override
         public void apply(ImageContext context) {
-            if(context.getImageSetting() == null){
+            if (context.getImageSetting() == null) {
                 throw new IllegalArgumentException("Image setting is null!");
             }
-            if(context.getTransformSetting() == null){
+            if (context.getTransformSetting() == null) {
                 throw new IllegalArgumentException("Transform setting is null!");
             }
-            if(context.getImageSetting().getImageSchema() == null){
+            if (context.getImageSetting().getImageSchema() == null) {
                 throw new IllegalArgumentException("Image schema setting is null!");
             }
-            if(context.getImageSetting().getSourceImage() == null){
+            if (context.getImageSetting().getSourceImage() == null) {
                 throw new IllegalArgumentException("Source image setting is null!");
             }
-            if(context.getImageSetting().getSegmentSize() == null){
+            if (context.getImageSetting().getSegmentSize() == null) {
                 throw new IllegalArgumentException("SegmentSize setting is null!");
             }
             if (context.getImageSetting().getImageSchema().getAmount()
@@ -217,6 +218,40 @@ public class ImageProcessing extends OperationManager<ImageContext> {
                                 .build())
                         .getFourierData().getArray2DCopy()));
             }
+        }
+    }
+
+    public static class PreBuildingOperation implements Operation<ImageContext> {
+
+        @Override
+        public boolean validate(ImageContext context) throws IllegalArgumentException {
+            return context.getPixelList().size() > 0;
+        }
+
+        @Override
+        public void apply(ImageContext context) {
+            for (Vector<Array2D> vector : context.getPixelList()) {
+                vector.setX(preBuildProcess(vector.getX()));
+                vector.setY(preBuildProcess(vector.getY()));
+                vector.setZ(preBuildProcess(vector.getZ()));
+            }
+        }
+
+        private Array2D preBuildProcess(Array2D sourceArray) {
+            double[][] array2D = sourceArray.getArray2DCopy();
+            for (int i = 0; i < array2D.length; i++) {
+                for (int j = 0; j < array2D[0].length; j++) {
+                    double val = array2D[i][j];
+                    if (val < 0) {
+                        array2D[i][j] = 0;
+                        continue;
+                    }
+                    if (val > 255) {
+                        array2D[i][j] = 255;
+                    }
+                }
+            }
+            return new Array2D(array2D);
         }
     }
 }

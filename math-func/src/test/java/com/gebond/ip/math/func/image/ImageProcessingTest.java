@@ -435,7 +435,6 @@ public class ImageProcessingTest {
                 .build();
     }
 
-
     private void saveImage(BufferedImage image, String imageName) throws IOException {
         File outputfile = new File("target/OUT-" + imageName + ".png");
         ImageIO.write(image, "png", outputfile);
