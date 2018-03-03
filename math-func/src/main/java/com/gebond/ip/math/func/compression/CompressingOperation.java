@@ -7,7 +7,6 @@ import java.util.List;
 
 import static com.gebond.ip.model.setting.CompressionSetting.MAX_COMPRESSION_RATE;
 import static com.gebond.ip.model.setting.CompressionSetting.MIN_COMPRESSION_RATE;
-import static org.apache.commons.math3.util.FastMath.abs;
 
 /**
  * Created on 11/02/18.
@@ -25,7 +24,7 @@ public abstract class CompressingOperation<T extends FourierContext> implements 
         return true;
     }
 
-    protected interface ValueGetterSetter {
+    protected interface ValueGetterSetter extends Comparable {
         double getValue();
 
         void setValue(double val);
@@ -35,7 +34,7 @@ public abstract class CompressingOperation<T extends FourierContext> implements 
         int maxDeleteCounter = (int) (size *
                 (MIN_COMPRESSION_RATE - context.getCompressionSetting().getCompressionRate()) /
                 (MIN_COMPRESSION_RATE - MAX_COMPRESSION_RATE));
-        values.sort((v1, v2) -> (abs(v1.getValue()) < abs(v2.getValue())) ? -1 : 1);
+        values.sort((v1, v2) -> (v1.compareTo(v2)));
         int counter = 0;
         for (ValueGetterSetter value : values) {
             if (counter < maxDeleteCounter) {

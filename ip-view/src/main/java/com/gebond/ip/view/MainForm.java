@@ -131,7 +131,7 @@ public class MainForm extends JFrame {
         if (sizeX16RadioButton.isSelected()) {
             return ImageSetting.SegmentSize.X16;
         }
-        if (sizeX8RadioButton.isSelected()) {
+        if (sizeX32RadioButton.isSelected()) {
             return ImageSetting.SegmentSize.X32;
         }
         return ImageSetting.SegmentSize.X8;

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.gebond.ip.model.setting.CompressionSetting.MIN_COMPRESSION_RATE;
+import static org.apache.commons.math3.util.FastMath.abs;
 
 /**
  * Created on 10/02/18.
@@ -51,6 +52,17 @@ public class CompressionOperation2D extends CompressingOperation<FourierContext.
         @Override
         public void setValue(double val) {
             value = val;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            Value valObj = (Value) o;
+            if (abs(value) < abs(valObj.value)) {
+                return -1;
+            } else if (abs(value) > abs(valObj.value)) {
+                return 1;
+            }
+            return 0;
         }
     }
 }
