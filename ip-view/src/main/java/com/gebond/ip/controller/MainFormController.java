@@ -21,7 +21,7 @@ public class MainFormController {
     private static final String PNG = "png";
     private static final String JPG = "jpg";
 
-    private MainForm mainForm;
+    MainForm mainForm;
     //left panel
     private JButton browserButton;
     private JLabel image;
@@ -56,14 +56,14 @@ public class MainFormController {
         selectMethodBox = mainForm.getSelectMethodBox();
     }
 
-    private void adjustComponents() {
+    void adjustComponents() {
         fileChooser = configureJFileChooser();
         for(TransformSetting.TransformationType transformationType: TransformSetting.TransformationType.values()){
             selectMethodBox.addItem(transformationType);
         }
     }
 
-    private void initListeners() {
+    void initListeners() {
         // browse image file and set background
         browserButton.addActionListener(e -> {
             int result = fileChooser.showDialog(null,

@@ -109,6 +109,38 @@ public class MainForm extends JFrame {
         return image;
     }
 
+    public JRadioButton getRgbRadioButton() {
+        return rgbRadioButton;
+    }
+
+    public JRadioButton getYcrcbRadioButton() {
+        return ycrcbRadioButton;
+    }
+
+    public JPanel getForierSettingPanel() {
+        return forierSettingPanel;
+    }
+
+    public JLabel getSelectMethod() {
+        return selectMethod;
+    }
+
+    public JPanel getDescreteSettingPanel() {
+        return descreteSettingPanel;
+    }
+
+    public JRadioButton getSizeX8RadioButton() {
+        return sizeX8RadioButton;
+    }
+
+    public JRadioButton getSizeX16RadioButton() {
+        return sizeX16RadioButton;
+    }
+
+    public JRadioButton getSizeX32RadioButton() {
+        return sizeX32RadioButton;
+    }
+
     public ImageSetting buildImageSetting(BufferedImage lastImage) {
         return ImageSetting.startBuilder()
                 .withImage(lastImage)

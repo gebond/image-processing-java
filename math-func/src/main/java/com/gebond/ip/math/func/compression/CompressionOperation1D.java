@@ -41,11 +41,6 @@ public class CompressionOperation1D extends CompressingOperation<FourierContext.
         }
 
         @Override
-        public double getValue() {
-            return value;
-        }
-
-        @Override
         public void setValue(double val) {
             value = val;
         }
