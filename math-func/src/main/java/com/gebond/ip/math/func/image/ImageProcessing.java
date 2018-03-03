@@ -39,6 +39,21 @@ public class ImageProcessing extends OperationManager<ImageContext> {
 
         @Override
         public void apply(ImageContext context) {
+            if(context.getImageSetting() == null){
+                throw new IllegalArgumentException("Image setting is null!");
+            }
+            if(context.getTransformSetting() == null){
+                throw new IllegalArgumentException("Transform setting is null!");
+            }
+            if(context.getImageSetting().getImageSchema() == null){
+                throw new IllegalArgumentException("Image schema setting is null!");
+            }
+            if(context.getImageSetting().getSourceImage() == null){
+                throw new IllegalArgumentException("Source image setting is null!");
+            }
+            if(context.getImageSetting().getSegmentSize() == null){
+                throw new IllegalArgumentException("SegmentSize setting is null!");
+            }
             if (context.getImageSetting().getImageSchema().getAmount()
                     != context.getImageSetting().getImageValues().size()) {
                 throw new IllegalArgumentException("Wrong imageSetting configuration");

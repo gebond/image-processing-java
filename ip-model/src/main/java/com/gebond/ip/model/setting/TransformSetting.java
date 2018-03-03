@@ -22,14 +22,25 @@ public class TransformSetting {
         return compressionSetting;
     }
 
-    public void setCompressionSetting(CompressionSetting compressionSetting) {
-        this.compressionSetting = compressionSetting;
-    }
-
     public enum TransformationType {
-        HAART_TRANSFORM,
-        WALSH_TRANSFORM,
-        DESCRETE_TRANSFORM,
+        HAART_TRANSFORM {
+            @Override
+            public String toString() {
+                return "Haart transformation";
+            }
+        },
+        WALSH_TRANSFORM {
+            @Override
+            public String toString() {
+                return "Walsh transformation";
+            }
+        },
+        DISCRETE_TRANSFORM {
+            @Override
+            public String toString() {
+                return "Discrete transformation";
+            }
+        }
     }
 
 

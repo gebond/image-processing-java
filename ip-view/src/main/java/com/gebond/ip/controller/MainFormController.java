@@ -2,7 +2,6 @@ package com.gebond.ip.controller;
 
 import com.gebond.ip.math.func.image.ImageProcessor;
 import com.gebond.ip.math.func.image.ImageProcessorImpl;
-import com.gebond.ip.model.setting.ImageSetting;
 import com.gebond.ip.model.setting.TransformSetting;
 import com.gebond.ip.view.MainForm;
 import org.apache.commons.io.FilenameUtils;
@@ -28,8 +27,11 @@ public class MainFormController {
     private JLabel image;
     //right panel
     private JButton runButton;
+    private JComboBox<TransformSetting.TransformationType> selectMethodBox;
     //util
     private JFileChooser fileChooser;
+    // in-memory input image representation
+    private BufferedImage lastImage;
 
     private ResultsFormController resultsFormController;
     private ImageProcessor imageProcessor;
@@ -38,6 +40,7 @@ public class MainFormController {
         this.resultsFormController = resultsFormController;
         imageProcessor = new ImageProcessorImpl();
         initComponents();
+        adjustComponents();
         initListeners();
     }
 
@@ -50,7 +53,14 @@ public class MainFormController {
         browserButton = mainForm.getBrowserButton();
         image = mainForm.getImage();
         runButton = mainForm.getRunButton();
+        selectMethodBox = mainForm.getSelectMethodBox();
+    }
+
+    private void adjustComponents() {
         fileChooser = configureJFileChooser();
+        for(TransformSetting.TransformationType transformationType: TransformSetting.TransformationType.values()){
+            selectMethodBox.addItem(transformationType);
+        }
     }
 
     private void initListeners() {
@@ -61,7 +71,8 @@ public class MainFormController {
             if (result == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 try {
-                    image.setIcon(new ImageIcon(ImageIO.read(file)));
+                    lastImage = ImageIO.read(file);
+                    image.setIcon(new ImageIcon(lastImage));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -70,7 +81,18 @@ public class MainFormController {
 
         // run processing
         runButton.addActionListener(e -> {
-            BufferedImage result = imageProcessor.processImage(new ImageSetting(), new TransformSetting());
+            try {
+                BufferedImage result = imageProcessor.processImage(
+                        mainForm.buildImageSetting(lastImage),
+                        mainForm.buildTransformSetting()
+                );
+                image.setIcon(new ImageIcon(result));
+            } catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(mainForm,
+                        ex.getMessage(),
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+            }
         });
     }
 

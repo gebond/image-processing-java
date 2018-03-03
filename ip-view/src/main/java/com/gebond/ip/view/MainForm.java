@@ -1,6 +1,13 @@
 package com.gebond.ip.view;
 
+import com.gebond.ip.model.setting.CompressionSetting;
+import com.gebond.ip.model.setting.ImageSetting;
+import com.gebond.ip.model.setting.TransformSetting;
+
 import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created on 28/02/18.
@@ -22,7 +29,7 @@ public class MainForm extends JFrame {
     private JPanel imagePanel;
     private JPanel browserPanel;
     private JPanel mainPanel;
-    private JComboBox selectMethodBox;
+    private JComboBox<TransformSetting.TransformationType> selectMethodBox;
     private JButton browserButton;
     private JLabel image;
     private JRadioButton rgbRadioButton;
@@ -90,7 +97,7 @@ public class MainForm extends JFrame {
         return mainPanel;
     }
 
-    public JComboBox getSelectMethodBox() {
+    public JComboBox<TransformSetting.TransformationType> getSelectMethodBox() {
         return selectMethodBox;
     }
 
@@ -100,5 +107,51 @@ public class MainForm extends JFrame {
 
     public JLabel getImage() {
         return image;
+    }
+
+    public ImageSetting buildImageSetting(BufferedImage lastImage) {
+        return ImageSetting.startBuilder()
+                .withImage(lastImage)
+                .withSegmentSize(getSegmentSize())
+                .withSchema(buildSchema())
+                .withCompressions(buildCompressions())
+                .build();
+    }
+
+    public TransformSetting buildTransformSetting() {
+        return TransformSetting.startBuilder()
+                .withType((TransformSetting.TransformationType) selectMethodBox.getSelectedItem())
+                .build();
+    }
+
+    private ImageSetting.SegmentSize getSegmentSize() {
+        if (sizeX8RadioButton.isSelected()) {
+            return ImageSetting.SegmentSize.X8;
+        }
+        if (sizeX16RadioButton.isSelected()) {
+            return ImageSetting.SegmentSize.X16;
+        }
+        if (sizeX8RadioButton.isSelected()) {
+            return ImageSetting.SegmentSize.X32;
+        }
+        return ImageSetting.SegmentSize.X8;
+    }
+
+    private Map<Integer, CompressionSetting> buildCompressions() {
+        Map<Integer, CompressionSetting> compressionSettingMap = new HashMap<>();
+        compressionSettingMap.put(ImageSetting.RGB.RED.getOrder(), CompressionSetting.of(slider1.getValue()));
+        compressionSettingMap.put(ImageSetting.RGB.GREEN.getOrder(), CompressionSetting.of(slider2.getValue()));
+        compressionSettingMap.put(ImageSetting.RGB.BLUE.getOrder(), CompressionSetting.of(slider3.getValue()));
+        return compressionSettingMap;
+    }
+
+    private ImageSetting.ImageSchema buildSchema() {
+        if (rgbRadioButton.isSelected()) {
+            return ImageSetting.ImageSchema.RGB;
+        }
+        if (ycrcbRadioButton.isSelected()) {
+            return ImageSetting.ImageSchema.YCRCB;
+        }
+        return ImageSetting.ImageSchema.RGB;
     }
 }
