@@ -15,6 +15,10 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.gebond.ip.math.commons.util.ImageUtil.normalizePixelArray;
+import static com.gebond.ip.model.converter.ConverterUtil.converRGBToYCrCb;
+import static com.gebond.ip.model.converter.ConverterUtil.converYCrCbToRGB;
+
 /**
  * Created on 17/02/18.
  */
@@ -24,8 +28,9 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         return Arrays.asList(
                 new ValidationOperation(),
                 new SplittingOperation(),
-                new ConsistentOperation(),
-                new PreBuildingOperation(),
+                new PreProcessingOperation(),
+                new ConsistentProcessingOperation(),
+                new PostProcessingOperation(),
                 new BuildingOperation()
         );
     }
@@ -114,6 +119,22 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         }
     }
 
+    public static class PreProcessingOperation implements Operation<ImageContext> {
+
+        @Override
+        public boolean validate(ImageContext context) throws IllegalArgumentException {
+            return context.getPixelList().size() > 0;
+        }
+
+        @Override
+        public void apply(ImageContext context) {
+            if (context.getImageSetting().getImageSchema().equals(ImageSetting.ImageSchema.YCRCB))
+                for (Vector<Array2D> vector : context.getPixelList()) {
+                    converRGBToYCrCb(vector);
+                }
+        }
+    }
+
     public static class BuildingOperation implements Operation<ImageContext> {
         @Override
         public boolean validate(ImageContext context) throws IllegalArgumentException {
@@ -184,7 +205,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         }
     }
 
-    public static class ConsistentOperation extends TransformationOperation {
+    public static class ConsistentProcessingOperation extends TransformationOperation {
         @Override
         public void apply(ImageContext context) {
             OperationManager<FourierContext.FourierContext2D> transformation2D;
@@ -221,7 +242,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         }
     }
 
-    public static class PreBuildingOperation implements Operation<ImageContext> {
+    public static class PostProcessingOperation implements Operation<ImageContext> {
 
         @Override
         public boolean validate(ImageContext context) throws IllegalArgumentException {
@@ -231,26 +252,17 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         @Override
         public void apply(ImageContext context) {
             for (Vector<Array2D> vector : context.getPixelList()) {
-                vector.setX(preBuildProcess(vector.getX()));
-                vector.setY(preBuildProcess(vector.getY()));
-                vector.setZ(preBuildProcess(vector.getZ()));
+                if (context.getImageSetting().getImageSchema().equals(ImageSetting.ImageSchema.YCRCB)) {
+                    converYCrCbToRGB(vector);
+                }
+                vector.setX(applyPostProcessing(vector.getX()));
+                vector.setY(applyPostProcessing(vector.getY()));
+                vector.setZ(applyPostProcessing(vector.getZ()));
             }
         }
 
-        private Array2D preBuildProcess(Array2D sourceArray) {
-            double[][] array2D = sourceArray.getArray2DCopy();
-            for (int i = 0; i < array2D.length; i++) {
-                for (int j = 0; j < array2D[0].length; j++) {
-                    double val = array2D[i][j];
-                    if (val < 0) {
-                        array2D[i][j] = 0;
-                        continue;
-                    }
-                    if (val > 255) {
-                        array2D[i][j] = 255;
-                    }
-                }
-            }
+        private Array2D applyPostProcessing(Array2D sourceArray) {
+            double[][] array2D = normalizePixelArray(sourceArray.getArray2DCopy());
             return new Array2D(array2D);
         }
     }

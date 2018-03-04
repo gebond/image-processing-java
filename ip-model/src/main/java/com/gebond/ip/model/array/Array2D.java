@@ -9,6 +9,10 @@ public class Array2D extends ArrayContainer {
 
     private double[][] array2D;
 
+    public static Array2D of(double[][] array2D){
+        return new Array2D(array2D);
+    }
+
     public Array2D(double[][] array) {
         setArray(array);
     }

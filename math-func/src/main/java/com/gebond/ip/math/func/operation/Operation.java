@@ -8,4 +8,7 @@ import com.gebond.ip.math.func.context.OperationContext;
 public interface Operation<T extends OperationContext> {
     boolean validate(T context) throws IllegalArgumentException;
     void apply(T context);
+    default String description(){
+        return "Default Operation";
+    }
 }

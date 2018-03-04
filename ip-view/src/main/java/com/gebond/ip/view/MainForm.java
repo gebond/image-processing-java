@@ -42,6 +42,18 @@ public class MainForm extends JFrame {
     private JRadioButton sizeX8RadioButton;
     private JRadioButton sizeX16RadioButton;
     private JRadioButton sizeX32RadioButton;
+    private JTextField a3TextField;
+    private JButton cancelButton;
+    private JProgressBar progressBar1;
+    private JPanel emptyPanel;
+    private JPanel progressPanel;
+    private JPanel colorSchemaPanel;
+    private JLabel sliderValue1;
+    private JLabel sliderValue2;
+    private JLabel sliderValue3;
+    private JLabel sliderLabel1;
+    private JLabel sliderLabel2;
+    private JLabel sliderLabel3;
 
     public MainForm() {
         super("Processing Form");
@@ -142,6 +154,38 @@ public class MainForm extends JFrame {
 
     public JRadioButton getSizeX32RadioButton() {
         return sizeX32RadioButton;
+    }
+
+    public JButton getCancelButton() {
+        return cancelButton;
+    }
+
+    public JPanel getProgressPanel() {
+        return progressPanel;
+    }
+
+    public JLabel getSliderValue1() {
+        return sliderValue1;
+    }
+
+    public JLabel getSliderValue2() {
+        return sliderValue2;
+    }
+
+    public JLabel getSliderValue3() {
+        return sliderValue3;
+    }
+
+    public JLabel getSliderLabel1() {
+        return sliderLabel1;
+    }
+
+    public JLabel getSliderLabel2() {
+        return sliderLabel2;
+    }
+
+    public JLabel getSliderLabel3() {
+        return sliderLabel3;
     }
 
     public ImageSetting buildImageSetting(BufferedImage lastImage) {

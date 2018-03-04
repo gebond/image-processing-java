@@ -110,17 +110,32 @@ public class ImageSetting {
     public enum RGB {
         RED {
             @Override
+            public String toString() {
+                return "Red";
+            }
+
+            @Override
             public int getOrder() {
                 return 0;
             }
         },
         GREEN {
             @Override
+            public String toString() {
+                return "Green";
+            }
+
+            @Override
             public int getOrder() {
                 return 1;
             }
         },
         BLUE {
+            @Override
+            public String toString() {
+                return "Blue";
+            }
+
             @Override
             public int getOrder() {
                 return 2;
@@ -137,17 +152,32 @@ public class ImageSetting {
     public enum YCRCB {
         Y {
             @Override
+            public String toString() {
+                return "Y";
+            }
+
+            @Override
             public int getOrder() {
                 return 0;
             }
         },
         CR {
             @Override
+            public String toString() {
+                return "Cr";
+            }
+
+            @Override
             public int getOrder() {
                 return 1;
             }
         },
         CB {
+            @Override
+            public String toString() {
+                return "Cb";
+            }
+
             @Override
             public int getOrder() {
                 return 2;

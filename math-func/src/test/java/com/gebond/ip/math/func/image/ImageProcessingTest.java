@@ -269,7 +269,7 @@ public class ImageProcessingTest {
 
     @Nested
     @DisplayName("Consistent operations")
-    public class ConsistentOperations {
+    public class ConsistentProcessingOperations {
 
         OperationManager<ImageContext> testee;
         ImageContext imageContext;
@@ -280,7 +280,7 @@ public class ImageProcessingTest {
                 @Override
                 public List<Operation<ImageContext>> getOperations() {
                     return Arrays.asList(
-                            new ImageProcessing.ConsistentOperation());
+                            new ImageProcessing.ConsistentProcessingOperation());
                 }
             };
         }
