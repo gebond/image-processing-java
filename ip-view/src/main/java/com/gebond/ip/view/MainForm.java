@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
+import static gebond.ip.domain.manager.LogManager.log;
+
 /**
  * Created on 28/02/18.
  */
@@ -34,9 +36,9 @@ public class MainForm extends JFrame {
     private JLabel image;
     private JRadioButton rgbRadioButton;
     private JRadioButton ycrcbRadioButton;
-    private JPanel forierSettingPanel;
+    private JPanel fourierSettingPanel;
     private JLabel selectMethod;
-    private JPanel descreteSettingPanel;
+    private JPanel discreteSettingPanel;
     private JRadioButton sizeX8RadioButton;
     private JRadioButton sizeX16RadioButton;
     private JRadioButton sizeX32RadioButton;
@@ -47,6 +49,7 @@ public class MainForm extends JFrame {
         setSize(WIDTH, HEIGHT);
         setContentPane(mainPanel);
         setLocationRelativeTo(null);
+        log("mainForm initialized");
     }
 
     public JButton getRunButton() {
@@ -117,16 +120,16 @@ public class MainForm extends JFrame {
         return ycrcbRadioButton;
     }
 
-    public JPanel getForierSettingPanel() {
-        return forierSettingPanel;
+    public JPanel getFourierSettingPanel() {
+        return fourierSettingPanel;
+    }
+
+    public JPanel getDiscreteSettingPanel() {
+        return discreteSettingPanel;
     }
 
     public JLabel getSelectMethod() {
         return selectMethod;
-    }
-
-    public JPanel getDescreteSettingPanel() {
-        return descreteSettingPanel;
     }
 
     public JRadioButton getSizeX8RadioButton() {
