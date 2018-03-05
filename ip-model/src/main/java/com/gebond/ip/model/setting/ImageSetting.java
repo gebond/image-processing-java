@@ -15,7 +15,6 @@ public class ImageSetting {
     private final Map<Integer, CompressionSetting> imageValues = new HashMap<>();
     private SegmentSize segmentSize;
 
-
     public ImageSchema getImageSchema() {
         return imageSchema;
     }

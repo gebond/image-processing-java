@@ -122,8 +122,8 @@
                 </constraints>
                 <properties>
                   <background color="-9328278"/>
-                  <enabled value="false"/>
-                  <foreground color="-4473925"/>
+                  <enabled value="true"/>
+                  <foreground color="-9124507"/>
                   <hideActionText value="false"/>
                   <text value="Run"/>
                 </properties>
@@ -134,8 +134,8 @@
                 </constraints>
                 <properties>
                   <background color="-5148068"/>
-                  <enabled value="false"/>
-                  <foreground color="-4473925"/>
+                  <enabled value="true"/>
+                  <foreground color="-4497593"/>
                   <hideActionText value="false"/>
                   <text value="Cancel"/>
                 </properties>

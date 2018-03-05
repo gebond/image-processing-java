@@ -15,6 +15,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import static com.gebond.ip.util.UIUtills.SMOOTH_GREEN;
+
 /**
  * Created on 28/02/18.
  */
@@ -101,6 +103,9 @@ public class MainFormController {
         sliderLabel1.setText(ImageSetting.RGB.RED.toString());
         sliderLabel2.setText(ImageSetting.RGB.GREEN.toString());
         sliderLabel3.setText(ImageSetting.RGB.BLUE.toString());
+        runButton.setEnabled(false);
+        runButton.setBackground(SMOOTH_GREEN);
+        cancelButton.setEnabled(false);
     }
 
     void initListeners() {
@@ -117,7 +122,6 @@ public class MainFormController {
                 }
             }
             updateImage(lastImage);
-            runButton.setEnabled(true);
         });
 
         // run processing
@@ -126,9 +130,9 @@ public class MainFormController {
                 imageSetting = mainForm.buildImageSetting(lastImage);
                 transformSetting = mainForm.buildTransformSetting();
                 processingTread = new Thread(() ->
-                        updateImage(imageProcessor.processImage(imageSetting, transformSetting)));
+                        callbackProcessing(imageProcessor.processImage(imageSetting, transformSetting)));
                 processingTread.start();
-                cancelButton.setEnabled(true);
+                toggleRunCancelButtons();
             } catch (RuntimeException ex) {
                 JOptionPane.showMessageDialog(mainForm,
                         ex.getMessage(),
@@ -166,16 +170,28 @@ public class MainFormController {
         // cancel button
         cancelButton.addActionListener(e -> {
             processingTread.interrupt();
-            cancelButton.setEnabled(false);
+            toggleRunCancelButtons();
         });
+    }
+
+    private void callbackProcessing(BufferedImage image) {
+        Image dimg = image.getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(),
+                Image.SCALE_SMOOTH);
+        imageLabel.setIcon(new ImageIcon(dimg));
+        toggleRunCancelButtons();
     }
 
     private void updateImage(BufferedImage image) {
         Image dimg = image.getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(),
                 Image.SCALE_SMOOTH);
         imageLabel.setIcon(new ImageIcon(dimg));
+        runButton.setEnabled(true);
     }
 
+    private void toggleRunCancelButtons() {
+        cancelButton.setEnabled(!cancelButton.isEnabled());
+        runButton.setEnabled(!runButton.isEnabled());
+    }
 
     private void updateTotalValue() {
         totalValue.setText(String.valueOf("Total compression: " +
