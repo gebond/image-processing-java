@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.gebond.ip.math.commons.util.TestHelper.assertArrayEqualsWithDelta;
 import static com.gebond.ip.math.func.image.ImageTestHelper.assertImageEqualsWithSizes;
 import static com.gebond.ip.math.func.image.ImageTestHelper.getImageUsingFileName;
 import static com.gebond.ip.model.setting.CompressionSetting.MIN_COMPRESSION_RATE;
@@ -410,6 +411,169 @@ public class ImageProcessingTest {
             assertArrayEquals(array1, imageContext.getPixelList().get(0).getX().getArray2DCopy());
             assertArrayEquals(array2, imageContext.getPixelList().get(0).getY().getArray2DCopy());
             assertArrayEquals(array3, imageContext.getPixelList().get(0).getZ().getArray2DCopy());
+        }
+    }
+
+    @Nested
+    @DisplayName("Pre&Post Processing operations")
+    public class PrePostProcessingOperations {
+
+        OperationManager<ImageContext> testee;
+
+        @BeforeEach
+        void init() {
+            testee = new OperationManager<ImageContext>() {
+                @Override
+                public List<Operation<ImageContext>> getOperations() {
+                    return Arrays.asList(
+                            new ImageProcessing.PreProcessingOperation(),
+                            new ImageProcessing.PostProcessingOperation());
+                }
+            };
+        }
+
+        @Test
+        @DisplayName("complete, 4x4, normal image, rgb")
+        void testProcess() {
+            ImageContext imageContext = buildImageContext(
+                    TransformSetting.TransformationType.HAART_TRANSFORM,
+                    new HashMap<Integer, CompressionSetting>() {
+                        {
+                            put(0, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                            put(1, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                            put(2, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                        }
+                    });
+
+            double[][] array1 = new double[][]{
+                    {35.0, 122.0, 3.0, 123.0},
+                    {3.0, 2.0, 3.0, 125.0},
+                    {3.0, 56.0, 3.0, 0.0},
+                    {3.0, 10.0, 102.0, 0.0}};
+            double[][] array2 = new double[][]{
+                    {35.0, 122.0, 3.0, 123.0},
+                    {3.0, 24.0, 3.0, 125.0},
+                    {3.0, 56.0, 0.0, 255.0},
+                    {34.0, 10.0, 251.0, 255.0}};
+            double[][] array3 = new double[][]{
+                    {35.0, 122.0, 35.0, 123.0},
+                    {30.0, 200.0, 30.0, 125.0},
+                    {3.0, 56.0, 3.0, 255.0},
+                    {0.0, 100.0, 101.0, 23.0}};
+
+            imageContext.setPixelList(Arrays.asList(
+                    new Vector<>(
+                            new Array2D(array1),
+                            new Array2D(array2),
+                            new Array2D(array3))
+            ));
+
+            testee.process(imageContext);
+
+            assertArrayEquals(array1, imageContext.getPixelList().get(0).getX().getArray2DCopy());
+            assertArrayEquals(array2, imageContext.getPixelList().get(0).getY().getArray2DCopy());
+            assertArrayEquals(array3, imageContext.getPixelList().get(0).getZ().getArray2DCopy());
+        }
+
+        @Test
+        @DisplayName("complete, 4x4, normal image, ycrcb")
+        void testProcessYcrCb() {
+            ImageContext imageContext = buildImageContext(
+                    TransformSetting.TransformationType.HAART_TRANSFORM,
+                    new HashMap<Integer, CompressionSetting>() {
+                        {
+                            put(0, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                            put(1, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                            put(2, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                        }
+                    });
+            imageContext.getImageSetting().setImageSchema(ImageSetting.ImageSchema.YCRCB);
+            double[][] array1 = new double[][]{
+                    {35.0, 122.0, 3.0, 123.0},
+                    {3.0, 2.0, 3.0, 125.0},
+                    {3.0, 56.0, 3.0, 0.0},
+                    {3.0, 10.0, 102.0, 0.0}};
+            double[][] array2 = new double[][]{
+                    {35.0, 122.0, 3.0, 123.0},
+                    {3.0, 24.0, 3.0, 125.0},
+                    {3.0, 56.0, 0.0, 255.0},
+                    {34.0, 10.0, 251.0, 255.0}};
+            double[][] array3 = new double[][]{
+                    {35.0, 122.0, 35.0, 123.0},
+                    {30.0, 200.0, 30.0, 125.0},
+                    {3.0, 56.0, 3.0, 255.0},
+                    {0.0, 100.0, 101.0, 23.0}};
+
+            imageContext.setPixelList(Arrays.asList(
+                    new Vector<>(
+                            new Array2D(array1),
+                            new Array2D(array2),
+                            new Array2D(array3))
+            ));
+
+            testee.process(imageContext);
+
+            assertArrayEqualsWithDelta(array1, imageContext.getPixelList().get(0).getX().getArray2DCopy(), 0.001);
+            assertArrayEqualsWithDelta(array2, imageContext.getPixelList().get(0).getY().getArray2DCopy(), 0.001);
+            assertArrayEqualsWithDelta(array3, imageContext.getPixelList().get(0).getZ().getArray2DCopy(), 0.001);
+        }
+
+        @Test
+        @DisplayName("complete, 4x4, corrupted image, rgb")
+        void testProcessCorrupted() {
+            ImageContext imageContext = buildImageContext(
+                    TransformSetting.TransformationType.HAART_TRANSFORM,
+                    new HashMap<Integer, CompressionSetting>() {
+                        {
+                            put(0, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                            put(1, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                            put(2, CompressionSetting.of(MIN_COMPRESSION_RATE));
+                        }
+                    });
+            double[][] array1 = new double[][]{
+                    {35.0, 122.0, 3.0, 123.0},
+                    {3.0, 2.0, 3.0, 125.0},
+                    {3.0, 56.0, 3.0, -30.0},
+                    {3.0, 10.0, 102.0, 0.0}};
+            double[][] array2 = new double[][]{
+                    {35.0, 122.0, 3.0, 123.0},
+                    {3.0, 24.0, 3.0, 125.0},
+                    {3.0, 56.0, -100.0, 285.0},
+                    {34.0, 10.0, 251.0, 255.0}};
+            double[][] array3 = new double[][]{
+                    {35.0, 122.0, 35.0, 123.0},
+                    {30.0, 200.0, 30.0, 125.0},
+                    {3.0, 56.0, 3.0, 256.0},
+                    {-10.0, 100.0, 101.0, 23.0}};
+
+            double[][] array1Correct = new double[][]{
+                    {35.0, 122.0, 3.0, 123.0},
+                    {3.0, 2.0, 3.0, 125.0},
+                    {3.0, 56.0, 3.0, 0.0},
+                    {3.0, 10.0, 102.0, 0.0}};
+            double[][] array2Correct = new double[][]{
+                    {35.0, 122.0, 3.0, 123.0},
+                    {3.0, 24.0, 3.0, 125.0},
+                    {3.0, 56.0, 0.0, 255.0},
+                    {34.0, 10.0, 251.0, 255.0}};
+            double[][] array3Correct = new double[][]{
+                    {35.0, 122.0, 35.0, 123.0},
+                    {30.0, 200.0, 30.0, 125.0},
+                    {3.0, 56.0, 3.0, 255.0},
+                    {0.0, 100.0, 101.0, 23.0}};
+
+            imageContext.setPixelList(Arrays.asList(
+                    new Vector<>(
+                            new Array2D(array1),
+                            new Array2D(array2),
+                            new Array2D(array3))
+            ));
+
+            testee.process(imageContext);
+
+            assertArrayEquals(array1Correct, imageContext.getPixelList().get(0).getX().getArray2DCopy());
+            assertArrayEquals(array2Correct, imageContext.getPixelList().get(0).getY().getArray2DCopy());
+            assertArrayEquals(array3Correct, imageContext.getPixelList().get(0).getZ().getArray2DCopy());
         }
     }
 

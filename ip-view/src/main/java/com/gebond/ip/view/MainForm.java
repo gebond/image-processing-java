@@ -54,6 +54,7 @@ public class MainForm extends JFrame {
     private JLabel sliderLabel1;
     private JLabel sliderLabel2;
     private JLabel sliderLabel3;
+    private JLabel totalValue;
 
     public MainForm() {
         super("Processing Form");
@@ -232,5 +233,9 @@ public class MainForm extends JFrame {
             return ImageSetting.ImageSchema.YCRCB;
         }
         return ImageSetting.ImageSchema.RGB;
+    }
+
+    public JLabel getTotalValue() {
+        return totalValue;
     }
 }

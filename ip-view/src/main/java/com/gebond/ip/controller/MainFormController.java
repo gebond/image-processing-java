@@ -41,6 +41,7 @@ public class MainFormController {
     private JLabel sliderValue1;
     private JLabel sliderValue2;
     private JLabel sliderValue3;
+    private JLabel totalValue;
     private JButton cancelButton;
     //util
     private JFileChooser fileChooser;
@@ -81,6 +82,7 @@ public class MainFormController {
         sliderValue1 = mainForm.getSliderValue1();
         sliderValue2 = mainForm.getSliderValue2();
         sliderValue3 = mainForm.getSliderValue3();
+        totalValue = mainForm.getTotalValue();
         sliderLabel1 = mainForm.getSliderLabel1();
         sliderLabel2 = mainForm.getSliderLabel2();
         sliderLabel3 = mainForm.getSliderLabel3();
@@ -95,6 +97,7 @@ public class MainFormController {
         sliderValue1.setText(slider1.getValue() + "%");
         sliderValue2.setText(slider2.getValue() + "%");
         sliderValue3.setText(slider3.getValue() + "%");
+        updateTotalValue();
         sliderLabel1.setText(ImageSetting.RGB.RED.toString());
         sliderLabel2.setText(ImageSetting.RGB.GREEN.toString());
         sliderLabel3.setText(ImageSetting.RGB.BLUE.toString());
@@ -149,12 +152,15 @@ public class MainFormController {
         // change sliders event
         slider1.addChangeListener(evt -> {
             sliderValue1.setText(slider1.getValue() + "%");
+            updateTotalValue();
         });
         slider2.addChangeListener(evt -> {
             sliderValue2.setText(slider2.getValue() + "%");
+            updateTotalValue();
         });
         slider3.addChangeListener(evt -> {
             sliderValue3.setText(slider3.getValue() + "%");
+            updateTotalValue();
         });
 
         // cancel button
@@ -168,6 +174,12 @@ public class MainFormController {
         Image dimg = image.getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(),
                 Image.SCALE_SMOOTH);
         imageLabel.setIcon(new ImageIcon(dimg));
+    }
+
+
+    private void updateTotalValue() {
+        totalValue.setText(String.valueOf("Total compression: " +
+                (slider1.getValue() + slider2.getValue() + slider3.getValue()) / 3 + "%"));
     }
 
     private static JFileChooser configureJFileChooser() {

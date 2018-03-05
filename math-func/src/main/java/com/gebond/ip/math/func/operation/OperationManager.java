@@ -16,7 +16,7 @@ public abstract class OperationManager<T extends OperationContext> {
                 return context;
             }
             if (operation.validate(context)) {
-                System.out.println(operation.description());
+//                System.out.println(operation.description());
                 operation.apply(context);
             }
         }
