@@ -10,18 +10,16 @@ import java.util.List;
 /**
  * Created on 01/03/18.
  */
-public class ResultsFormController {
+public class ResultsFormController extends ResultsForm {
 
-    private ResultsForm resultsForm;
     private List<ResultItem> resultItemList = new ArrayList<>();
 
     public ResultsFormController() {
-        initComponents();
         initListeners();
     }
 
-    public void show() {
-        resultsForm.setVisible(true);
+    public void showUp() {
+        super.setVisible(true);
     }
 
     public void addResult(ResultSetting resultSetting) {
@@ -30,10 +28,6 @@ public class ResultsFormController {
 
     public ResultItem getSelected() {
         return null;
-    }
-
-    private void initComponents() {
-        resultsForm = new ResultsForm();
     }
 
     private void initListeners() {

@@ -15,7 +15,7 @@ public class Runner {
         ResultsFormController resultsFormController = new ResultsFormController();
         MainFormController mainFormController = new MainFormController(resultsFormController);
 
-        resultsFormController.show();
+        resultsFormController.showUp();
         mainFormController.showUp();
     }
 }

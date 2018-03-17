@@ -16,11 +16,10 @@ public class ResultsForm extends JFrame{
     private JPanel contentPanel;
     private JLabel lastProcessedImage;
     private JLabel lastProcessedText;
-    private JTree tree1;
 
     public ResultsForm(){
         super("Results");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         setContentPane(previewPanel);
         log("resultsForm initialized");
