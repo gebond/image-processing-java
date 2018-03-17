@@ -51,7 +51,7 @@ class ImageProcessorImplTest {
                         .build(),
                 TransformSetting.startBuilder()
                         .withType(HAART_TRANSFORM)
-                        .build());
+                        .build()).getResultImage();
 
         assertImageEqualsWithSizes(inputImage, resultImage);
     }
@@ -76,7 +76,7 @@ class ImageProcessorImplTest {
                         .build(),
                 TransformSetting.startBuilder()
                         .withType(HAART_TRANSFORM)
-                        .build());
+                        .build()).getResultImage();
 
         assertImageEqualsWithSizes(inputImage, resultImage);
     }
@@ -101,7 +101,7 @@ class ImageProcessorImplTest {
                         .build(),
                 TransformSetting.startBuilder()
                         .withType(HAART_TRANSFORM)
-                        .build());
+                        .build()).getResultImage();
 
         assertNotNull(resultImage);
     }

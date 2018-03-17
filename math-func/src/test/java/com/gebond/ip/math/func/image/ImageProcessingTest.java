@@ -70,10 +70,10 @@ public class ImageProcessingTest {
                     1,
                     imageContext.getPixelList().size());
             assertEquals(
-                    imageContext.getColumnCount() * imageContext.getImageSetting().getSegmentSize().getValue(),
+                    imageContext.getColumnCount() * imageContext.getResultSetting().getImageSetting().getSegmentSize().getValue(),
                     imageContext.getImage().getWidth());
             assertEquals(
-                    imageContext.getRowCount() * imageContext.getImageSetting().getSegmentSize().getValue(),
+                    imageContext.getRowCount() * imageContext.getResultSetting().getImageSetting().getSegmentSize().getValue(),
                     imageContext.getImage().getHeight());
             saveImage(imageContext.getImage(), "8x8");
 
@@ -487,7 +487,7 @@ public class ImageProcessingTest {
                             put(2, CompressionSetting.of(MIN_COMPRESSION_RATE));
                         }
                     });
-            imageContext.getImageSetting().setImageSchema(ImageSetting.ImageSchema.YCRCB);
+            imageContext.getResultSetting().getImageSetting().setImageSchema(ImageSetting.ImageSchema.YCRCB);
             double[][] array1 = new double[][]{
                     {35.0, 122.0, 3.0, 123.0},
                     {3.0, 2.0, 3.0, 125.0},
