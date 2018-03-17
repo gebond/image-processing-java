@@ -315,7 +315,7 @@
             <properties/>
             <border type="etched"/>
             <children>
-              <component id="ccd11" class="javax.swing.JLabel" binding="image">
+              <component id="ccd11" class="javax.swing.JLabel" binding="imageLabel">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                     <minimum-size width="290" height="290"/>

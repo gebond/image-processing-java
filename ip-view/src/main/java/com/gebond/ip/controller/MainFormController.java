@@ -19,31 +19,10 @@ import java.io.IOException;
 /**
  * Created on 28/02/18.
  */
-public class MainFormController {
+public class MainFormController extends MainForm {
 
     private static final String PNG = "png";
     private static final String JPG = "jpg";
-
-    MainForm mainForm;
-    //left panel
-    private JButton browserButton;
-    private JLabel imageLabel;
-    //right panel
-    private JButton runButton;
-    private JComboBox<TransformSetting.TransformationType> selectMethodBox;
-    private JRadioButton rgbButton;
-    private JRadioButton ycrcbButton;
-    private JSlider slider1;
-    private JSlider slider2;
-    private JSlider slider3;
-    private JLabel sliderLabel1;
-    private JLabel sliderLabel2;
-    private JLabel sliderLabel3;
-    private JLabel sliderValue1;
-    private JLabel sliderValue2;
-    private JLabel sliderValue3;
-    private JLabel totalValue;
-    private JButton cancelButton;
     //util
     private JFileChooser fileChooser;
     // in-memory input image representation
@@ -58,36 +37,15 @@ public class MainFormController {
     private Thread processingTread;
 
     public MainFormController(ResultsFormController resultsFormController) {
+        super();
         this.resultsFormController = resultsFormController;
         imageProcessor = new ImageProcessorImpl();
-        initComponents();
         adjustComponents();
         initListeners();
     }
 
-    public void show() {
-        mainForm.setVisible(true);
-    }
-
-    private void initComponents() {
-        mainForm = new MainForm();
-        browserButton = mainForm.getBrowserButton();
-        imageLabel = mainForm.getImage();
-        runButton = mainForm.getRunButton();
-        selectMethodBox = mainForm.getSelectMethodBox();
-        rgbButton = mainForm.getRgbRadioButton();
-        ycrcbButton = mainForm.getYcrcbRadioButton();
-        slider1 = mainForm.getSlider1();
-        slider2 = mainForm.getSlider2();
-        slider3 = mainForm.getSlider3();
-        sliderValue1 = mainForm.getSliderValue1();
-        sliderValue2 = mainForm.getSliderValue2();
-        sliderValue3 = mainForm.getSliderValue3();
-        totalValue = mainForm.getTotalValue();
-        sliderLabel1 = mainForm.getSliderLabel1();
-        sliderLabel2 = mainForm.getSliderLabel2();
-        sliderLabel3 = mainForm.getSliderLabel3();
-        cancelButton = mainForm.getCancelButton();
+    public void showUp() {
+        super.setVisible(true);
     }
 
     void adjustComponents() {
@@ -125,14 +83,14 @@ public class MainFormController {
         // run processing
         runButton.addActionListener(e -> {
             try {
-                imageSetting = mainForm.buildImageSetting(lastImage);
-                transformSetting = mainForm.buildTransformSetting();
+                imageSetting = super.buildImageSetting(lastImage);
+                transformSetting = super.buildTransformSetting();
                 processingTread = new Thread(() ->
                         callbackProcessing(imageProcessor.processImage(imageSetting, transformSetting)));
                 processingTread.start();
                 toggleRunCancelButtons();
             } catch (RuntimeException ex) {
-                JOptionPane.showMessageDialog(mainForm,
+                JOptionPane.showMessageDialog(this,
                         ex.getMessage(),
                         "Warning",
                         JOptionPane.WARNING_MESSAGE);
@@ -140,12 +98,12 @@ public class MainFormController {
         });
 
         // change RGB/YCrCb schema
-        rgbButton.addActionListener(e -> {
+        rgbRadioButton.addActionListener(e -> {
             sliderLabel1.setText(ImageSetting.RGB.RED.toString());
             sliderLabel2.setText(ImageSetting.RGB.GREEN.toString());
             sliderLabel3.setText(ImageSetting.RGB.BLUE.toString());
         });
-        ycrcbButton.addActionListener(e -> {
+        ycrcbRadioButton.addActionListener(e -> {
             sliderLabel1.setText(ImageSetting.YCRCB.Y.toString());
             sliderLabel2.setText(ImageSetting.YCRCB.CR.toString());
             sliderLabel3.setText(ImageSetting.YCRCB.CB.toString());
@@ -173,7 +131,7 @@ public class MainFormController {
     }
 
     private void callbackProcessing(BufferedImage image) {
-        Image dimg = image.getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(),
+        Image dimg = image.getScaledInstance(image.getWidth(), imageLabel.getHeight(),
                 Image.SCALE_SMOOTH);
         imageLabel.setIcon(new ImageIcon(dimg));
         resultsFormController.addResult(ResultSetting.startBuilder()

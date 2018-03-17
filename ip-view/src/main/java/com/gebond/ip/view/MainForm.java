@@ -19,42 +19,42 @@ public class MainForm extends JFrame {
     private static final int WIDTH = 650;
     private static final int HEIGHT = 500;
 
-    private JButton runButton;
-    private JSlider slider1;
-    private JSlider slider2;
-    private JSlider slider3;
-    private JPanel compressionPanel;
-    private JPanel submitPanel;
-    private JPanel transformationPanel;
-    private JPanel rightPanel;
-    private JPanel leftPanel;
-    private JPanel imagePanel;
-    private JPanel browserPanel;
-    private JPanel mainPanel;
-    private JComboBox<TransformSetting.TransformationType> selectMethodBox;
-    private JButton browserButton;
-    private JLabel image;
-    private JRadioButton rgbRadioButton;
-    private JRadioButton ycrcbRadioButton;
-    private JPanel fourierSettingPanel;
-    private JLabel selectMethod;
-    private JPanel discreteSettingPanel;
-    private JRadioButton sizeX8RadioButton;
-    private JRadioButton sizeX16RadioButton;
-    private JRadioButton sizeX32RadioButton;
-    private JTextField a3TextField;
-    private JButton cancelButton;
-    private JProgressBar progressBar1;
-    private JPanel emptyPanel;
-    private JPanel progressPanel;
-    private JPanel colorSchemaPanel;
-    private JLabel sliderValue1;
-    private JLabel sliderValue2;
-    private JLabel sliderValue3;
-    private JLabel sliderLabel1;
-    private JLabel sliderLabel2;
-    private JLabel sliderLabel3;
-    private JLabel totalValue;
+    protected JButton runButton;
+    protected JSlider slider1;
+    protected JSlider slider2;
+    protected JSlider slider3;
+    protected JPanel compressionPanel;
+    protected JPanel submitPanel;
+    protected JPanel transformationPanel;
+    protected JPanel rightPanel;
+    protected JPanel leftPanel;
+    protected JPanel imagePanel;
+    protected JPanel browserPanel;
+    protected JPanel mainPanel;
+    protected JComboBox<TransformSetting.TransformationType> selectMethodBox;
+    protected JButton browserButton;
+    protected JLabel imageLabel;
+    protected JRadioButton rgbRadioButton;
+    protected JRadioButton ycrcbRadioButton;
+    protected JPanel fourierSettingPanel;
+    protected JLabel selectMethod;
+    protected JPanel discreteSettingPanel;
+    protected JRadioButton sizeX8RadioButton;
+    protected JRadioButton sizeX16RadioButton;
+    protected JRadioButton sizeX32RadioButton;
+    protected JTextField a3TextField;
+    protected JButton cancelButton;
+    protected JProgressBar progressBar1;
+    protected JPanel emptyPanel;
+    protected JPanel progressPanel;
+    protected JPanel colorSchemaPanel;
+    protected JLabel sliderValue1;
+    protected JLabel sliderValue2;
+    protected JLabel sliderValue3;
+    protected JLabel sliderLabel1;
+    protected JLabel sliderLabel2;
+    protected JLabel sliderLabel3;
+    protected JLabel totalValue;
 
     public MainForm() {
         super("Processing Form");
@@ -121,8 +121,8 @@ public class MainForm extends JFrame {
         return browserButton;
     }
 
-    public JLabel getImage() {
-        return image;
+    public JLabel getImageabel() {
+        return imageLabel;
     }
 
     public JRadioButton getRgbRadioButton() {

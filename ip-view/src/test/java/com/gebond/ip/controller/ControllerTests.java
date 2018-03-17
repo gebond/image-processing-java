@@ -1,7 +1,6 @@
 package com.gebond.ip.controller;
 
 import com.gebond.ip.model.setting.TransformSetting;
-import com.gebond.ip.view.MainForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -19,19 +18,17 @@ public class ControllerTests {
     @DisplayName("Main Controller")
     public class MainControllerTests {
         private MainFormController mainFormController;
-        private MainForm mainForm;
 
         @BeforeEach
         void init() {
             mainFormController = new MainFormController(new ResultsFormController());
-            mainForm = mainFormController.mainForm;
         }
 
         @DisplayName("adjusting components")
         @Test
         void adjustingTest() {
             assertEquals(TransformSetting.TransformationType.values().length,
-                    mainForm.getSelectMethodBox().getModel().getSize());
+                    mainFormController.getSelectMethodBox().getModel().getSize());
         }
     }
 
