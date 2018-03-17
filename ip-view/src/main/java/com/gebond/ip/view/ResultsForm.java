@@ -16,6 +16,7 @@ public class ResultsForm extends JFrame{
     private JPanel contentPanel;
     private JLabel lastProcessedImage;
     private JLabel lastProcessedText;
+    private JTree tree1;
 
     public ResultsForm(){
         super("Results");

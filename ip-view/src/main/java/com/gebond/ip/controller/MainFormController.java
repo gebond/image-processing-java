@@ -3,6 +3,7 @@ package com.gebond.ip.controller;
 import com.gebond.ip.math.func.image.ImageProcessor;
 import com.gebond.ip.math.func.image.ImageProcessorImpl;
 import com.gebond.ip.model.setting.ImageSetting;
+import com.gebond.ip.model.setting.ResultSetting;
 import com.gebond.ip.model.setting.TransformSetting;
 import com.gebond.ip.view.MainForm;
 import org.apache.commons.io.FilenameUtils;
@@ -14,8 +15,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
-import static com.gebond.ip.util.UIUtills.SMOOTH_GREEN;
 
 /**
  * Created on 28/02/18.
@@ -104,7 +103,6 @@ public class MainFormController {
         sliderLabel2.setText(ImageSetting.RGB.GREEN.toString());
         sliderLabel3.setText(ImageSetting.RGB.BLUE.toString());
         runButton.setEnabled(false);
-        runButton.setBackground(SMOOTH_GREEN);
         cancelButton.setEnabled(false);
     }
 
@@ -178,6 +176,11 @@ public class MainFormController {
         Image dimg = image.getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(),
                 Image.SCALE_SMOOTH);
         imageLabel.setIcon(new ImageIcon(dimg));
+        resultsFormController.addResult(ResultSetting.startBuilder()
+                .withResultImage(image)
+                .withImageSetting(imageSetting)
+                .withTransformSetting(transformSetting)
+                .build());
         toggleRunCancelButtons();
     }
 
