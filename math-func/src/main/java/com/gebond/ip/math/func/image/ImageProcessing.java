@@ -31,12 +31,13 @@ public class ImageProcessing extends OperationManager<ImageContext> {
                 new PreProcessingOperation(),
                 new ConsistentProcessingOperation(),
                 new PostProcessingOperation(),
-                new BuildingOperation()
+                new BuildingOperation(),
+                new CalculateMetricsOperation(),
+                new StopCounterOperation()
         );
     }
 
     public static class ValidationOperation implements Operation<ImageContext> {
-
         @Override
         public boolean validate(ImageContext context) throws IllegalArgumentException {
             // no validations - validate always
@@ -45,23 +46,23 @@ public class ImageProcessing extends OperationManager<ImageContext> {
 
         @Override
         public void apply(ImageContext context) {
-            if (context.getImageSetting() == null) {
+            if (context.getResultSetting().getImageSetting() == null) {
                 throw new IllegalArgumentException("Image setting is null!");
             }
-            if (context.getTransformSetting() == null) {
+            if (context.getResultSetting().getTransformSetting() == null) {
                 throw new IllegalArgumentException("Transform setting is null!");
             }
-            if (context.getImageSetting().getImageSchema() == null) {
+            if (context.getResultSetting().getImageSetting().getImageSchema() == null) {
                 throw new IllegalArgumentException("Image schema setting is null!");
             }
-            if (context.getImageSetting().getSourceImage() == null) {
+            if (context.getResultSetting().getImageSetting().getSourceImage() == null) {
                 throw new IllegalArgumentException("Source image setting is null!");
             }
-            if (context.getImageSetting().getSegmentSize() == null) {
+            if (context.getResultSetting().getImageSetting().getSegmentSize() == null) {
                 throw new IllegalArgumentException("SegmentSize setting is null!");
             }
-            if (context.getImageSetting().getImageSchema().getAmount()
-                    != context.getImageSetting().getImageValues().size()) {
+            if (context.getResultSetting().getImageSetting().getImageSchema().getAmount()
+                    != context.getResultSetting().getImageSetting().getImageValues().size()) {
                 throw new IllegalArgumentException("Wrong imageSetting configuration");
             }
         }
@@ -70,14 +71,14 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     public static class SplittingOperation implements Operation<ImageContext> {
         @Override
         public boolean validate(ImageContext context) throws IllegalArgumentException {
-            if (context.getImageSetting() == null || context.getImageSetting().getSourceImage() == null) {
+            if (context.getResultSetting().getImageSetting() == null || context.getResultSetting().getImageSetting().getSourceImage() == null) {
                 throw new IllegalArgumentException("Image or setting is null");
             }
-            if (context.getImageSetting().getSegmentSize() == null) {
+            if (context.getResultSetting().getImageSetting().getSegmentSize() == null) {
                 throw new IllegalArgumentException("Segment size is null");
             }
-            if (context.getImageSetting().getSourceImage().getHeight() < context.getImageSetting().getSegmentSize().getValue()
-                    || context.getImageSetting().getSourceImage().getWidth() < context.getImageSetting().getSegmentSize().getValue()) {
+            if (context.getResultSetting().getImageSetting().getSourceImage().getHeight() < context.getResultSetting().getImageSetting().getSegmentSize().getValue()
+                    || context.getResultSetting().getImageSetting().getSourceImage().getWidth() < context.getResultSetting().getImageSetting().getSegmentSize().getValue()) {
                 throw new IllegalArgumentException("Height or Width must be more than segment size");
             }
             return true;
@@ -85,9 +86,9 @@ public class ImageProcessing extends OperationManager<ImageContext> {
 
         @Override
         public void apply(ImageContext context) {
-            BufferedImage bufferedImage = context.getImageSetting().getSourceImage();
+            BufferedImage bufferedImage = context.getResultSetting().getImageSetting().getSourceImage();
 
-            int size = context.getImageSetting().getSegmentSize().getValue();
+            int size = context.getResultSetting().getImageSetting().getSegmentSize().getValue();
             context.setRowCount(bufferedImage.getHeight() / size);
             context.setColumnCount(bufferedImage.getWidth() / size);
 
@@ -120,7 +121,6 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     }
 
     public static class PreProcessingOperation implements Operation<ImageContext> {
-
         @Override
         public boolean validate(ImageContext context) throws IllegalArgumentException {
             return context.getPixelList().size() > 0;
@@ -128,7 +128,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
 
         @Override
         public void apply(ImageContext context) {
-            if (context.getImageSetting().getImageSchema().equals(ImageSetting.ImageSchema.YCRCB))
+            if (context.getResultSetting().getImageSetting().getImageSchema().equals(ImageSetting.ImageSchema.YCRCB))
                 for (Vector<Array2D> vector : context.getPixelList()) {
                     converRGBToYCrCb(vector);
                 }
@@ -138,7 +138,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     public static class BuildingOperation implements Operation<ImageContext> {
         @Override
         public boolean validate(ImageContext context) throws IllegalArgumentException {
-            if (context.getImageSetting().getSegmentSize() == null) {
+            if (context.getResultSetting().getImageSetting().getSegmentSize() == null) {
                 throw new IllegalArgumentException("Image setting segment is null");
             }
             if (context.getPixelList() == null || context.getPixelList().isEmpty()) {
@@ -153,8 +153,8 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         @Override
         public void apply(ImageContext context) {
             BufferedImage newImage = new BufferedImage(
-                    context.getColumnCount() * context.getImageSetting().getSegmentSize().getValue(),
-                    context.getRowCount() * context.getImageSetting().getSegmentSize().getValue(),
+                    context.getColumnCount() * context.getResultSetting().getImageSetting().getSegmentSize().getValue(),
+                    context.getRowCount() * context.getResultSetting().getImageSetting().getSegmentSize().getValue(),
                     BufferedImage.TYPE_INT_RGB);
             for (int i = 0; i < context.getRowCount(); i++) {
                 for (int j = 0; j < context.getColumnCount(); j++) {
@@ -163,10 +163,10 @@ public class ImageProcessing extends OperationManager<ImageContext> {
                             context.getPixelList().get(i * context.getColumnCount() + j),
                             i,
                             j,
-                            context.getImageSetting().getSegmentSize().getValue());
+                            context.getResultSetting().getImageSetting().getSegmentSize().getValue());
                 }
             }
-            context.setImage(newImage);
+            context.getResultSetting().setResultImage(newImage);
         }
 
         private void applyVector(BufferedImage image, Vector<Array2D> vector, int rowCurrent, int columnCurrent, int size) {
@@ -198,7 +198,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
             if (context.getPixelList() == null || context.getPixelList().isEmpty()) {
                 throw new IllegalArgumentException("Pixel array = null or empty");
             }
-            if (context.getTransformSetting().getType() == null) {
+            if (context.getResultSetting().getTransformSetting().getType() == null) {
                 throw new IllegalArgumentException("Transformation type is null");
             }
             return true;
@@ -209,7 +209,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         @Override
         public void apply(ImageContext context) {
             OperationManager<FourierContext.FourierContext2D> transformation2D;
-            switch (context.getTransformSetting().getType()) {
+            switch (context.getResultSetting().getTransformSetting().getType()) {
                 case HAART_TRANSFORM:
                     transformation2D = new HaartTransformation2D();
                     break;
@@ -223,19 +223,19 @@ public class ImageProcessing extends OperationManager<ImageContext> {
                 // TODO change hardcoded vector size to generic. Should depend on Schema.amount
                 vector.setX(new Array2D(transformation2D
                         .process(FourierContext.start2DBuilder(vector.getX().getArray2DCopy())
-                                .withCompression(context.getImageSetting().getImageValues().get(ImageSetting.RGB.RED.getOrder()))
+                                .withCompression(context.getResultSetting().getImageSetting().getImageValues().get(ImageSetting.RGB.RED.getOrder()))
                                 .build())
                         .getFourierData().getArray2DCopy()));
                 vector.setY(new Array2D(transformation2D
                         .process(FourierContext
                                 .start2DBuilder(vector.getY().getArray2DCopy())
-                                .withCompression(context.getImageSetting().getImageValues().get(ImageSetting.RGB.GREEN.getOrder()))
+                                .withCompression(context.getResultSetting().getImageSetting().getImageValues().get(ImageSetting.RGB.GREEN.getOrder()))
                                 .build())
                         .getFourierData().getArray2DCopy()));
                 vector.setZ(new Array2D(transformation2D
                         .process(FourierContext
                                 .start2DBuilder(vector.getZ().getArray2DCopy())
-                                .withCompression(context.getImageSetting().getImageValues().get(ImageSetting.RGB.BLUE.getOrder()))
+                                .withCompression(context.getResultSetting().getImageSetting().getImageValues().get(ImageSetting.RGB.BLUE.getOrder()))
                                 .build())
                         .getFourierData().getArray2DCopy()));
             }
@@ -243,7 +243,6 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     }
 
     public static class PostProcessingOperation implements Operation<ImageContext> {
-
         @Override
         public boolean validate(ImageContext context) throws IllegalArgumentException {
             return context.getPixelList().size() > 0;
@@ -252,7 +251,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         @Override
         public void apply(ImageContext context) {
             for (Vector<Array2D> vector : context.getPixelList()) {
-                if (context.getImageSetting().getImageSchema().equals(ImageSetting.ImageSchema.YCRCB)) {
+                if (context.getResultSetting().getImageSetting().getImageSchema().equals(ImageSetting.ImageSchema.YCRCB)) {
                     converYCrCbToRGB(vector);
                 }
                 vector.setX(applyPostProcessing(vector.getX()));
@@ -264,6 +263,31 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         private Array2D applyPostProcessing(Array2D sourceArray) {
             double[][] array2D = normalizePixelArray(sourceArray.getArray2DCopy());
             return new Array2D(array2D);
+        }
+    }
+
+    public static class CalculateMetricsOperation implements Operation<ImageContext> {
+        @Override
+        public boolean validate(ImageContext context) throws IllegalArgumentException {
+            return !context.getResultSetting().getTransformSetting().getMetricsTypes().isEmpty();
+        }
+
+        @Override
+        public void apply(ImageContext context) {
+            // TODO: implement MSE/PSNR metrics calculation
+        }
+    }
+
+    public static class StopCounterOperation implements Operation<ImageContext> {
+        @Override
+        public boolean validate(ImageContext context) throws IllegalArgumentException {
+            return context.getStartTime() != null;
+        }
+
+        @Override
+        public void apply(ImageContext context) {
+            final long actualTime = System.nanoTime();
+            context.getResultSetting().setTimeInMilles(actualTime - context.getStartTime());
         }
     }
 }

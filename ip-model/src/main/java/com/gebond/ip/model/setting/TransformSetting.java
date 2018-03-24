@@ -1,5 +1,10 @@
 package com.gebond.ip.model.setting;
 
+import com.gebond.ip.model.metric.Metrics;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created on 21/02/18.
  */
@@ -8,6 +13,11 @@ public class TransformSetting {
     private TransformationType type;
     @Deprecated
     private CompressionSetting compressionSetting;
+    private final Set<Metrics.MetricsType> metricsTypes;
+
+    public TransformSetting() {
+        metricsTypes = new HashSet<>();
+    }
 
     public TransformationType getType() {
         return type;
@@ -15,6 +25,10 @@ public class TransformSetting {
 
     public void setType(TransformationType type) {
         this.type = type;
+    }
+
+    public Set<Metrics.MetricsType> getMetricsTypes() {
+        return metricsTypes;
     }
 
     @Deprecated
@@ -57,6 +71,11 @@ public class TransformSetting {
 
         public TransformSettingBuilder withType(TransformationType type) {
             this.transformSetting.type = type;
+            return this;
+        }
+
+        public TransformSettingBuilder addMetrics(Metrics.MetricsType metricsType) {
+            this.transformSetting.metricsTypes.add(metricsType);
             return this;
         }
 

@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
  */
 public class ResultSetting {
     private BufferedImage resultImage;
-    private long timeInMilSec;
+    private long timeInMilles;
     private TransformSetting transformSetting;
     private ImageSetting imageSetting;
 
@@ -50,12 +50,12 @@ public class ResultSetting {
         this.resultImage = resultImage;
     }
 
-    public long getTimeInMilSec() {
-        return timeInMilSec;
+    public long getTimeInMilles() {
+        return timeInMilles;
     }
 
-    public void setTimeInMilSec(long timeInMilSec) {
-        this.timeInMilSec = timeInMilSec;
+    public void setTimeInMilles(long timeInMilles) {
+        this.timeInMilles = timeInMilles;
     }
 
     public TransformSetting getTransformSetting() {

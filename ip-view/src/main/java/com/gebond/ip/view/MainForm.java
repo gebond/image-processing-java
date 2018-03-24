@@ -55,6 +55,10 @@ public class MainForm extends JFrame {
     protected JLabel sliderLabel2;
     protected JLabel sliderLabel3;
     protected JLabel totalValue;
+    private JPanel metricsPanel;
+    private JCheckBox MSECheckBox;
+    private JCheckBox PSNRCheckBox;
+    private JLabel metricsLabel;
 
     public MainForm() {
         super("Processing Form");
