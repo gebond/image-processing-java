@@ -13,11 +13,20 @@ import com.gebond.ip.model.setting.ImageSetting;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.gebond.ip.math.commons.util.ImageUtil.normalizePixelArray;
 import static com.gebond.ip.model.converter.ConverterUtil.converRGBToYCrCb;
 import static com.gebond.ip.model.converter.ConverterUtil.converYCrCbToRGB;
+import static com.gebond.ip.model.metric.Metrics.MetricsType.MSE;
+import static com.gebond.ip.model.metric.Metrics.MetricsType.PSNR;
+import static com.gebond.ip.model.setting.ImageSetting.RGB.BLUE;
+import static com.gebond.ip.model.setting.ImageSetting.RGB.GREEN;
+import static com.gebond.ip.model.setting.ImageSetting.RGB.RED;
+import static org.apache.commons.math3.util.FastMath.abs;
+import static org.apache.commons.math3.util.FastMath.pow;
 
 /**
  * Created on 17/02/18.
@@ -223,13 +232,13 @@ public class ImageProcessing extends OperationManager<ImageContext> {
                 // TODO change hardcoded vector size to generic. Should depend on Schema.amount
                 vector.setX(new Array2D(transformation2D
                         .process(FourierContext.start2DBuilder(vector.getX().getArray2DCopy())
-                                .withCompression(context.getResultSetting().getImageSetting().getImageValues().get(ImageSetting.RGB.RED.getOrder()))
+                                .withCompression(context.getResultSetting().getImageSetting().getImageValues().get(RED.getOrder()))
                                 .build())
                         .getFourierData().getArray2DCopy()));
                 vector.setY(new Array2D(transformation2D
                         .process(FourierContext
                                 .start2DBuilder(vector.getY().getArray2DCopy())
-                                .withCompression(context.getResultSetting().getImageSetting().getImageValues().get(ImageSetting.RGB.GREEN.getOrder()))
+                                .withCompression(context.getResultSetting().getImageSetting().getImageValues().get(GREEN.getOrder()))
                                 .build())
                         .getFourierData().getArray2DCopy()));
                 vector.setZ(new Array2D(transformation2D
@@ -274,8 +283,58 @@ public class ImageProcessing extends OperationManager<ImageContext> {
 
         @Override
         public void apply(ImageContext context) {
-            // TODO: implement MSE/PSNR metrics calculation
-            long b = 10;
+            if (context.getResultSetting().getTransformSetting().getMetricsTypes().contains(MSE)) {
+                Map<ImageSetting.RGB, Double> mseMap = new HashMap<>();
+                mseMap.put(RED, getMSE(context, RED));
+                mseMap.put(GREEN, getMSE(context, GREEN));
+                mseMap.put(BLUE, getMSE(context, BLUE));
+                context.getResultSetting().getMetrics().put(MSE, mseMap);
+            }
+            if (context.getResultSetting().getTransformSetting().getMetricsTypes().contains(PSNR)) {
+                Map<ImageSetting.RGB, Double> psnrMap = new HashMap<>();
+                psnrMap.put(RED, getPSNR(context, RED));
+                psnrMap.put(GREEN, getPSNR(context, GREEN));
+                psnrMap.put(BLUE, getPSNR(context, BLUE));
+                context.getResultSetting().getMetrics().put(PSNR, psnrMap);
+            }
+        }
+
+        private double getMSE(ImageContext context, ImageSetting.RGB colorChannel) {
+            double result = 0.0;
+            int width = context.getResultSetting().getResultImage().getWidth();
+            int height = context.getResultSetting().getResultImage().getHeight();
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    Color sourcePixel = new Color(context.getResultSetting().getImageSetting().getSourceImage().getRGB(x, y));
+                    Color resultPixel = new Color(context.getResultSetting().getResultImage().getRGB(x, y));
+                    int sourceValue = 0;
+                    int resultValue = 0;
+                    switch (colorChannel) {
+                        case RED:
+                            sourceValue = sourcePixel.getRed();
+                            resultValue = resultPixel.getRed();
+                            break;
+                        case GREEN:
+                            sourceValue = sourcePixel.getGreen();
+                            resultValue = resultPixel.getGreen();
+                            break;
+                        case BLUE:
+                            sourceValue = sourcePixel.getBlue();
+                            resultValue = resultPixel.getBlue();
+                            break;
+                        default:
+                            break;
+                    }
+                    result += pow(abs(sourceValue - resultValue), 2);
+                }
+            }
+            return result / (width * height);
+        }
+
+        private double getPSNR(ImageContext context, ImageSetting.RGB colorChannel) {
+            double mse = context.getResultSetting().getMetrics().get(MSE) != null ?
+                    context.getResultSetting().getMetrics().get(MSE).get(colorChannel) : getMSE(context, colorChannel);
+            return 10 * Math.log10(255 * 255 / mse);
         }
     }
 

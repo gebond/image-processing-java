@@ -1,11 +1,14 @@
 package com.gebond.ip.view.component;
 
 import com.gebond.ip.model.setting.CompressionSetting;
+import com.gebond.ip.model.setting.ImageSetting;
 import com.gebond.ip.model.setting.ResultSetting;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 
+import static com.gebond.ip.model.metric.Metrics.MetricsType.MSE;
+import static com.gebond.ip.model.metric.Metrics.MetricsType.PSNR;
 import static com.gebond.ip.util.UIUtills.buildIconForDimension;
 
 /**
@@ -34,13 +37,26 @@ public class ResultItem extends JLabel {
     }
 
     private String buildDescription(ResultSetting resultSetting) {
-        return "Method: " + resultSetting.getTransformSetting().getType().name() + "\n" +
-                "Schema: " + resultSetting.getImageSetting().getImageSchema().toString() + "\n" +
-                "Compression: " + resultSetting.getImageSetting().getImageValues().values()
-                .stream()
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<html>");
+        stringBuilder.append("Method: " + resultSetting.getTransformSetting().getType().name() + "<br/>");
+        stringBuilder.append("Schema: " + resultSetting.getImageSetting().getImageSchema().toString() + "<br/>");
+        stringBuilder.append("Compression: " + resultSetting.getImageSetting().getImageValues()
+                .values().stream()
                 .mapToDouble(CompressionSetting::getCompressionRate)
-                .average().getAsDouble() +
-                "%\n" +
-                "Sec: " + resultSetting.getTimeInMilles() / 1000000000.0 + "s\n";
+                .average().getAsDouble() + "%<br/>");
+        stringBuilder.append("Time: " + resultSetting.getTimeInMilles() / 1000000000.0 + "s<br/>");
+        stringBuilder.append(resultSetting.getMetrics().get(MSE) != null ? "MSE: [" +
+                resultSetting.getMetrics().get(MSE).get(ImageSetting.RGB.RED) + ", " +
+                resultSetting.getMetrics().get(MSE).get(ImageSetting.RGB.GREEN) + ", " +
+                resultSetting.getMetrics().get(MSE).get(ImageSetting.RGB.BLUE) + "]<br/>"
+                : "");
+        stringBuilder.append(resultSetting.getMetrics().get(PSNR) != null ? "PSNR: [" +
+                resultSetting.getMetrics().get(PSNR).get(ImageSetting.RGB.RED) + ", " +
+                resultSetting.getMetrics().get(PSNR).get(ImageSetting.RGB.GREEN) + ", " +
+                resultSetting.getMetrics().get(PSNR).get(ImageSetting.RGB.BLUE) + "]<br/>"
+                : "");
+        stringBuilder.append("</html>");
+        return stringBuilder.toString();
     }
 }
