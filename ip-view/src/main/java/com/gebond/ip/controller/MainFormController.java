@@ -16,8 +16,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import static com.gebond.ip.util.UIUtills.buildIconForLabel;
-
 /**
  * Created on 28/02/18.
  */
@@ -133,7 +131,7 @@ public class MainFormController extends MainForm {
     }
 
     private void callbackProcessing(ResultSetting resultSetting) {
-        imageLabel.setIcon(buildIconForLabel(resultSetting.getResultImage(), imageLabel));
+//        imageLabel.setIcon(buildIconForLabel(resultSetting.getResultImage(), imageLabel));
         resultsFormController.addResult(resultSetting);
         if (!resultsFormController.isVisible()) {
             resultsFormController.showUp();
