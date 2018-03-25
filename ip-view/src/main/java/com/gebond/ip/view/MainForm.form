@@ -84,6 +84,7 @@
                 </constraints>
                 <properties>
                   <enabled value="false"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="none"/>
                 <children>

@@ -1,6 +1,10 @@
 package com.gebond.ip.model.setting;
 
+import com.gebond.ip.model.metric.Metrics;
+
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created on 11/03/18.
@@ -10,6 +14,11 @@ public class ResultSetting {
     private long timeInMilles;
     private TransformSetting transformSetting;
     private ImageSetting imageSetting;
+    private Map<Metrics.MetricsType, Map<ImageSetting.RGB, Double>> metrics;
+
+    public ResultSetting() {
+        metrics = new HashMap<>();
+    }
 
     public static ResultSettingBuilder startBuilder() {
         return new ResultSettingBuilder();
@@ -40,6 +49,14 @@ public class ResultSetting {
         public ResultSetting build() {
             return resultSetting;
         }
+    }
+
+    public Map<Metrics.MetricsType, Map<ImageSetting.RGB, Double>> getMetrics() {
+        return metrics;
+    }
+
+    public void setMetrics(Map<Metrics.MetricsType, Map<ImageSetting.RGB, Double>> metrics) {
+        this.metrics = metrics;
     }
 
     public BufferedImage getResultImage() {
