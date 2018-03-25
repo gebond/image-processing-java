@@ -275,6 +275,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         @Override
         public void apply(ImageContext context) {
             // TODO: implement MSE/PSNR metrics calculation
+            long b = 10;
         }
     }
 

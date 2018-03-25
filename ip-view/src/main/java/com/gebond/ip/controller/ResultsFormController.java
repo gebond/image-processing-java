@@ -26,9 +26,9 @@ public class ResultsFormController extends ResultsForm {
     }
 
     public void addResult(ResultSetting resultSetting) {
-        lastProcessedImage.setIcon(buildIconForDimension(resultSetting.getImageSetting().getSourceImage(), 145, 145));
+        lastProcessedImage.setIcon(buildIconForDimension(resultSetting.getResultImage(), 290, 290));
 //        resultItemList.add(new ResultItem(resultSetting));   // we set the max height to 75 and the max width to (almost) unlimited
-        resultContent.setLayout(new BoxLayout(resultContent, BoxLayout.X_AXIS));
+        resultContent.setLayout(new BoxLayout(resultContent, BoxLayout.Y_AXIS));
         resultContent.add(new ResultItem(resultSetting));
         pack();
     }

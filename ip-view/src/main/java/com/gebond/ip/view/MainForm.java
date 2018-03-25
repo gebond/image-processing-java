@@ -1,5 +1,6 @@
 package com.gebond.ip.view;
 
+import com.gebond.ip.model.metric.Metrics;
 import com.gebond.ip.model.setting.CompressionSetting;
 import com.gebond.ip.model.setting.ImageSetting;
 import com.gebond.ip.model.setting.TransformSetting;
@@ -203,7 +204,14 @@ public class MainForm extends JFrame {
     }
 
     public TransformSetting buildTransformSetting() {
-        return TransformSetting.startBuilder()
+        TransformSetting.TransformSettingBuilder builder = TransformSetting.startBuilder();
+        if (MSECheckBox.isSelected()) {
+            builder.addMetrics(Metrics.MetricsType.MSE);
+        }
+        if (PSNRCheckBox.isSelected()) {
+            builder.addMetrics(Metrics.MetricsType.PSNR);
+        }
+        return builder
                 .withType((TransformSetting.TransformationType) selectMethodBox.getSelectedItem())
                 .build();
     }
