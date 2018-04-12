@@ -6,6 +6,7 @@ import com.gebond.ip.model.setting.ResultSetting;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
 
 import static com.gebond.ip.model.metric.Metrics.MetricsType.MSE;
 import static com.gebond.ip.model.metric.Metrics.MetricsType.PSNR;
@@ -18,6 +19,7 @@ public class ResultItem extends JLabel {
 
     private BufferedImage sourceImage;
     private ResultSetting resultSetting;
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
 
     public ResultItem(ResultSetting resultSetting) {
         super("Result#1");
@@ -28,33 +30,25 @@ public class ResultItem extends JLabel {
         System.out.println("New Result!");
     }
 
-    public BufferedImage getSourceImage() {
-        return sourceImage;
-    }
-
-    public ResultSetting getResultSetting() {
-        return resultSetting;
-    }
-
     private String buildDescription(ResultSetting resultSetting) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<html>");
         stringBuilder.append("Method: " + resultSetting.getTransformSetting().getType().name() + "<br/>");
         stringBuilder.append("Schema: " + resultSetting.getImageSetting().getImageSchema().toString() + "<br/>");
-        stringBuilder.append("Compression: " + resultSetting.getImageSetting().getImageValues()
+        stringBuilder.append("Compression: " + df2.format(resultSetting.getImageSetting().getImageValues()
                 .values().stream()
                 .mapToDouble(CompressionSetting::getCompressionRate)
-                .average().getAsDouble() + "%<br/>");
-        stringBuilder.append("Time: " + resultSetting.getTimeInMilles() / 1000000000.0 + "s<br/>");
+                .average().getAsDouble()) + "%<br/>");
+        stringBuilder.append("Time: " + df2.format(resultSetting.getTimeInMilles() / 1000000000.0) + "s<br/>");
         stringBuilder.append(resultSetting.getMetrics().get(MSE) != null ? "MSE: [" +
-                resultSetting.getMetrics().get(MSE).get(ImageSetting.RGB.RED) + ", " +
-                resultSetting.getMetrics().get(MSE).get(ImageSetting.RGB.GREEN) + ", " +
-                resultSetting.getMetrics().get(MSE).get(ImageSetting.RGB.BLUE) + "]<br/>"
+                df2.format(resultSetting.getMetrics().get(MSE).get(ImageSetting.RGB.RED)) + ", " +
+                df2.format(resultSetting.getMetrics().get(MSE).get(ImageSetting.RGB.GREEN)) + ", " +
+                df2.format(resultSetting.getMetrics().get(MSE).get(ImageSetting.RGB.BLUE)) + "]<br/>"
                 : "");
         stringBuilder.append(resultSetting.getMetrics().get(PSNR) != null ? "PSNR: [" +
-                resultSetting.getMetrics().get(PSNR).get(ImageSetting.RGB.RED) + ", " +
-                resultSetting.getMetrics().get(PSNR).get(ImageSetting.RGB.GREEN) + ", " +
-                resultSetting.getMetrics().get(PSNR).get(ImageSetting.RGB.BLUE) + "]<br/>"
+                df2.format(resultSetting.getMetrics().get(PSNR).get(ImageSetting.RGB.RED)) + ", " +
+                df2.format(resultSetting.getMetrics().get(PSNR).get(ImageSetting.RGB.GREEN)) + ", " +
+                df2.format(resultSetting.getMetrics().get(PSNR).get(ImageSetting.RGB.BLUE)) + "]<br/>"
                 : "");
         stringBuilder.append("</html>");
         return stringBuilder.toString();
