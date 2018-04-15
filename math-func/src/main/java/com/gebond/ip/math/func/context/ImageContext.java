@@ -5,7 +5,6 @@ import com.gebond.ip.model.array.Vector;
 import com.gebond.ip.model.setting.ImageSetting;
 import com.gebond.ip.model.setting.ResultSetting;
 import com.gebond.ip.model.setting.TransformSetting;
-
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,87 +14,88 @@ import java.util.List;
  */
 public class ImageContext extends OperationContext {
 
-    private BufferedImage image;
-    private final ResultSetting resultSetting;
-    private final Long startTime;
-    private int columnCount;
-    private int rowCount;
-    /**
-     * list of vectors where vector contains (x-red, y-green, z-blue, ...)
-     */
-    private List<Vector<Array2D>> pixelList;
+  private final ResultSetting resultSetting;
+  private final Long startTime;
+  private BufferedImage image;
+  private int columnCount;
+  private int rowCount;
+  /**
+   * list of vectors where vector contains (x-red, y-green, z-blue, ...)
+   */
+  private List<Vector<Array2D>> pixelList;
 
-    public ImageContext() {
-        startTime = System.nanoTime();
-        pixelList = new ArrayList<>();
-        resultSetting = new ResultSetting();
-        rowCount = 0;
-        columnCount = 0;
+  public ImageContext() {
+    startTime = System.nanoTime();
+    pixelList = new ArrayList<>();
+    resultSetting = new ResultSetting();
+    rowCount = 0;
+    columnCount = 0;
+  }
+
+  public static ImageContextBuilder startBuilder() {
+    return new ImageContextBuilder();
+  }
+
+  public Long getStartTime() {
+    return startTime;
+  }
+
+  public BufferedImage getImage() {
+    return image;
+  }
+
+  public void setImage(BufferedImage image) {
+    this.image = image;
+  }
+
+  public int getColumnCount() {
+    return columnCount;
+  }
+
+  public void setColumnCount(int columnCount) {
+    this.columnCount = columnCount;
+  }
+
+  public int getRowCount() {
+    return rowCount;
+  }
+
+  public void setRowCount(int rowCount) {
+    this.rowCount = rowCount;
+  }
+
+  public List<Vector<Array2D>> getPixelList() {
+    return pixelList;
+  }
+
+  public void setPixelList(List<Vector<Array2D>> pixelList) {
+    this.pixelList = pixelList;
+  }
+
+  public ResultSetting getResultSetting() {
+    return resultSetting;
+  }
+
+  public static class ImageContextBuilder {
+
+    private ImageContext imageContext;
+
+    public ImageContextBuilder() {
+      this.imageContext = new ImageContext();
     }
 
-    public Long getStartTime() {
-        return startTime;
+    public ImageContextBuilder withSetting(ImageSetting imageSetting) {
+      imageContext.getResultSetting().setImageSetting(imageSetting);
+      return this;
     }
 
-    public BufferedImage getImage() {
-        return image;
+    public ImageContextBuilder withSetting(TransformSetting transformSetting) {
+      imageContext.getResultSetting().setTransformSetting(transformSetting);
+      return this;
     }
 
-    public void setImage(BufferedImage image) {
-        this.image = image;
+    public ImageContext build() {
+      return imageContext;
     }
-
-    public int getColumnCount() {
-        return columnCount;
-    }
-
-    public void setColumnCount(int columnCount) {
-        this.columnCount = columnCount;
-    }
-
-    public int getRowCount() {
-        return rowCount;
-    }
-
-    public void setRowCount(int rowCount) {
-        this.rowCount = rowCount;
-    }
-
-    public List<Vector<Array2D>> getPixelList() {
-        return pixelList;
-    }
-
-    public void setPixelList(List<Vector<Array2D>> pixelList) {
-        this.pixelList = pixelList;
-    }
-
-    public ResultSetting getResultSetting() {
-        return resultSetting;
-    }
-
-    public static ImageContextBuilder startBuilder() {
-        return new ImageContextBuilder();
-    }
-
-    public static class ImageContextBuilder {
-        private ImageContext imageContext;
-
-        public ImageContextBuilder() {
-            this.imageContext = new ImageContext();
-        }
-
-        public ImageContextBuilder withSetting(ImageSetting imageSetting) {
-            imageContext.getResultSetting().setImageSetting(imageSetting);
-            return this;
-        }
-
-        public ImageContextBuilder withSetting(TransformSetting transformSetting) {
-            imageContext.getResultSetting().setTransformSetting(transformSetting);
-            return this;
-        }
-
-        public ImageContext build() {
-            return imageContext;
-        }
-    }
+  }
 }

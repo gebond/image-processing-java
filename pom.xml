@@ -1,116 +1,117 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.gebond.ip</groupId>
-    <artifactId>ip-parent</artifactId>
-    <version>1.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>ip-parent</name>
+  <groupId>com.gebond.ip</groupId>
+  <artifactId>ip-parent</artifactId>
+  <version>1.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>ip-parent</name>
 
-    <modules>
-        <module>ip-commons</module>
-        <module>math-func</module>
-        <module>math-commons</module>
-        <module>ip-view</module>
-        <module>ip-model</module>
-    </modules>
+  <modules>
+    <module>ip-commons</module>
+    <module>math-func</module>
+    <module>math-commons</module>
+    <module>ip-view</module>
+    <module>ip-model</module>
+  </modules>
 
-    <properties>
-        <!-- System -->
-        <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Common -->
-        <apache.common>3.6.1</apache.common>
-        <apache.commons-io>2.6</apache.commons-io>
-        <!-- Testing -->
-        <junit.jupiter.version>5.0.1</junit.jupiter.version>
-        <jmockit.version>1.8</jmockit.version>
-        <!-- Plugins -->
-        <junit.surefire.provider.version>1.0.1</junit.surefire.provider.version>
-        <plugin.maven.surfire.version>2.19.1</plugin.maven.surfire.version>
-    </properties>
+  <properties>
+    <!-- System -->
+    <java.version>1.8</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- Common -->
+    <apache.common>3.6.1</apache.common>
+    <apache.commons-io>2.6</apache.commons-io>
+    <!-- Testing -->
+    <junit.jupiter.version>5.0.1</junit.jupiter.version>
+    <jmockit.version>1.8</jmockit.version>
+    <!-- Plugins -->
+    <junit.surefire.provider.version>1.0.1</junit.surefire.provider.version>
+    <plugin.maven.surfire.version>2.19.1</plugin.maven.surfire.version>
+  </properties>
 
-    <dependencyManagement>
+  <dependencyManagement>
+    <dependencies>
+      <!-- Common -->
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-math3</artifactId>
+        <version>${apache.common}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${apache.commons-io}</version>
+      </dependency>
+
+      <!--  Testing -->
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit.jupiter.version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jmockit</groupId>
+        <artifactId>jmockit</artifactId>
+        <version>${jmockit.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <!-- UI -->
+      <dependency>
+        <groupId>com.intellij</groupId>
+        <artifactId>forms_rt</artifactId>
+        <version>5.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.activemq</groupId>
+        <artifactId>activemq-core</artifactId>
+        <version>5.3.0</version>
+      </dependency>
+
+      <!-- Runtime -->
+      <!--<dependency>-->
+      <!--<groupId>org.nd4j</groupId>-->
+      <!--<artifactId>nd4j-native-platform</artifactId>-->
+      <!--<version>0.9.1</version>-->
+      <!--</dependency>-->
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+      <!-- Maven compilation -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+
+      <!--  Testing -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${plugin.maven.surfire.version}</version>
         <dependencies>
-            <!-- Common -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-math3</artifactId>
-                <version>${apache.common}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${apache.commons-io}</version>
-            </dependency>
-
-            <!--  Testing -->
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit.jupiter.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jmockit</groupId>
-                <artifactId>jmockit</artifactId>
-                <version>${jmockit.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- UI -->
-            <dependency>
-                <groupId>com.intellij</groupId>
-                <artifactId>forms_rt</artifactId>
-                <version>5.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-core</artifactId>
-                <version>5.3.0</version>
-            </dependency>
-
-            <!-- Runtime -->
-            <!--<dependency>-->
-                <!--<groupId>org.nd4j</groupId>-->
-                <!--<artifactId>nd4j-native-platform</artifactId>-->
-                <!--<version>0.9.1</version>-->
-            <!--</dependency>-->
+          <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>${junit.surefire.provider.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+          </dependency>
         </dependencies>
-    </dependencyManagement>
-
-    <build>
-        <plugins>
-            <!-- Maven compilation -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-
-            <!--  Testing -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${plugin.maven.surfire.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>${junit.surefire.provider.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.junit.jupiter</groupId>
-                        <artifactId>junit-jupiter-engine</artifactId>
-                        <version>${junit.jupiter.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        </plugins>
-    </build>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

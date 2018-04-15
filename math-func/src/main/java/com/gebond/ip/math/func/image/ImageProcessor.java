@@ -8,6 +8,7 @@ import com.gebond.ip.model.setting.TransformSetting;
  * Created on 02/03/18.
  */
 public interface ImageProcessor {
-    ResultSetting processImage(ImageSetting imageSetting,
-                               TransformSetting transformSetting);
+
+  ResultSetting processImage(ImageSetting imageSetting,
+      TransformSetting transformSetting);
 }

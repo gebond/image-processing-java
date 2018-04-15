@@ -5,13 +5,13 @@ package com.gebond.ip.math.func.context;
  */
 public abstract class OperationContext {
 
-    private boolean closed = false;
+  private boolean closed = false;
 
-    public boolean isClosed() {
-        return closed;
-    }
+  public boolean isClosed() {
+    return closed;
+  }
 
-    public void close() {
-        this.closed = true;
-    }
+  public void close() {
+    this.closed = true;
+  }
 }

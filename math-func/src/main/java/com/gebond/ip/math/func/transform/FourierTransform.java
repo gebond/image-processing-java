@@ -12,95 +12,95 @@ import static org.apache.commons.math3.util.FastMath.log;
  */
 public class FourierTransform {
 
-    private FourierTransform() {
+  private FourierTransform() {
+  }
+
+  public static class HaartFourierTransform {
+
+    public static double[] doAnalysis(double[] input) {
+      double[] result = copyOf(input); // after copy no use of input of array
+      int len = result.length;
+
+      int k = (int) log(2, len);
+      while (k > 0) {
+        double[] copy = copyOf(result);
+        for (int j = 0; j < intPow(2, k - 1); j++) {
+          result[j] = 0.5 * (copy[2 * j] + copy[2 * j + 1]);
+          result[intPow(2, k - 1) + j] = 0.5 * (copy[2 * j] - copy[2 * j + 1]);
+        }
+        k--;
+      }
+      return result;
     }
 
-    public static class HaartFourierTransform {
+    public static double[] doSynthesis(double[] input) {
+      double[] inputCopy = copyOf(input); // after copy no use of input of array
+      int len = inputCopy.length;
 
-        public static double[] doAnalysis(double[] input) {
-            double[] result = copyOf(input); // after copy no use of input of array
-            int len = result.length;
+      double[] result = new double[len];
+      double[] centers = getCenters(len);
 
-            int k = (int) log(2, len);
-            while (k > 0) {
-                double[] copy = copyOf(result);
-                for (int j = 0; j < intPow(2, k - 1); j++) {
-                    result[j] = 0.5 * (copy[2 * j] + copy[2 * j + 1]);
-                    result[intPow(2, k - 1) + j] = 0.5 * (copy[2 * j] - copy[2 * j + 1]);
-                }
-                k--;
-            }
-            return result;
+      for (int i = 0; i < len; i++) {
+        double fun_ith = 0.0;
+        for (int j = 0; j < len; j++) {
+          double haart = haart(j, centers[i]);
+          fun_ith += inputCopy[j] * haart;
         }
+        result[i] = fun_ith;
+      }
+      return result;
+    }
+  }
 
-        public static double[] doSynthesis(double[] input) {
-            double[] inputCopy = copyOf(input); // after copy no use of input of array
-            int len = inputCopy.length;
+  public static class WalshFourierTransform {
 
-            double[] result = new double[len];
-            double[] centers = getCenters(len);
+    public static double[] doAnalysis(double[] input) {
+      double[] inputCopy = copyOf(input); // after copy no use of input of array
 
-            for (int i = 0; i < len; i++) {
-                double fun_ith = 0.0;
-                for (int j = 0; j < len; j++) {
-                    double haart = haart(j, centers[i]);
-                    fun_ith += inputCopy[j] * haart;
-                }
-                result[i] = fun_ith;
-            }
-            return result;
-        }
+      double[] target = new double[inputCopy.length];
+      analysisIntoTarget(inputCopy, target, 0);
+
+      return target;
     }
 
-    public static class WalshFourierTransform {
+    public static double[] doSynthesis(double[] input) {
+      double[] inputCopy = copyOf(input);
+      int len = input.length;
 
-        public static double[] doAnalysis(double[] input) {
-            double[] inputCopy = copyOf(input); // after copy no use of input of array
+      double[] result = new double[len];
+      double[] centers = getCenters(len);
 
-            double[] target = new double[inputCopy.length];
-            analysisIntoTarget(inputCopy, target, 0);
-
-            return target;
+      for (int i = 0; i < len; i++) {
+        double fun_ith = 0.0;
+        for (int j = 0; j < len; j++) {
+          double haart = walsh(j, centers[i]);
+          fun_ith += inputCopy[j] * haart;
         }
-
-        public static double[] doSynthesis(double[] input) {
-            double[] inputCopy = copyOf(input);
-            int len = input.length;
-
-            double[] result = new double[len];
-            double[] centers = getCenters(len);
-
-            for (int i = 0; i < len; i++) {
-                double fun_ith = 0.0;
-                for (int j = 0; j < len; j++) {
-                    double haart = walsh(j, centers[i]);
-                    fun_ith += inputCopy[j] * haart;
-                }
-                result[i] = fun_ith;
-            }
-            return result;
-        }
-
-        private static void analysisIntoTarget(double[] input, double[] target, int current) {
-        int len = input.length;
-            if (len == 1) {
-                target[current] = input[0];
-                return; // the end of recursion
-            }
-            int N = len / 2;
-            double[] copy = copyOf(input);
-            for (int j = 0; j < N; j++) {
-                input[j] = 0.5 * (copy[2 * j] + copy[2 * j + 1]);
-                input[N + j] = 0.5 * (copy[2 * j] - copy[2 * j + 1]);
-            }
-            double[] right = new double[N], left = new double[N];
-            for (int j = 0; j < N; j++) {
-                left[j] = input[j];
-                right[j] = input[j + N];
-            }
-            // recursive calls for left and right parts
-            analysisIntoTarget(left, target, current); // left part of input array
-            analysisIntoTarget(right, target, current + N); // right part
-        }
+        result[i] = fun_ith;
+      }
+      return result;
     }
+
+    private static void analysisIntoTarget(double[] input, double[] target, int current) {
+      int len = input.length;
+      if (len == 1) {
+        target[current] = input[0];
+        return; // the end of recursion
+      }
+      int N = len / 2;
+      double[] copy = copyOf(input);
+      for (int j = 0; j < N; j++) {
+        input[j] = 0.5 * (copy[2 * j] + copy[2 * j + 1]);
+        input[N + j] = 0.5 * (copy[2 * j] - copy[2 * j + 1]);
+      }
+      double[] right = new double[N], left = new double[N];
+      for (int j = 0; j < N; j++) {
+        left[j] = input[j];
+        right[j] = input[j + N];
+      }
+      // recursive calls for left and right parts
+      analysisIntoTarget(left, target, current); // left part of input array
+      analysisIntoTarget(right, target, current + N); // right part
+    }
+  }
 }

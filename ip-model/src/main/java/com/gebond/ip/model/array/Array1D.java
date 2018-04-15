@@ -7,28 +7,28 @@ import java.util.Arrays;
  */
 public class Array1D extends ArrayContainer {
 
-    private double[] array1D;
+  private double[] array1D;
 
-    public Array1D(double[] array) {
-        setArray(array);
-    }
+  public Array1D(double[] array) {
+    setArray(array);
+  }
 
-    public double[] getArray1DCopy() {
-        return Arrays.copyOf(array1D, array1D.length);
-    }
+  public double[] getArray1DCopy() {
+    return Arrays.copyOf(array1D, array1D.length);
+  }
 
-    @Override
-    public int getSize() {
-        return array1D.length;
-    }
+  @Override
+  public int getSize() {
+    return array1D.length;
+  }
 
-    @Override
-    public Object getArrayCopy() {
-        return getArray1DCopy();
-    }
+  @Override
+  public Object getArrayCopy() {
+    return getArray1DCopy();
+  }
 
-    @Override
-    protected void setArrayAsCopyOf(Object array) {
-        array1D = Arrays.copyOf((double[]) array, ((double[]) array).length);
-    }
+  @Override
+  protected void setArrayAsCopyOf(Object array) {
+    array1D = Arrays.copyOf((double[]) array, ((double[]) array).length);
+  }
 }

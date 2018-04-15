@@ -1,12 +1,12 @@
 package com.gebond.ip.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.gebond.ip.model.setting.TransformSetting;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created on 01/03/18.
@@ -14,37 +14,39 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("Controllers")
 public class ControllerTests {
 
-    @Nested
-    @DisplayName("Main Controller")
-    public class MainControllerTests {
-        private MainFormController mainFormController;
+  @Nested
+  @DisplayName("Main Controller")
+  public class MainControllerTests {
 
-        @BeforeEach
-        void init() {
-            mainFormController = new MainFormController(new ResultsFormController());
-        }
+    private MainFormController mainFormController;
 
-        @DisplayName("adjusting components")
-        @Test
-        void adjustingTest() {
-            assertEquals(TransformSetting.TransformationType.values().length,
-                    mainFormController.getSelectMethodBox().getModel().getSize());
-        }
+    @BeforeEach
+    void init() {
+      mainFormController = new MainFormController(new ResultsFormController());
     }
 
-    @Nested
-    @DisplayName("Results Controller")
-    public class ResultsControllerTests {
-        private ResultsFormController resultsFormController;
-
-        @BeforeEach
-        void init() {
-            resultsFormController = new ResultsFormController();
-        }
-
-        @DisplayName("Renders results")
-        void renderResultsTest() {
-
-        }
+    @DisplayName("adjusting components")
+    @Test
+    void adjustingTest() {
+      assertEquals(TransformSetting.TransformationType.values().length,
+          mainFormController.getSelectMethodBox().getModel().getSize());
     }
+  }
+
+  @Nested
+  @DisplayName("Results Controller")
+  public class ResultsControllerTests {
+
+    private ResultsFormController resultsFormController;
+
+    @BeforeEach
+    void init() {
+      resultsFormController = new ResultsFormController();
+    }
+
+    @DisplayName("Renders results")
+    void renderResultsTest() {
+
+    }
+  }
 }

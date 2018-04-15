@@ -10,20 +10,20 @@ import com.gebond.ip.model.setting.TransformSetting;
  */
 public class ImageProcessorImpl implements ImageProcessor {
 
-    private ImageProcessing imageProcessing;
+  private ImageProcessing imageProcessing;
 
-    public ImageProcessorImpl() {
-        imageProcessing = new ImageProcessing();
-    }
+  public ImageProcessorImpl() {
+    imageProcessing = new ImageProcessing();
+  }
 
-    @Override
-    public ResultSetting processImage(ImageSetting imageSetting,
-                                      TransformSetting transformSetting) {
-        return imageProcessing.process(
-                ImageContext.startBuilder()
-                        .withSetting(imageSetting)
-                        .withSetting(transformSetting)
-                        .build())
-                .getResultSetting();
-    }
+  @Override
+  public ResultSetting processImage(ImageSetting imageSetting,
+      TransformSetting transformSetting) {
+    return imageProcessing.process(
+        ImageContext.startBuilder()
+            .withSetting(imageSetting)
+            .withSetting(transformSetting)
+            .build())
+        .getResultSetting();
+  }
 }
