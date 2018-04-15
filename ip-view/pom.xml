@@ -1,106 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>ip-parent</artifactId>
-        <groupId>com.gebond.ip</groupId>
-        <version>1.1-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>ip-parent</artifactId>
+    <groupId>com.gebond.ip</groupId>
+    <version>1.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ip-view</artifactId>
+  <artifactId>ip-view</artifactId>
 
-    <dependencies>
-        <!-- Project -->
-        <dependency>
-            <groupId>com.gebond.ip</groupId>
-            <artifactId>math-func</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.gebond.ip</groupId>
-            <artifactId>ip-commons</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+  <dependencies>
+    <!-- Project -->
+    <dependency>
+      <groupId>com.gebond.ip</groupId>
+      <artifactId>math-func</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.gebond.ip</groupId>
+      <artifactId>ip-commons</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-        <!-- Common -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
+    <!-- Common -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
 
-        <!-- Testing -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
+    <!-- Testing -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+    </dependency>
 
-        <!-- UI -->
-        <dependency>
-            <groupId>com.intellij</groupId>
-            <artifactId>forms_rt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-core</artifactId>
-        </dependency>
-    </dependencies>
+    <!-- UI -->
+    <dependency>
+      <groupId>com.intellij</groupId>
+      <artifactId>forms_rt</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-core</artifactId>
+    </dependency>
+  </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>false</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.gebond.ip.Runner</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>ideauidesigner-maven-plugin</artifactId>
-                <version>1.0-beta-2-17.1.5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>javac2</goal>
-                        </goals>
-                    </execution>
-                </executions>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+              <mainClass>com.gebond.ip.Runner</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>ideauidesigner-maven-plugin</artifactId>
+        <version>1.0-beta-2-17.1.5</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>javac2</goal>
+            </goals>
+          </execution>
+        </executions>
 
-                <configuration>
-                    <fork>true</fork>
-                    <debug>true</debug>
-                    <failOnError>true</failOnError>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+        <configuration>
+          <fork>true</fork>
+          <debug>true</debug>
+          <failOnError>true</failOnError>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
