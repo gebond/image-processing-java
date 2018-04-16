@@ -106,11 +106,11 @@ class MainFormTest {
 
         assertEquals(ImageSetting.ImageSchema.RGB, imageSetting.getImageSchema());
         assertEquals(ImageSetting.SegmentSize.X32, imageSetting.getSegmentSize());
-        assertEquals(10.0, imageSetting.getImageValues().get(ImageSetting.RGB.RED.getOrder())
+        assertEquals(10.0, imageSetting.getCompressionValues().get(ImageSetting.RGB.RED.getOrder())
             .getCompressionRate());
-        assertEquals(30.0, imageSetting.getImageValues().get(ImageSetting.RGB.GREEN.getOrder())
+        assertEquals(30.0, imageSetting.getCompressionValues().get(ImageSetting.RGB.GREEN.getOrder())
             .getCompressionRate());
-        assertEquals(90.0, imageSetting.getImageValues().get(ImageSetting.RGB.BLUE.getOrder())
+        assertEquals(90.0, imageSetting.getCompressionValues().get(ImageSetting.RGB.BLUE.getOrder())
             .getCompressionRate());
       }
 
@@ -127,11 +127,11 @@ class MainFormTest {
 
         assertEquals(ImageSetting.ImageSchema.YCRCB, imageSetting.getImageSchema());
         assertEquals(ImageSetting.SegmentSize.X16, imageSetting.getSegmentSize());
-        assertEquals(11.0, imageSetting.getImageValues().get(ImageSetting.RGB.RED.getOrder())
+        assertEquals(11.0, imageSetting.getCompressionValues().get(ImageSetting.RGB.RED.getOrder())
             .getCompressionRate());
-        assertEquals(31.0, imageSetting.getImageValues().get(ImageSetting.RGB.GREEN.getOrder())
+        assertEquals(31.0, imageSetting.getCompressionValues().get(ImageSetting.RGB.GREEN.getOrder())
             .getCompressionRate());
-        assertEquals(91.0, imageSetting.getImageValues().get(ImageSetting.RGB.BLUE.getOrder())
+        assertEquals(91.0, imageSetting.getCompressionValues().get(ImageSetting.RGB.BLUE.getOrder())
             .getCompressionRate());
       }
 
@@ -148,11 +148,11 @@ class MainFormTest {
 
         assertEquals(ImageSetting.ImageSchema.YCRCB, imageSetting.getImageSchema());
         assertEquals(ImageSetting.SegmentSize.X8, imageSetting.getSegmentSize());
-        assertEquals(12.0, imageSetting.getImageValues().get(ImageSetting.RGB.RED.getOrder())
+        assertEquals(12.0, imageSetting.getCompressionValues().get(ImageSetting.RGB.RED.getOrder())
             .getCompressionRate());
-        assertEquals(32.0, imageSetting.getImageValues().get(ImageSetting.RGB.GREEN.getOrder())
+        assertEquals(32.0, imageSetting.getCompressionValues().get(ImageSetting.RGB.GREEN.getOrder())
             .getCompressionRate());
-        assertEquals(92.0, imageSetting.getImageValues().get(ImageSetting.RGB.BLUE.getOrder())
+        assertEquals(92.0, imageSetting.getCompressionValues().get(ImageSetting.RGB.BLUE.getOrder())
             .getCompressionRate());
       }
 

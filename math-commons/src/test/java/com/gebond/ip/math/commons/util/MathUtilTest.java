@@ -31,54 +31,32 @@ class MathUtilTest {
     @Test
     @DisplayName("when n = 10 (even)")
     public void divide_2k() {
-      int[] result = divideNumber(10);
-
-      int[] expected = new int[]{2, 5};
-
-      assertArrayEquals(expected, result);
+      assertArrayEquals(new int[]{2, 5}, divideNumber(10));
     }
 
     @Test
     @DisplayName("when n = 2000 (even)")
     public void divide_2k_2() {
-      int[] result = divideNumber(2000);
-
-      int[] expected = new int[]{2, 1000};
-
-      assertArrayEquals(expected, result);
+      assertArrayEquals(new int[]{2, 1000}, divideNumber(2000));
     }
 
     @Test
     @DisplayName("when n = 33 (step 1)")
     public void divide_n_1() {
-      int[] result = divideNumber(33);
-
-      int[] expected = new int[]{3, 11};
-
-      assertArrayEquals(expected, result);
+      assertArrayEquals(new int[]{3, 11}, divideNumber(33));
     }
 
     @Test
     @DisplayName("when n = 11 (prime)")
     public void divide_n_3() {
-      int[] result = divideNumber(11);
-
-      int[] expected = new int[]{};
-
-      assertArrayEquals(expected, result);
+      assertArrayEquals(new int[]{}, divideNumber(11));
     }
 
     @Test
     @DisplayName("when n = 65 (step 2)")
     @Disabled("todo implement logic")
     public void divide_n_2() {
-      int[] result = divideNumber(65);
-
-      int[] expected = new int[]{5, 13};
-
-      assertArrayEquals(expected, result);
+      assertArrayEquals(new int[]{5, 13}, divideNumber(65));
     }
-
   }
-
 }

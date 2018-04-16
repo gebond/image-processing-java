@@ -10,7 +10,7 @@ import java.util.Map;
 public class ImageSetting {
 
   // Example: { 85, 15, 35}
-  private final Map<Integer, CompressionSetting> imageValues = new HashMap<>();
+  private final Map<Integer, CompressionSetting> compressionValues = new HashMap<>();
   private BufferedImage sourceImage;
   private ImageSchema imageSchema;
   private SegmentSize segmentSize;
@@ -27,8 +27,8 @@ public class ImageSetting {
     this.imageSchema = imageSchema;
   }
 
-  public Map<Integer, CompressionSetting> getImageValues() {
-    return imageValues;
+  public Map<Integer, CompressionSetting> getCompressionValues() {
+    return compressionValues;
   }
 
   public SegmentSize getSegmentSize() {
@@ -208,7 +208,7 @@ public class ImageSetting {
     }
 
     public ImageSettingBuilder withCompressions(Map<Integer, CompressionSetting> compressions) {
-      imageSetting.imageValues.putAll(compressions);
+      imageSetting.compressionValues.putAll(compressions);
       return this;
     }
 

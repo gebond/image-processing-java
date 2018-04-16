@@ -18,6 +18,14 @@
       <artifactId>math-func</artifactId>
       <version>${project.version}</version>
     </dependency>
+
+    <!-- Test-->
+    <dependency>
+      <groupId>com.gebond.ip</groupId>
+      <artifactId>math-func</artifactId>
+      <type>test-jar</type>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
 </project>
