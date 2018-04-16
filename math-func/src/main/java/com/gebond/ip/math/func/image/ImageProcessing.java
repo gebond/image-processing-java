@@ -1,6 +1,7 @@
 package com.gebond.ip.math.func.image;
 
 import static com.gebond.ip.math.commons.util.ImageUtil.normalizePixelArray;
+import static com.gebond.ip.math.func.util.ProcessingUtil.buildTransformForType;
 import static com.gebond.ip.model.converter.ConverterUtil.converRGBToYCrCb;
 import static com.gebond.ip.model.converter.ConverterUtil.converYCrCbToRGB;
 import static com.gebond.ip.model.metric.Metrics.MetricsType.MSE;
@@ -15,10 +16,9 @@ import com.gebond.ip.math.func.context.FourierContext;
 import com.gebond.ip.math.func.context.ImageContext;
 import com.gebond.ip.math.func.operation.Operation;
 import com.gebond.ip.math.func.operation.OperationManager;
-import com.gebond.ip.math.func.transform.HaartTransformation2D;
-import com.gebond.ip.math.func.transform.WalshTransformation2D;
 import com.gebond.ip.model.array.Array2D;
 import com.gebond.ip.model.array.Vector;
+import com.gebond.ip.model.setting.CompressionSetting;
 import com.gebond.ip.model.setting.ImageSetting;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 /**
  * Created on 17/02/18.
@@ -39,6 +41,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         new SplittingOperation(),
         new PreProcessingOperation(),
         new ConsistentProcessingOperation(),
+        new ConcurrentOperation(),
         new PostProcessingOperation(),
         new BuildingOperation(),
         new CalculateMetricsOperation(),
@@ -72,7 +75,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         throw new IllegalArgumentException("SegmentSize setting is null!");
       }
       if (context.getResultSetting().getImageSetting().getImageSchema().getAmount()
-          != context.getResultSetting().getImageSetting().getImageValues().size()) {
+          != context.getResultSetting().getImageSetting().getCompressionValues().size()) {
         throw new IllegalArgumentException("Wrong imageSetting configuration");
       }
     }
@@ -211,8 +214,49 @@ public class ImageProcessing extends OperationManager<ImageContext> {
   public static class ConcurrentOperation extends TransformationOperation {
 
     @Override
-    public void apply(ImageContext context) {
+    public boolean validate(ImageContext context) throws IllegalArgumentException {
+      return !context.IS_SINGLE_THREAD;
+    }
 
+    @Override
+    public void apply(ImageContext context) {
+      OperationManager<FourierContext.FourierContext2D> transformation2D = buildTransformForType(
+          context.getResultSetting().getTransformSetting().getType());
+
+      List<Vector<Array2D>> pixelList = context.getPixelList();
+      List<CompletableFuture<Vector<Array2D>>> futures =
+          pixelList.stream()
+              .map(v -> CompletableFuture.supplyAsync(() -> applyAsync(v, transformation2D,
+                  context.getResultSetting().getImageSetting().getCompressionValues())))
+              .collect(Collectors.toList());
+      List<Vector<Array2D>> result =
+          futures.stream()
+              .map(CompletableFuture::join)
+              .collect(Collectors.toList());
+      context.setPixelList(result);
+    }
+
+    private Vector<Array2D> applyAsync(Vector<Array2D> vector,
+        OperationManager<FourierContext.FourierContext2D> transformation2D,
+        Map<Integer, CompressionSetting> compressionSettingMap) {
+      vector.setX(new Array2D(transformation2D
+          .process(FourierContext.start2DBuilder(vector.getX().getArray2DCopy())
+              .withCompression(compressionSettingMap.get(RED.getOrder()))
+              .build())
+          .getFourierData().getArray2DCopy()));
+      vector.setY(new Array2D(transformation2D
+          .process(FourierContext
+              .start2DBuilder(vector.getY().getArray2DCopy())
+              .withCompression(compressionSettingMap.get(GREEN.getOrder()))
+              .build())
+          .getFourierData().getArray2DCopy()));
+      vector.setZ(new Array2D(transformation2D
+          .process(FourierContext
+              .start2DBuilder(vector.getZ().getArray2DCopy())
+              .withCompression(compressionSettingMap.get(ImageSetting.RGB.BLUE.getOrder()))
+              .build())
+          .getFourierData().getArray2DCopy()));
+      return vector;
     }
   }
 
@@ -233,37 +277,33 @@ public class ImageProcessing extends OperationManager<ImageContext> {
   public static class ConsistentProcessingOperation extends TransformationOperation {
 
     @Override
+    public boolean validate(ImageContext context) throws IllegalArgumentException {
+      return context.IS_SINGLE_THREAD;
+    }
+
+    @Override
     public void apply(ImageContext context) {
-      OperationManager<FourierContext.FourierContext2D> transformation2D;
-      switch (context.getResultSetting().getTransformSetting().getType()) {
-        case HAART_TRANSFORM:
-          transformation2D = new HaartTransformation2D();
-          break;
-        case WALSH_TRANSFORM:
-          transformation2D = new WalshTransformation2D();
-          break;
-        default:
-          transformation2D = new HaartTransformation2D();
-      }
+      OperationManager<FourierContext.FourierContext2D> transformation2D = buildTransformForType(
+          context.getResultSetting().getTransformSetting().getType());
       for (Vector<Array2D> vector : context.getPixelList()) {
         // TODO change hardcoded vector size to generic. Should depend on Schema.amount
         vector.setX(new Array2D(transformation2D
             .process(FourierContext.start2DBuilder(vector.getX().getArray2DCopy())
-                .withCompression(context.getResultSetting().getImageSetting().getImageValues()
+                .withCompression(context.getResultSetting().getImageSetting().getCompressionValues()
                     .get(RED.getOrder()))
                 .build())
             .getFourierData().getArray2DCopy()));
         vector.setY(new Array2D(transformation2D
             .process(FourierContext
                 .start2DBuilder(vector.getY().getArray2DCopy())
-                .withCompression(context.getResultSetting().getImageSetting().getImageValues()
+                .withCompression(context.getResultSetting().getImageSetting().getCompressionValues()
                     .get(GREEN.getOrder()))
                 .build())
             .getFourierData().getArray2DCopy()));
         vector.setZ(new Array2D(transformation2D
             .process(FourierContext
                 .start2DBuilder(vector.getZ().getArray2DCopy())
-                .withCompression(context.getResultSetting().getImageSetting().getImageValues()
+                .withCompression(context.getResultSetting().getImageSetting().getCompressionValues()
                     .get(ImageSetting.RGB.BLUE.getOrder()))
                 .build())
             .getFourierData().getArray2DCopy()));

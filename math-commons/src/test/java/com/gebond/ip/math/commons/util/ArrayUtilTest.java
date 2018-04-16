@@ -37,6 +37,7 @@ class ArrayUtilTest {
       double[][] source_copy = new double[][]{{1.0, 2.0, 3.0}, {3.0, 4.0, 6.0}};
 
       double[][] target = copyOf(source);
+      // corruption of source array
       source[1][0] = -10.0;
       source[0][1] = 100.0;
 
