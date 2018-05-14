@@ -1,41 +1,15 @@
 package com.gebond.ip.model.array;
 
 /**
- * Created on 17/02/18.
+ * Created on 07/05/18.
  */
-public class Vector<T> {
+public interface Vector<T> {
 
-  private T x;
-  private T y;
-  private T z;
+  int getSize();
 
-  public Vector(T x, T y, T z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-  }
+  T get(int i);
 
-  public T getX() {
-    return x;
-  }
+  void set(int i,  T value);
 
-  public void setX(T x) {
-    this.x = x;
-  }
-
-  public T getY() {
-    return y;
-  }
-
-  public void setY(T y) {
-    this.y = y;
-  }
-
-  public T getZ() {
-    return z;
-  }
-
-  public void setZ(T z) {
-    this.z = z;
-  }
+  T[] toArray();
 }

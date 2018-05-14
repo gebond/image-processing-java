@@ -10,13 +10,16 @@ public abstract class OperationManager<T extends OperationContext> {
 
   public abstract List<Operation<T>> getOperations();
 
+  protected List<Operation<T>> getOperations(T context){
+    return getOperations();
+  }
+
   public T process(T context) {
-    for (Operation<T> operation : getOperations()) {
+    for (Operation<T> operation : getOperations(context)) {
       if (context.isClosed()) {
         return context;
       }
       if (operation.validate(context)) {
-//                System.out.println(operation.description());
         operation.apply(context);
       }
     }
