@@ -1,7 +1,7 @@
 package com.gebond.ip.math.func.context;
 
 import com.gebond.ip.model.array.Array2D;
-import com.gebond.ip.model.array.Vector;
+import com.gebond.ip.model.array.Vector3D;
 import com.gebond.ip.model.setting.ImageSetting;
 import com.gebond.ip.model.setting.ResultSetting;
 import com.gebond.ip.model.setting.TransformSetting;
@@ -22,7 +22,7 @@ public class ImageContext extends OperationContext {
   /**
    * List of vectors where vector contains (x-red, y-green, z-blue, ...)
    */
-  private List<Vector<Array2D>> pixelList;
+  private List<Vector3D<Array2D>> pixelList;
   /**
    * Determines whether single threaded operations will be used or not
    */
@@ -68,11 +68,11 @@ public class ImageContext extends OperationContext {
     this.rowCount = rowCount;
   }
 
-  public List<Vector<Array2D>> getPixelList() {
+  public List<Vector3D<Array2D>> getPixelList() {
     return pixelList;
   }
 
-  public void setPixelList(List<Vector<Array2D>> pixelList) {
+  public void setPixelList(List<Vector3D<Array2D>> pixelList) {
     this.pixelList = pixelList;
   }
 

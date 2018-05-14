@@ -14,10 +14,16 @@ import static org.apache.commons.math3.util.FastMath.pow;
 
 import com.gebond.ip.math.func.context.FourierContext;
 import com.gebond.ip.math.func.context.ImageContext;
+import com.gebond.ip.math.func.image.ImageProcessing.ConsistentProcessingOperation.CalculateMetricsOperation;
+import com.gebond.ip.math.func.image.ImageProcessing.ConsistentProcessingOperation.PostProcessingOperation;
+import com.gebond.ip.math.func.image.ImageProcessing.ConsistentProcessingOperation.StopCounterOperation;
 import com.gebond.ip.math.func.operation.Operation;
 import com.gebond.ip.math.func.operation.OperationManager;
+import com.gebond.ip.math.func.transform.DiscreteTransformation2D;
+import com.gebond.ip.math.func.transform.HaartTransformation2D;
+import com.gebond.ip.math.func.transform.WalshTransformation2D;
 import com.gebond.ip.model.array.Array2D;
-import com.gebond.ip.model.array.Vector;
+import com.gebond.ip.model.array.Vector3D;
 import com.gebond.ip.model.setting.CompressionSetting;
 import com.gebond.ip.model.setting.ImageSetting;
 import java.awt.Color;
@@ -116,7 +122,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
       }
     }
 
-    private Vector<Array2D> buildVector(BufferedImage bufferedImage, int rowCurrent,
+    private Vector3D<Array2D> buildVector(BufferedImage bufferedImage, int rowCurrent,
         int columnCurrent, int size) {
       double[][] arrayReds = new double[size][size];
       double[][] arrayGreens = new double[size][size];
@@ -131,7 +137,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
           arrayBlues[x][y] = color.getBlue();
         }
       }
-      Vector<Array2D> vector = new Vector<>(
+      Vector3D<Array2D> vector = new Vector3D<>(
           new Array2D(arrayReds),
           new Array2D(arrayGreens),
           new Array2D(arrayBlues));
@@ -150,7 +156,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     public void apply(ImageContext context) {
       if (context.getResultSetting().getImageSetting().getImageSchema()
           .equals(ImageSetting.ImageSchema.YCRCB)) {
-        for (Vector<Array2D> vector : context.getPixelList()) {
+        for (Vector3D<Array2D> vector : context.getPixelList()) {
           converRGBToYCrCb(vector);
         }
       }
@@ -194,7 +200,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
       context.getResultSetting().setResultImage(newImage);
     }
 
-    private void applyVector(BufferedImage image, Vector<Array2D> vector, int rowCurrent,
+    private void applyVector(BufferedImage image, Vector3D<Array2D> vector, int rowCurrent,
         int columnCurrent, int size) {
       double[][] arrayReds = vector.getX().getArray2DCopy();
       double[][] arrayGreens = vector.getY().getArray2DCopy();
@@ -285,7 +291,22 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     public void apply(ImageContext context) {
       OperationManager<FourierContext.FourierContext2D> transformation2D = buildTransformForType(
           context.getResultSetting().getTransformSetting().getType());
-      for (Vector<Array2D> vector : context.getPixelList()) {
+      for (Vector3D<Array2D> vector : context.getPixelList()) {
+      OperationManager<FourierContext.FourierContext2D> transformation2D;
+      switch (context.getResultSetting().getTransformSetting().getType()) {
+        case HAART_TRANSFORM:
+          transformation2D = new HaartTransformation2D();
+          break;
+        case WALSH_TRANSFORM:
+          transformation2D = new WalshTransformation2D();
+          break;
+        case DISCRETE_TRANSFORM:
+          transformation2D = new DiscreteTransformation2D();
+          break;
+        default:
+          transformation2D = new HaartTransformation2D();
+      }
+      for (Vector3D<Array2D> vector : context.getPixelList()) {
         // TODO change hardcoded vector size to generic. Should depend on Schema.amount
         vector.setX(new Array2D(transformation2D
             .process(FourierContext.start2DBuilder(vector.getX().getArray2DCopy())
@@ -320,7 +341,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
 
     @Override
     public void apply(ImageContext context) {
-      for (Vector<Array2D> vector : context.getPixelList()) {
+      for (Vector3D<Array2D> vector : context.getPixelList()) {
         if (context.getResultSetting().getImageSetting().getImageSchema()
             .equals(ImageSetting.ImageSchema.YCRCB)) {
           converYCrCbToRGB(vector);

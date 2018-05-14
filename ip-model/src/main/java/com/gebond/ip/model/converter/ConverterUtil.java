@@ -1,7 +1,7 @@
 package com.gebond.ip.model.converter;
 
 import com.gebond.ip.model.array.Array2D;
-import com.gebond.ip.model.array.Vector;
+import com.gebond.ip.model.array.Vector3D;
 
 /**
  * Created on 04/03/18.
@@ -13,7 +13,7 @@ public class ConverterUtil {
    *
    * @param rgbVector input array of RGB pixel values
    */
-  public static void converRGBToYCrCb(Vector<Array2D> rgbVector) {
+  public static void converRGBToYCrCb(Vector3D<Array2D> rgbVector) {
     double[][] redColor = rgbVector.getX().getArray2DCopy();
     double[][] greenColor = rgbVector.getY().getArray2DCopy();
     double[][] blueColor = rgbVector.getZ().getArray2DCopy();
@@ -40,7 +40,7 @@ public class ConverterUtil {
    *
    * @param yCrCbVector input array of YCrCb pixel values
    */
-  public static void converYCrCbToRGB(Vector<Array2D> yCrCbVector) {
+  public static void converYCrCbToRGB(Vector3D<Array2D> yCrCbVector) {
     double[][] yColor = yCrCbVector.getX().getArray2DCopy();
     double[][] crColor = yCrCbVector.getY().getArray2DCopy();
     double[][] cbColor = yCrCbVector.getZ().getArray2DCopy();
