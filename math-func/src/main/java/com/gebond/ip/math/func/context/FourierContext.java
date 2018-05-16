@@ -98,7 +98,7 @@ public abstract class FourierContext<
   public static class FourierContext2D extends FourierContext<Array2D, CompressionSetting> {
 
     public FourierContext2D(double[][] array) {
-      this.fourierData = new Array2D(array);
+      this.fourierData = Array2D.ofNoCopy(array);
     }
 
     @Override

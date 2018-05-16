@@ -42,7 +42,6 @@ public abstract class CompressingOperation<T extends FourierContext> implements 
   }
 
   protected interface ValueGetterSetter extends Comparable {
-
     void setValue(double val);
   }
 

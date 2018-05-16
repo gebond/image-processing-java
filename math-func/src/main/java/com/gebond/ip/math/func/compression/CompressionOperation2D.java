@@ -17,7 +17,7 @@ public class CompressionOperation2D extends CompressingOperation<FourierContext.
     if (context.getCompressionSetting().getCompressionRate() == MIN_COMPRESSION_RATE) {
       return; // no compression is required
     }
-    double[][] target = context.getFourierData().getArray2DCopy();
+    double[][] target = context.getFourierData().getArray2DNoCopy();
     List<Value> values = new ArrayList<>();
     for (int i = 0; i < target.length; i++) {
       for (int j = 0; j < target.length; j++) {

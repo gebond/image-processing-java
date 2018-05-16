@@ -14,9 +14,9 @@ public class ConverterUtil {
    * @param rgbVector input array of RGB pixel values
    */
   public static void convertRGBToYCrCb(Vector3D<Array2D> rgbVector) {
-    double[][] redColor = rgbVector.getX().getArray2DCopy();
-    double[][] greenColor = rgbVector.getY().getArray2DCopy();
-    double[][] blueColor = rgbVector.getZ().getArray2DCopy();
+    double[][] redColor = rgbVector.getX().getArray2DNoCopy();
+    double[][] greenColor = rgbVector.getY().getArray2DNoCopy();
+    double[][] blueColor = rgbVector.getZ().getArray2DNoCopy();
     double[][] yColor = new double[redColor.length][redColor[0].length];
     double[][] crColor = new double[greenColor.length][greenColor[0].length];
     double[][] cbColor = new double[blueColor.length][blueColor[0].length];
@@ -30,9 +30,9 @@ public class ConverterUtil {
             * blueColor[i][j]);
       }
     }
-    rgbVector.setX(Array2D.of(yColor));
-    rgbVector.setY(Array2D.of(crColor));
-    rgbVector.setZ(Array2D.of(cbColor));
+    rgbVector.setX(Array2D.ofNoCopy(yColor));
+    rgbVector.setY(Array2D.ofNoCopy(crColor));
+    rgbVector.setZ(Array2D.ofNoCopy(cbColor));
   }
 
   /**
@@ -41,9 +41,9 @@ public class ConverterUtil {
    * @param yCrCbVector input array of YCrCb pixel values
    */
   public static void converYCrCbToRGB(Vector3D<Array2D> yCrCbVector) {
-    double[][] yColor = yCrCbVector.getX().getArray2DCopy();
-    double[][] crColor = yCrCbVector.getY().getArray2DCopy();
-    double[][] cbColor = yCrCbVector.getZ().getArray2DCopy();
+    double[][] yColor = yCrCbVector.getX().getArray2DNoCopy();
+    double[][] crColor = yCrCbVector.getY().getArray2DNoCopy();
+    double[][] cbColor = yCrCbVector.getZ().getArray2DNoCopy();
     double[][] redColor = new double[yColor.length][yColor[0].length];
     double[][] greenColor = new double[redColor.length][redColor[0].length];
     double[][] blueColor = new double[redColor.length][redColor[0].length];
@@ -55,8 +55,8 @@ public class ConverterUtil {
         blueColor[i][j] = yColor[i][j] + 1.772 * (cbColor[i][j] - 128.0);
       }
     }
-    yCrCbVector.setX(Array2D.of(redColor));
-    yCrCbVector.setY(Array2D.of(greenColor));
-    yCrCbVector.setZ(Array2D.of(blueColor));
+    yCrCbVector.setX(Array2D.ofNoCopy(redColor));
+    yCrCbVector.setY(Array2D.ofNoCopy(greenColor));
+    yCrCbVector.setZ(Array2D.ofNoCopy(blueColor));
   }
 }

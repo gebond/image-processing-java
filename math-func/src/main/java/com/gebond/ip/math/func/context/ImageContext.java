@@ -1,5 +1,7 @@
 package com.gebond.ip.math.func.context;
 
+import com.gebond.ip.math.func.context.FourierContext.FourierContext2D;
+import com.gebond.ip.math.func.operation.OperationManager;
 import com.gebond.ip.model.array.Array2D;
 import com.gebond.ip.model.array.Vector3D;
 import com.gebond.ip.model.setting.ImageSetting;
@@ -19,6 +21,8 @@ public class ImageContext extends OperationContext {
   private BufferedImage image;
   private int columnCount;
   private int rowCount;
+  private OperationManager<FourierContext2D> transformation2D;
+
   /**
    * List of vectors where vector contains (x-red, y-green, z-blue, ...)
    */
@@ -74,6 +78,15 @@ public class ImageContext extends OperationContext {
 
   public ResultSetting getResultSetting() {
     return resultSetting;
+  }
+
+  public OperationManager<FourierContext2D> getTransformation2D() {
+    return transformation2D;
+  }
+
+  public void setTransformation2D(
+      OperationManager<FourierContext2D> transformation2D) {
+    this.transformation2D = transformation2D;
   }
 
   public static class ImageContextBuilder {

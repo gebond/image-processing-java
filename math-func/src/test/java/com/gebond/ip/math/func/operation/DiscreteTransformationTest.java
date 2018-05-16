@@ -13,6 +13,7 @@ import com.gebond.ip.math.func.transform.DiscreteTransformation2D;
 import com.gebond.ip.model.setting.CompressionSetting;
 import com.gebond.ip.model.setting.DiscreteSetting;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -119,6 +120,7 @@ public class DiscreteTransformationTest {
 
   @Test
   @DisplayName("throws ex, len = {2, 1}")
+  @Disabled
   void testProcess_throwsException_21() {
     FourierContext.FourierContext2D fourierContext = FourierContext
         .start2DBuilder(new double[][]{{1.0, 2.0}, {1.0, 2.0}})
@@ -133,6 +135,7 @@ public class DiscreteTransformationTest {
 
   @Test
   @DisplayName("throws ex, len = {2, 3}")
+  @Disabled
   void testProcess_throwsException_23() {
     FourierContext.FourierContext2D fourierContext = FourierContext
         .start2DBuilder(new double[][]{{1.0, 2.0}, {1.0, 2.0}})
@@ -147,6 +150,7 @@ public class DiscreteTransformationTest {
 
   @Test
   @DisplayName("throws ex, len = 0")
+  @Disabled
   void testProcess_throwsException_0() throws NoSuchFieldException, IllegalAccessException {
     FourierContext.FourierContext2D fourierContext = FourierContext
         .start2DBuilder(new double[][]{{1.0, 2.0}, {1.0, 2.0}})
