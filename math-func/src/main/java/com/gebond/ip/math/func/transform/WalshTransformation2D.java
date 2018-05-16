@@ -29,7 +29,7 @@ public class WalshTransformation2D extends OperationManager<FourierContext.Fouri
 
     @Override
     public void apply(FourierContext.FourierContext2D context) {
-      double[][] input = context.getFourierData().getArray2DNoCopy();
+      double[][] input = context.getFourierData().getArray2DCopy();
       int length = input.length;
       // 1 step: applying transformation to rows
       for (int i = 0; i < length; i++) {

@@ -71,6 +71,12 @@ public class ImageSetting {
       public int getValue() {
         return 32;
       }
+    },
+    CUSTOM() {
+      @Override
+      public int getValue() {
+        return -1;
+      }
     };
 
     private int value;

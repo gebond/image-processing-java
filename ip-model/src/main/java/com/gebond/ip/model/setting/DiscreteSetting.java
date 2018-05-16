@@ -7,6 +7,8 @@ public class DiscreteSetting {
 
   private int p;
   private int s;
+  private int N;
+  private int size;
 
   public DiscreteSetting() {
   }
@@ -27,6 +29,22 @@ public class DiscreteSetting {
     this.s = s;
   }
 
+  public int getN() {
+    return N;
+  }
+
+  public void setN(int n) {
+    N = n;
+  }
+
+  public int getSize() {
+    return size;
+  }
+
+  public void setSize(int size) {
+    this.size = size;
+  }
+
   public static DiscreteSettingBuilder newDiscreteBuilder() {
     return new DiscreteSettingBuilder();
   }
@@ -35,8 +53,14 @@ public class DiscreteSetting {
 
     private int p;
     private int s;
+    private int N;
+    private int size;
 
     private DiscreteSettingBuilder() {
+    }
+
+    public static DiscreteSettingBuilder aDiscreteSetting() {
+      return new DiscreteSettingBuilder();
     }
 
     public DiscreteSettingBuilder withP(int p) {
@@ -49,10 +73,22 @@ public class DiscreteSetting {
       return this;
     }
 
+    public DiscreteSettingBuilder withN(int N) {
+      this.N = N;
+      return this;
+    }
+
+    public DiscreteSettingBuilder withSize(int size) {
+      this.size = size;
+      return this;
+    }
+
     public DiscreteSetting build() {
       DiscreteSetting discreteSetting = new DiscreteSetting();
       discreteSetting.setP(p);
       discreteSetting.setS(s);
+      discreteSetting.setN(N);
+      discreteSetting.setSize(size);
       return discreteSetting;
     }
   }

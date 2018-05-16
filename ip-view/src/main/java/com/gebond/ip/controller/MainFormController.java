@@ -1,5 +1,6 @@
 package com.gebond.ip.controller;
 
+import static com.gebond.ip.math.func.util.Functions.discreteLength;
 import static com.gebond.ip.util.FileChooserUtil.configureJFileChooser;
 import static com.gebond.ip.util.ImageIconUtil.updateImageLabel;
 import static com.gebond.ip.util.ProcessingUtil.retrieveFuture;
@@ -9,7 +10,10 @@ import com.gebond.ip.math.func.image.ImageProcessorImpl;
 import com.gebond.ip.model.setting.ImageSetting;
 import com.gebond.ip.model.setting.ResultSetting;
 import com.gebond.ip.model.setting.TransformSetting;
+import com.gebond.ip.model.setting.TransformSetting.TransformationType;
 import com.gebond.ip.view.MainForm;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -109,6 +113,21 @@ public class MainFormController extends MainForm {
       sliderLabel3.setText(ImageSetting.YCRCB.CB.toString());
     });
 
+    selectMethodBox.addItemListener(evt -> {
+      if (evt.getItem().equals(TransformationType.DISCRETE_TRANSFORM)) {
+        discreteSettingPanel.setVisible(true);
+        sizeX8RadioButton.setEnabled(false);
+        sizeX16RadioButton.setEnabled(false);
+        sizeX32RadioButton.setEnabled(false);
+        updateDiscreteSize();
+      } else {
+        discreteSettingPanel.setVisible(false);
+        sizeX8RadioButton.setEnabled(true);
+        sizeX16RadioButton.setEnabled(true);
+        sizeX32RadioButton.setEnabled(true);
+      }
+    });
+
     // change slider values event
     slider1.addChangeListener(evt -> {
       sliderValue1.setText(slider1.getValue() + "%");
@@ -128,6 +147,28 @@ public class MainFormController extends MainForm {
       resultFuture.cancel(true);
       toggleRunCancelButtons();
     });
+
+    inputParamS.addKeyListener(new KeyAdapter() {
+      @Override
+      public void keyPressed(KeyEvent e) {
+        updateDiscreteSize();
+        super.keyPressed(e);
+      }
+    });
+    inputParamP.addKeyListener(new KeyAdapter() {
+      @Override
+      public void keyPressed(KeyEvent e) {
+        updateDiscreteSize();
+        super.keyPressed(e);
+      }
+    });
+    inputParamN.addKeyListener(new KeyAdapter() {
+      @Override
+      public void keyPressed(KeyEvent e) {
+        updateDiscreteSize();
+        super.keyPressed(e);
+      }
+    });
   }
 
   private void updateResultForm(ResultSetting resultSetting) {
@@ -143,5 +184,17 @@ public class MainFormController extends MainForm {
   private void updateTotalValue() {
     totalValue.setText(String.valueOf("Total compression: " +
         (slider1.getValue() + slider2.getValue() + slider3.getValue()) / 3 + "%"));
+  }
+
+  private void updateDiscreteSize() {
+    try {
+      inputParamSize.setText(String.valueOf(discreteLength(
+          Integer.valueOf(inputParamP.getText()),
+          Integer.valueOf(inputParamS.getText()),
+          Integer.valueOf(inputParamN.getText()))));
+    }
+    catch (java.lang.NumberFormatException ex){
+      System.out.println("Has wrong input.");
+    }
   }
 }

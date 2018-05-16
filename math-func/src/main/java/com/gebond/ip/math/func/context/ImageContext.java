@@ -21,6 +21,7 @@ public class ImageContext extends OperationContext {
   private BufferedImage image;
   private int columnCount;
   private int rowCount;
+  private int size;
   private OperationManager<FourierContext2D> transformation2D;
 
   /**
@@ -87,6 +88,14 @@ public class ImageContext extends OperationContext {
   public void setTransformation2D(
       OperationManager<FourierContext2D> transformation2D) {
     this.transformation2D = transformation2D;
+  }
+
+  public void setSize(int size) {
+    this.size = size;
+  }
+
+  public int getSize() {
+    return size;
   }
 
   public static class ImageContextBuilder {

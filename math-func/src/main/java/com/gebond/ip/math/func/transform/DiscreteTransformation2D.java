@@ -1,5 +1,7 @@
 package com.gebond.ip.math.func.transform;
 
+import static com.gebond.ip.math.func.util.Functions.discreteLength;
+
 import com.gebond.ip.math.func.compression.CompressionOperation2D;
 import com.gebond.ip.math.func.context.FourierContext;
 import com.gebond.ip.math.func.context.FourierContext.FourierContext2D;
@@ -8,7 +10,6 @@ import com.gebond.ip.math.func.operation.OperationManager;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.apache.commons.math3.util.FastMath;
 
 /**
  * Created by Gleb on 16.04.2018.
@@ -35,29 +36,24 @@ public class DiscreteTransformation2D extends OperationManager<FourierContext.Fo
     private final int s;
 
     DiscreteAnalysis2D(FourierContext.FourierContext2D context) {
-      p = context.getDiscreteSetting().getP();
-      s = context.getDiscreteSetting().getS();
+      this.p = context.getDiscreteSetting().getP();
+      this.s = context.getDiscreteSetting().getS();
     }
 
     @Override
     public boolean validate(FourierContext2D context) throws IllegalArgumentException {
-      return false;
+      if (context.getDiscreteSetting().getSize() !=
+          discreteLength(context.getDiscreteSetting().getP(),
+              context.getDiscreteSetting().getS(),
+              context.getDiscreteSetting().getN())) {
+        throw new IllegalArgumentException("Wrong configuration {p, s, N, len}");
+      }
+      return true;
     }
 
     @Override
     public void apply(FourierContext.FourierContext2D context) {
       context.getFourierData();
-    }
-
-    private int calculateN(int sourceLength) {
-      double N = 0;
-      while (FastMath.pow(p, (s * N)) < sourceLength) {
-        N++;
-      }
-      if (FastMath.pow(p, s * N) != sourceLength) {
-        throw new IllegalArgumentException("p^(Ns) must equals to array size");
-      }
-      return (int) N;
     }
   }
 
@@ -67,14 +63,19 @@ public class DiscreteTransformation2D extends OperationManager<FourierContext.Fo
     private final int s;
 
     DiscreteSynthesis2D(FourierContext.FourierContext2D context) {
-      p = context.getDiscreteSetting().getP();
-      s = context.getDiscreteSetting().getS();
+      this.p = context.getDiscreteSetting().getP();
+      this.s = context.getDiscreteSetting().getS();
     }
 
     @Override
     public boolean validate(FourierContext2D context) throws IllegalArgumentException {
-
-      return false;
+      if (context.getDiscreteSetting().getSize() !=
+          discreteLength(context.getDiscreteSetting().getP(),
+              context.getDiscreteSetting().getS(),
+              context.getDiscreteSetting().getN())) {
+        throw new IllegalArgumentException("Wrong configuration {p, s, N, len}");
+      }
+      return true;
     }
 
     @Override

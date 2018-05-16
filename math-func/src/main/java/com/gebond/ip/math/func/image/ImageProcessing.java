@@ -23,6 +23,7 @@ import com.gebond.ip.model.array.Array2D;
 import com.gebond.ip.model.array.Vector3D;
 import com.gebond.ip.model.setting.CompressionSetting;
 import com.gebond.ip.model.setting.ImageSetting;
+import com.gebond.ip.model.setting.ImageSetting.SegmentSize;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -108,6 +109,15 @@ public class ImageProcessing extends OperationManager<ImageContext> {
           throw new IllegalArgumentException("Unrecognized transformation type");
       }
       context.setTransformation2D(transformation2D);
+
+      int size;
+      if (context.getResultSetting().getImageSetting().getSegmentSize()
+          .equals(SegmentSize.CUSTOM)) {
+        size = context.getResultSetting().getTransformSetting().getDiscreteSetting().getSize();
+      } else {
+        size = context.getResultSetting().getImageSetting().getSegmentSize().getValue();
+      }
+      context.setSize(size);
     }
   }
 
@@ -124,9 +134,9 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         throw new IllegalArgumentException("Segment size is null");
       }
       if (context.getResultSetting().getImageSetting().getSourceImage().getHeight() < context
-          .getResultSetting().getImageSetting().getSegmentSize().getValue()
+          .getSize()
           || context.getResultSetting().getImageSetting().getSourceImage().getWidth() < context
-          .getResultSetting().getImageSetting().getSegmentSize().getValue()) {
+          .getSize()) {
         throw new IllegalArgumentException("Height or Width must be more than segment size");
       }
       return true;
@@ -135,8 +145,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     @Override
     public void apply(ImageContext context) {
       BufferedImage bufferedImage = context.getResultSetting().getImageSetting().getSourceImage();
-
-      int size = context.getResultSetting().getImageSetting().getSegmentSize().getValue();
+      int size = context.getSize();
       context.setRowCount(bufferedImage.getHeight() / size);
       context.setColumnCount(bufferedImage.getWidth() / size);
 
@@ -205,10 +214,8 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     @Override
     public void apply(ImageContext context) {
       BufferedImage newImage = new BufferedImage(
-          context.getColumnCount() * context.getResultSetting().getImageSetting().getSegmentSize()
-              .getValue(),
-          context.getRowCount() * context.getResultSetting().getImageSetting().getSegmentSize()
-              .getValue(),
+          context.getColumnCount() * context.getSize(),
+          context.getRowCount() * context.getSize(),
           BufferedImage.TYPE_INT_RGB);
       for (int i = 0; i < context.getRowCount(); i++) {
         for (int j = 0; j < context.getColumnCount(); j++) {
@@ -217,7 +224,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
               context.getPixelList().get(i * context.getColumnCount() + j),
               i,
               j,
-              context.getResultSetting().getImageSetting().getSegmentSize().getValue());
+              context.getSize());
         }
       }
       context.getResultSetting().setResultImage(newImage);
@@ -255,20 +262,24 @@ public class ImageProcessing extends OperationManager<ImageContext> {
 
       System.out.println("Starts in thread# " + Thread.currentThread().getId());
       vector.setX(Array2D.ofNoCopy(transformation2D
-          .process(FourierContext.start2DBuilder(vector.getX().getArray2DNoCopy())
+          .process(FourierContext
+              .start2DBuilder(vector.getX().getArray2DNoCopy())
               .withCompression(compressionValues.get(RED.getOrder()))
+              .withDiscrete(context.getResultSetting().getTransformSetting().getDiscreteSetting())
               .build())
           .getFourierData().getArray2DNoCopy()));
       vector.setY(Array2D.ofNoCopy(transformation2D
           .process(FourierContext
               .start2DBuilder(vector.getY().getArray2DNoCopy())
               .withCompression(compressionValues.get(GREEN.getOrder()))
+              .withDiscrete(context.getResultSetting().getTransformSetting().getDiscreteSetting())
               .build())
           .getFourierData().getArray2DNoCopy()));
       vector.setZ(Array2D.ofNoCopy(transformation2D
           .process(FourierContext
               .start2DBuilder(vector.getZ().getArray2DNoCopy())
               .withCompression(compressionValues.get(ImageSetting.RGB.BLUE.getOrder()))
+              .withDiscrete(context.getResultSetting().getTransformSetting().getDiscreteSetting())
               .build())
           .getFourierData().getArray2DNoCopy()));
       return vector;
