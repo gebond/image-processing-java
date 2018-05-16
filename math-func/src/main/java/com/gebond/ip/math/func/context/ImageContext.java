@@ -23,10 +23,6 @@ public class ImageContext extends OperationContext {
    * List of vectors where vector contains (x-red, y-green, z-blue, ...)
    */
   private List<Vector3D<Array2D>> pixelList;
-  /**
-   * Determines whether single threaded operations will be used or not
-   */
-  public final boolean IS_SINGLE_THREAD = false;
 
   public ImageContext() {
     startTime = System.nanoTime();

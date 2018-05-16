@@ -3,6 +3,7 @@ package com.gebond.ip.view;
 import static gebond.ip.domain.manager.LogManager.log;
 
 import java.awt.Dimension;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,6 +23,7 @@ public class ResultsForm extends JFrame {
   protected JLabel lastProcessedImage;
   protected JLabel lastProcessedText;
   protected JPanel resultContent;
+  protected JButton clearResultsButton;
 
   public ResultsForm() {
     super("Results");

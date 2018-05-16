@@ -2,6 +2,7 @@ package com.gebond.ip.math.func.util;
 
 import com.gebond.ip.math.func.context.FourierContext.FourierContext2D;
 import com.gebond.ip.math.func.operation.OperationManager;
+import com.gebond.ip.math.func.transform.DiscreteTransformation2D;
 import com.gebond.ip.math.func.transform.HaartTransformation2D;
 import com.gebond.ip.math.func.transform.WalshTransformation2D;
 import com.gebond.ip.model.setting.TransformSetting.TransformationType;
@@ -23,6 +24,9 @@ public class ProcessingUtil {
         break;
       case WALSH_TRANSFORM:
         transformation2D = new WalshTransformation2D();
+        break;
+      case DISCRETE_TRANSFORM:
+        transformation2D = new DiscreteTransformation2D();
         break;
       default:
         transformation2D = new HaartTransformation2D();

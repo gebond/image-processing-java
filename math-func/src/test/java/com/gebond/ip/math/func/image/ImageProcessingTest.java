@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.gebond.ip.math.func.context.ImageContext;
+import com.gebond.ip.math.func.image.ImageProcessing.ImageProcessingOperation;
 import com.gebond.ip.math.func.operation.Operation;
 import com.gebond.ip.math.func.operation.OperationManager;
 import com.gebond.ip.model.array.Array2D;
@@ -324,7 +325,7 @@ public class ImageProcessingTest {
         @Override
         public List<Operation<ImageContext>> getOperations() {
           return Arrays.asList(
-              new ImageProcessing.ConsistentProcessingOperation());
+              new ImageProcessing.ImageProcessingOperation());
         }
       };
     }
@@ -410,7 +411,7 @@ public class ImageProcessingTest {
 
   @Nested
   @DisplayName("Concurrent operations")
-  public class ConcurrentOperations {
+  public class ImageProcessingOperations {
 
     OperationManager<ImageContext> testee;
 
@@ -420,7 +421,7 @@ public class ImageProcessingTest {
         @Override
         public List<Operation<ImageContext>> getOperations() {
           return Arrays.asList(
-              new ImageProcessing.ConcurrentOperation());
+              new ImageProcessingOperation());
         }
       };
     }
