@@ -74,7 +74,7 @@ public class GFieldCacheUtils {
       allCombinations.add(list);
     } else {
       for (Vector<Integer> vector : get(params).alphas) {
-        List<Vector<Integer>> copy = new ArrayList<Vector<Integer>>(targetList);
+        List<Vector<Integer>> copy = new ArrayList<>(targetList);
         copy.add(vector);
         iterateAllCombinations(current_counter + 1, limit_counter, params, copy, allCombinations);
       }
