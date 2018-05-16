@@ -9,8 +9,21 @@ public class Array2D extends ArrayContainer {
 
   private double[][] array2D;
 
+  private Array2D(){
+  }
+
   public Array2D(double[][] array) {
     setArray(array);
+  }
+
+  public static Array2D ofNoCopy(double[][] array) {
+    Array2D array2D = new Array2D();
+    array2D.array2D = array;
+    return array2D;
+  }
+
+  public double[][] getArray2DNoCopy(){
+    return array2D;
   }
 
   public static Array2D of(double[][] array2D) {

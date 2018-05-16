@@ -9,7 +9,7 @@ public abstract class Operation2D implements Operation<FourierContext.FourierCon
 
   @Override
   public boolean validate(FourierContext.FourierContext2D context) throws IllegalArgumentException {
-    double[][] array2D = context.getFourierData().getArray2DCopy();
+    double[][] array2D = context.getFourierData().getArray2DNoCopy();
     if (array2D == null) {
       throw new IllegalArgumentException("input array is null");
     }

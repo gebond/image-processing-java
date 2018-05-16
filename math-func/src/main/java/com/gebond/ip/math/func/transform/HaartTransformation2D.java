@@ -28,7 +28,7 @@ public class HaartTransformation2D extends OperationManager<FourierContext.Fouri
 
     @Override
     public void apply(FourierContext.FourierContext2D context) {
-      double[][] input = context.getFourierData().getArray2DCopy();
+      double[][] input = context.getFourierData().getArray2DNoCopy();
       int length = input.length;
       // 1 step: applying transformation to rows
       for (int i = 0; i < length; i++) {
@@ -54,7 +54,7 @@ public class HaartTransformation2D extends OperationManager<FourierContext.Fouri
 
     @Override
     public void apply(FourierContext.FourierContext2D context) {
-      double[][] input = context.getFourierData().getArray2DCopy();
+      double[][] input = context.getFourierData().getArray2DNoCopy();
       int length = input.length;
       double[] unit = new double[length];
       // 1st step: applying transformation to cols
