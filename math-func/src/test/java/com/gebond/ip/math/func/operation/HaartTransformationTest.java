@@ -154,7 +154,7 @@ public class HaartTransformationTest {
 
       assertNotNull(context);
       assertFalse(context.isClosed());
-      double[][] result = context.getFourierData().getArray2DCopy();
+      double[][] result = context.getFourierData().getArray2DNoCopy();
       assertNotNull(result, "array 2d mut be not null");
       assertEquals(array.length, result.length, "result array must have the same size");
       assertArrayEquals(array, result);

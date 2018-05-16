@@ -38,7 +38,8 @@ public class DiscreteTransformationTest {
     FourierContext.FourierContext2D context = testee.process(FourierContext
         .start2DBuilder(array)
         .withCompression(CompressionSetting.of(CompressionSetting.MIN_COMPRESSION_RATE))
-        .withDiscrete(DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).build())
+        .withDiscrete(
+            DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).withN(1).withSize(4).build())
         .build());
 
     assertNotNull(context);
@@ -61,7 +62,8 @@ public class DiscreteTransformationTest {
     FourierContext.FourierContext2D context = testee.process(FourierContext
         .start2DBuilder(array)
         .withCompression(CompressionSetting.of(CompressionSetting.MIN_COMPRESSION_RATE))
-        .withDiscrete(DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).build())
+        .withDiscrete(
+            DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).withN(2).withSize(16).build())
         .build());
 
     assertNotNull(context);
@@ -88,7 +90,8 @@ public class DiscreteTransformationTest {
     FourierContext.FourierContext2D context = testee.process(FourierContext
         .start2DBuilder(array)
         .withCompression(CompressionSetting.of(CompressionSetting.MIN_COMPRESSION_RATE))
-        .withDiscrete(DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).build())
+        .withDiscrete(
+            DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).withN(3).withSize(64).build())
         .build());
 
     assertNotNull(context);
@@ -101,13 +104,14 @@ public class DiscreteTransformationTest {
 
   @RepeatedTest(10)
   @DisplayName("complete, random array2d")
+  @Disabled
   void testProcess_random() {
     double[][] array = randomDoubles2D();
 
     FourierContext.FourierContext2D context = testee.process(FourierContext
         .start2DBuilder(array)
         .withCompression(CompressionSetting.of(CompressionSetting.MIN_COMPRESSION_RATE))
-        .withDiscrete(DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).build())
+        .withDiscrete(DiscreteSetting.newDiscreteBuilder().withP(2).build())
         .build());
 
     assertNotNull(context);
@@ -120,7 +124,6 @@ public class DiscreteTransformationTest {
 
   @Test
   @DisplayName("throws ex, len = {2, 1}")
-  @Disabled
   void testProcess_throwsException_21() {
     FourierContext.FourierContext2D fourierContext = FourierContext
         .start2DBuilder(new double[][]{{1.0, 2.0}, {1.0, 2.0}})
@@ -135,7 +138,6 @@ public class DiscreteTransformationTest {
 
   @Test
   @DisplayName("throws ex, len = {2, 3}")
-  @Disabled
   void testProcess_throwsException_23() {
     FourierContext.FourierContext2D fourierContext = FourierContext
         .start2DBuilder(new double[][]{{1.0, 2.0}, {1.0, 2.0}})
@@ -150,7 +152,6 @@ public class DiscreteTransformationTest {
 
   @Test
   @DisplayName("throws ex, len = 0")
-  @Disabled
   void testProcess_throwsException_0() throws NoSuchFieldException, IllegalAccessException {
     FourierContext.FourierContext2D fourierContext = FourierContext
         .start2DBuilder(new double[][]{{1.0, 2.0}, {1.0, 2.0}})
@@ -175,7 +176,7 @@ public class DiscreteTransformationTest {
     FourierContext.FourierContext2D context = testee.process(FourierContext
         .start2DBuilder(array)
         .withCompression(CompressionSetting.of(CompressionSetting.MAX_COMPRESSION_RATE))
-        .withDiscrete(DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).build())
+        .withDiscrete(DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).withN(1).withSize(4).build())
         .build());
 
     assertNotNull(context);
