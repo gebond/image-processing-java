@@ -4,7 +4,6 @@ import com.gebond.ip.math.func.compression.CompressionOperation2D;
 import com.gebond.ip.math.func.context.FourierContext;
 import com.gebond.ip.math.func.context.FourierContext.FourierContext2D;
 import com.gebond.ip.math.func.operation.Operation;
-import com.gebond.ip.math.func.operation.Operation2D;
 import com.gebond.ip.math.func.operation.OperationManager;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,7 +29,7 @@ public class DiscreteTransformation2D extends OperationManager<FourierContext.Fo
         new DiscreteSynthesis2D(context2D));
   }
 
-  public static class DiscreteAnalysis2D extends Operation2D {
+  public static class DiscreteAnalysis2D implements Operation<FourierContext2D> {
 
     private final int p;
     private final int s;
@@ -38,6 +37,11 @@ public class DiscreteTransformation2D extends OperationManager<FourierContext.Fo
     DiscreteAnalysis2D(FourierContext.FourierContext2D context) {
       p = context.getDiscreteSetting().getP();
       s = context.getDiscreteSetting().getS();
+    }
+
+    @Override
+    public boolean validate(FourierContext2D context) throws IllegalArgumentException {
+      return false;
     }
 
     @Override
@@ -57,10 +61,20 @@ public class DiscreteTransformation2D extends OperationManager<FourierContext.Fo
     }
   }
 
-  public static class DiscreteSynthesis2D extends Operation2D {
+  public static class DiscreteSynthesis2D implements Operation<FourierContext2D> {
+
+    private final int p;
+    private final int s;
 
     DiscreteSynthesis2D(FourierContext.FourierContext2D context) {
+      p = context.getDiscreteSetting().getP();
+      s = context.getDiscreteSetting().getS();
+    }
 
+    @Override
+    public boolean validate(FourierContext2D context) throws IllegalArgumentException {
+
+      return false;
     }
 
     @Override
