@@ -13,7 +13,7 @@ public class ConverterUtil {
    *
    * @param rgbVector input array of RGB pixel values
    */
-  public static void converRGBToYCrCb(Vector3D<Array2D> rgbVector) {
+  public static void convertRGBToYCrCb(Vector3D<Array2D> rgbVector) {
     double[][] redColor = rgbVector.getX().getArray2DCopy();
     double[][] greenColor = rgbVector.getY().getArray2DCopy();
     double[][] blueColor = rgbVector.getZ().getArray2DCopy();

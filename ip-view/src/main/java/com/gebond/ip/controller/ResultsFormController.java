@@ -39,5 +39,10 @@ public class ResultsFormController extends ResultsForm {
   }
 
   private void initListeners() {
+    // change RGB/YCrCb color schema
+    clearResultsButton.addActionListener(e -> {
+      resultContent.removeAll();
+      pack();
+    });
   }
 }
