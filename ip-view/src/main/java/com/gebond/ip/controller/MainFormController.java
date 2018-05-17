@@ -66,6 +66,7 @@ public class MainFormController extends MainForm {
     sliderLabel3.setText(ImageSetting.RGB.BLUE.toString());
     runButton.setEnabled(false);
     cancelButton.setEnabled(false);
+    discreteSettingPanel.setVisible(false);
   }
 
   private void initListeners() {
@@ -150,23 +151,23 @@ public class MainFormController extends MainForm {
 
     inputParamS.addKeyListener(new KeyAdapter() {
       @Override
-      public void keyPressed(KeyEvent e) {
+      public void keyTyped(KeyEvent e) {
         updateDiscreteSize();
-        super.keyPressed(e);
+        super.keyTyped(e);
       }
     });
     inputParamP.addKeyListener(new KeyAdapter() {
       @Override
-      public void keyPressed(KeyEvent e) {
+      public void keyTyped(KeyEvent e) {
         updateDiscreteSize();
-        super.keyPressed(e);
+        super.keyTyped(e);
       }
     });
     inputParamN.addKeyListener(new KeyAdapter() {
       @Override
-      public void keyPressed(KeyEvent e) {
+      public void keyTyped(KeyEvent e) {
         updateDiscreteSize();
-        super.keyPressed(e);
+        super.keyTyped(e);
       }
     });
   }
@@ -192,9 +193,8 @@ public class MainFormController extends MainForm {
           Integer.valueOf(inputParamP.getText()),
           Integer.valueOf(inputParamS.getText()),
           Integer.valueOf(inputParamN.getText()))));
-    }
-    catch (java.lang.NumberFormatException ex){
-      System.out.println("Has wrong input.");
+    } catch (java.lang.NumberFormatException ex) {
+      System.out.println("Not a number! " + ex.getMessage());
     }
   }
 }

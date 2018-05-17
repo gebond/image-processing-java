@@ -41,7 +41,7 @@ public class DiscreteTransformationTest {
         .start2DBuilder(array)
         .withCompression(CompressionSetting.of(CompressionSetting.MIN_COMPRESSION_RATE))
         .withDiscrete(
-            DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).withN(1).withSize(4).build())
+            DiscreteSetting.newDiscreteBuilder().withP(2).withS(1).withN(1).withSize(2).build())
         .build());
 
     assertNotNull(context);
@@ -65,7 +65,7 @@ public class DiscreteTransformationTest {
         .start2DBuilder(array)
         .withCompression(CompressionSetting.of(CompressionSetting.MIN_COMPRESSION_RATE))
         .withDiscrete(
-            DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).withN(2).withSize(16).build())
+            DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).withN(1).withSize(4).build())
         .build());
 
     assertNotNull(context);
@@ -93,7 +93,7 @@ public class DiscreteTransformationTest {
         .start2DBuilder(array)
         .withCompression(CompressionSetting.of(CompressionSetting.MIN_COMPRESSION_RATE))
         .withDiscrete(
-            DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).withN(3).withSize(64).build())
+            DiscreteSetting.newDiscreteBuilder().withP(2).withS(3).withN(1).withSize(8).build())
         .build());
 
     assertNotNull(context);
@@ -203,6 +203,6 @@ public class DiscreteTransformationTest {
 
     double[] result = FourierTransform.DiscreteFourierTransform.doAnalysis(params, array);
 
-    assertArrayEquals(new double[]{31, 0, 0, 0}, result);
+    assertEquals(31, result[0]);
   }
 }
