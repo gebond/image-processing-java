@@ -5,6 +5,7 @@ import static gebond.ip.domain.manager.LogManager.log;
 import com.gebond.ip.model.metric.Metrics;
 import com.gebond.ip.model.setting.CompressionSetting;
 import com.gebond.ip.model.setting.DiscreteSetting;
+import com.gebond.ip.model.setting.DiscreteSetting.DiscreteSettingBuilder;
 import com.gebond.ip.model.setting.ImageSetting;
 import com.gebond.ip.model.setting.ImageSetting.SegmentSize;
 import com.gebond.ip.model.setting.TransformSetting;
@@ -237,12 +238,17 @@ public class MainForm extends JFrame {
   }
 
   private DiscreteSetting buildDiscreteSettings() {
-    return DiscreteSetting.newDiscreteBuilder()
-        .withS(Integer.valueOf(inputParamS.getText()))
-        .withP(Integer.valueOf(inputParamP.getText()))
-        .withN(Integer.valueOf(inputParamN.getText()))
-        .withSize(Integer.valueOf(inputParamSize.getText()))
-        .build();
+    DiscreteSettingBuilder builder;
+    try {
+      builder = DiscreteSetting.newDiscreteBuilder()
+          .withS(Integer.valueOf(inputParamS.getText()))
+          .withP(Integer.valueOf(inputParamP.getText()))
+          .withN(Integer.valueOf(inputParamN.getText()))
+          .withSize(Integer.valueOf(inputParamSize.getText()));
+    } catch (NumberFormatException ex) {
+      throw new NumberFormatException("Not a number! " +  ex.getMessage());
+    }
+    return builder.build();
   }
 
   private ImageSetting.SegmentSize buildSegmentSize() {

@@ -20,7 +20,13 @@ public class ProcessingUtil {
       TransformSetting transformSetting) {
     CompletableFuture<ResultSetting> completableFuture = new CompletableFuture<>();
     Executors.newCachedThreadPool().submit(() -> {
-      completableFuture.complete(imageProcessor.processImage(imageSetting, transformSetting));
+      try {
+        completableFuture.complete(imageProcessor.processImage(imageSetting, transformSetting));
+      }
+      catch (RuntimeException e){
+        System.out.println(e.getMessage());
+        throw new RuntimeException(e.getMessage(), e);
+      }
       return null;
     });
     return completableFuture;
