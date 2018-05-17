@@ -34,7 +34,8 @@ public class ResultItem extends JLabel {
       strBuilder
           .append("p= " + resultSetting.getTransformSetting().getDiscreteSetting().getP()
               + " s= " + resultSetting.getTransformSetting().getDiscreteSetting().getS()
-              + " n= " + resultSetting.getTransformSetting().getDiscreteSetting().getN() + "<br/>");
+              + " n= " + resultSetting.getTransformSetting().getDiscreteSetting().getN()
+              + " size= " + resultSetting.getTransformSetting().getDiscreteSetting().getSize() + "<br/>");
     }
     strBuilder
         .append("Schema: " + resultSetting.getImageSetting().getImageSchema().toString() + "<br/>");
