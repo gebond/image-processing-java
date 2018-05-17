@@ -29,11 +29,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 /**
  * Created on 17/02/18.
  */
 @DisplayName("Image Operations")
+@Disabled
 public class ImageProcessingTest {
 
   private ImageContext buildImageContext(TransformSetting.TransformationType transformationType,
