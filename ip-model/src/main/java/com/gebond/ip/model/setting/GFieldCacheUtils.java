@@ -25,11 +25,11 @@ public class GFieldCacheUtils {
   public static GField get(Vector2D<Integer> params) {
     GField cached = cache.get(params);
     if (cached == null) {
-      synchronized (GFieldCacheUtils.class) {
+//      synchronized (GFieldCacheUtils.class) {
 //      cached = cache.put(params, new GField(params)); //BREAKES DURING TEST, BUT OK DURING DEBUG
         cached = new GField(params);
         cache.put(params, cached);
-      }
+//      }
     }
     return cached;
   }
@@ -40,10 +40,10 @@ public class GFieldCacheUtils {
   public static List<Vector<Integer>> get(Vector3D<Integer> params, int number) {
     Map<Integer, List<Vector<Integer>>> cache = cacheByParamsAndNumber.get(params);
     if (cache == null) {
-      synchronized (GFieldCacheUtils.class) {
+//      synchronized (GFieldCacheUtils.class) {
         cache = buildFilledCache(params);
         cacheByParamsAndNumber.put(params, cache);
-      }
+//      }
     }
     return cache.get(number);
   }

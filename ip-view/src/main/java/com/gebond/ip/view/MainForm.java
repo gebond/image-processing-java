@@ -239,7 +239,7 @@ public class MainForm extends JFrame {
   private DiscreteSetting buildDiscreteSettings() {
     return DiscreteSetting.newDiscreteBuilder()
         .withS(Integer.valueOf(inputParamS.getText()))
-        .withP(Integer.valueOf(inputParamS.getText()))
+        .withP(Integer.valueOf(inputParamP.getText()))
         .withN(Integer.valueOf(inputParamN.getText()))
         .withSize(Integer.valueOf(inputParamSize.getText()))
         .build();

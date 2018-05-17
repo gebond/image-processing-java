@@ -278,7 +278,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
       vector.setZ(Array2D.ofNoCopy(transformation2D
           .process(FourierContext
               .start2DBuilder(vector.getZ().getArray2DNoCopy())
-              .withCompression(compressionValues.get(ImageSetting.RGB.BLUE.getOrder()))
+              .withCompression(compressionValues.get(BLUE.getOrder()))
               .withDiscrete(context.getResultSetting().getTransformSetting().getDiscreteSetting())
               .build())
           .getFourierData().getArray2DNoCopy()));
