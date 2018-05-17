@@ -12,4 +12,6 @@ public interface Vector<T> {
   void set(int i,  T value);
 
   T[] toArray();
+
+  double multiply(Vector<T> anotherVector);
 }

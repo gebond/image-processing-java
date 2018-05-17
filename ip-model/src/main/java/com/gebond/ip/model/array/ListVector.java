@@ -62,4 +62,14 @@ public class ListVector<T> implements Vector<T> {
   public T[] toArray() {
     return (T[]) values.toArray();
   }
+
+  @Override
+  //TODO !!@#!#!@#!@#
+  public double multiply(Vector<T> anotherVector) {
+    double result = 0.0;
+    for (int i = 0; i < anotherVector.getSize(); i++) {
+      result += (Integer) this.get(i) * ((Integer) anotherVector.get(i));
+    }
+    return result;
+  }
 }

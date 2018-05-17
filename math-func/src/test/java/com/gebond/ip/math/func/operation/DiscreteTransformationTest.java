@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.gebond.ip.math.func.context.FourierContext;
 import com.gebond.ip.math.func.transform.DiscreteTransformation2D;
+import com.gebond.ip.math.func.transform.FourierTransform;
+import com.gebond.ip.model.array.Vector3D;
 import com.gebond.ip.model.setting.CompressionSetting;
 import com.gebond.ip.model.setting.DiscreteSetting;
 import org.junit.jupiter.api.BeforeEach;
@@ -176,7 +178,8 @@ public class DiscreteTransformationTest {
     FourierContext.FourierContext2D context = testee.process(FourierContext
         .start2DBuilder(array)
         .withCompression(CompressionSetting.of(CompressionSetting.MAX_COMPRESSION_RATE))
-        .withDiscrete(DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).withN(1).withSize(4).build())
+        .withDiscrete(
+            DiscreteSetting.newDiscreteBuilder().withP(2).withS(2).withN(1).withSize(4).build())
         .build());
 
     assertNotNull(context);
@@ -190,5 +193,16 @@ public class DiscreteTransformationTest {
         {0, 0, 0, 0},
         {0, 0, 0, 0},
         {0, 0, 0, 0}}, result);
+  }
+
+  @Test
+  @DisplayName("complete analysis only, p=2 s=2 n=1 len=4")
+  void analysis_accept() {
+    Vector3D<Integer> params = new Vector3D<>(2, 2, 1);
+    double[] array = new double[]{10.0, -5.0, 1.0, 25.0};
+
+    double[] result = FourierTransform.DiscreteFourierTransform.doAnalysis(params, array);
+
+    assertArrayEquals(new double[]{31, 0, 0, 0}, result);
   }
 }

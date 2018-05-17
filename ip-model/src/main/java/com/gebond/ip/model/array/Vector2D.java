@@ -52,4 +52,9 @@ public class Vector2D<T> implements Vector<T> {
   public T[] toArray() {
     return vector.toArray();
   }
+
+  @Override
+  public double multiply(Vector<T> anotherVector) {
+    return 0.0;
+  }
 }

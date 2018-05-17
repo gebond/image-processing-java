@@ -146,4 +146,14 @@ class ListVectorTest {
     base.set(2, 6);
     assertNotEquals(base, testee);
   }
+
+  @Test
+  @DisplayName("ListVector multiplied")
+  void multiply_apply() {
+    Vector<Integer> base = new ListVector<>(1, 2, 3);
+    Vector<Integer> target = new ListVector<>(2, 4, 6);
+
+    assertEquals(28, base.multiply(target));
+    assertEquals(28, target.multiply(base));
+  }
 }

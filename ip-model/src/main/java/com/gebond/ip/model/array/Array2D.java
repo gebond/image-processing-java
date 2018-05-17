@@ -9,7 +9,7 @@ public class Array2D extends ArrayContainer {
 
   private double[][] array2D;
 
-  private Array2D(){
+  private Array2D() {
   }
 
   public Array2D(double[][] array) {
@@ -22,8 +22,22 @@ public class Array2D extends ArrayContainer {
     return array2D;
   }
 
-  public double[][] getArray2DNoCopy(){
+  public double[][] getArray2DNoCopy() {
     return array2D;
+  }
+
+  public double[] getRow(int rowIndex) {
+    double[] result = new double[array2D[0].length];
+    for (int j = 0; j < array2D[0].length; j++) {
+      result[j] = array2D[rowIndex][j];
+    }
+    return result;
+  }
+
+  public void setRow(int rowIndex, double[] input) {
+    for (int j = 0; j < array2D[0].length; j++) {
+      array2D[rowIndex][j] = input[j];
+    }
   }
 
   public static Array2D of(double[][] array2D) {
