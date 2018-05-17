@@ -101,14 +101,14 @@ public class ImageProcessingTest {
       assertEquals(
           imageContext.getColumnCount() * imageContext.getResultSetting().getImageSetting()
               .getSegmentSize().getValue(),
-          imageContext.getImage().getWidth());
+         imageContext.getResultSetting().getResultImage().getWidth());
       assertEquals(
           imageContext.getRowCount() * imageContext.getResultSetting().getImageSetting()
               .getSegmentSize().getValue(),
-          imageContext.getImage().getHeight());
-      saveImage(imageContext.getImage(), "8x8");
+         imageContext.getResultSetting().getResultImage().getHeight());
+      saveImage(imageContext.getResultSetting().getResultImage(), "8x8");
 
-      assertImageEqualsWithSizes(input, imageContext.getImage());
+      assertImageEqualsWithSizes(input,imageContext.getResultSetting().getResultImage());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class ImageProcessingTest {
           imageContext.getPixelList().size());
       assertEquals(1, imageContext.getPixelList().size());
 
-      saveImage(imageContext.getImage(), "9x12");
+      saveImage(imageContext.getResultSetting().getResultImage(), "9x12");
     }
 
     @Test
@@ -157,9 +157,9 @@ public class ImageProcessingTest {
       assertEquals(imageContext.getColumnCount() * imageContext.getRowCount(),
           imageContext.getPixelList().size());
       assertEquals(2, imageContext.getPixelList().size());
-      assertImageEqualsWithSizes(input, imageContext.getImage());
+      assertImageEqualsWithSizes(input,imageContext.getResultSetting().getResultImage());
 
-      saveImage(imageContext.getImage(), "8x16");
+      saveImage(imageContext.getResultSetting().getResultImage(), "8x16");
     }
 
     @Test
@@ -173,9 +173,9 @@ public class ImageProcessingTest {
       assertEquals(imageContext.getColumnCount() * imageContext.getRowCount(),
           imageContext.getPixelList().size());
       assertEquals(2, imageContext.getPixelList().size());
-      assertImageEqualsWithSizes(input, imageContext.getImage());
+      assertImageEqualsWithSizes(input, imageContext.getResultSetting().getResultImage());
 
-      saveImage(imageContext.getImage(), "16x8");
+      saveImage(imageContext.getResultSetting().getResultImage(), "16x8");
     }
 
     @Test
@@ -189,9 +189,9 @@ public class ImageProcessingTest {
       assertEquals(imageContext.getColumnCount() * imageContext.getRowCount(),
           imageContext.getPixelList().size());
       assertEquals(64, imageContext.getPixelList().size());
-      assertImageEqualsWithSizes(input, imageContext.getImage());
+      assertImageEqualsWithSizes(input,imageContext.getResultSetting().getResultImage());
 
-      saveImage(imageContext.getImage(), "64x64");
+      saveImage(imageContext.getResultSetting().getResultImage(), "64x64");
     }
 
     @Test
@@ -206,13 +206,13 @@ public class ImageProcessingTest {
           imageContext.getPixelList().size());
       assertEquals(1, imageContext.getPixelList().size());
 
-      saveImage(imageContext.getImage(), "6x5_x4");
+      saveImage(imageContext.getResultSetting().getResultImage(), "6x5_x4");
 
-      assertEquals(input.getRGB(0, 0), imageContext.getImage().getRGB(0, 0));
-      assertEquals(input.getRGB(3, 3), imageContext.getImage().getRGB(3, 3));
-      assertEquals(input.getRGB(0, 3), imageContext.getImage().getRGB(0, 3));
-      assertEquals(input.getRGB(3, 3), imageContext.getImage().getRGB(3, 3));
-      assertEquals(input.getRGB(2, 2), imageContext.getImage().getRGB(2, 2));
+      assertEquals(input.getRGB(0, 0),imageContext.getResultSetting().getResultImage().getRGB(0, 0));
+      assertEquals(input.getRGB(3, 3),imageContext.getResultSetting().getResultImage().getRGB(3, 3));
+      assertEquals(input.getRGB(0, 3),imageContext.getResultSetting().getResultImage().getRGB(0, 3));
+      assertEquals(input.getRGB(3, 3),imageContext.getResultSetting().getResultImage().getRGB(3, 3));
+      assertEquals(input.getRGB(2, 2),imageContext.getResultSetting().getResultImage().getRGB(2, 2));
     }
 
     @Test
@@ -227,9 +227,9 @@ public class ImageProcessingTest {
           imageContext.getPixelList().size());
       assertEquals(4, imageContext.getPixelList().size());
 
-      saveImage(imageContext.getImage(), "8x8_x4");
+      saveImage(imageContext.getResultSetting().getResultImage(), "8x8_x4");
 
-      assertImageEqualsWithSizes(input, imageContext.getImage());
+      assertImageEqualsWithSizes(input,imageContext.getResultSetting().getResultImage());
     }
 
     @Test
@@ -244,7 +244,7 @@ public class ImageProcessingTest {
           imageContext.getPixelList().size());
       assertEquals(2, imageContext.getPixelList().size());
 
-      saveImage(imageContext.getImage(), "6x10_x4");
+      saveImage(imageContext.getResultSetting().getResultImage(), "6x10_x4");
     }
 
     @Test
@@ -259,7 +259,7 @@ public class ImageProcessingTest {
           imageContext.getPixelList().size());
       assertEquals(6, imageContext.getPixelList().size());
 
-      saveImage(imageContext.getImage(), "9x12_x4");
+      saveImage(imageContext.getResultSetting().getResultImage(), "9x12_x4");
     }
 
     @Test
@@ -274,7 +274,7 @@ public class ImageProcessingTest {
           imageContext.getPixelList().size());
       assertEquals(3, imageContext.getPixelList().size());
 
-      saveImage(imageContext.getImage(), "13x6_x4");
+      saveImage(imageContext.getResultSetting().getResultImage(), "13x6_x4");
     }
 
     @Test
@@ -288,9 +288,9 @@ public class ImageProcessingTest {
       assertEquals(imageContext.getColumnCount() * imageContext.getRowCount(),
           imageContext.getPixelList().size());
       assertEquals(8, imageContext.getPixelList().size());
-      assertImageEqualsWithSizes(input, imageContext.getImage());
+      assertImageEqualsWithSizes(input,imageContext.getResultSetting().getResultImage());
 
-      saveImage(imageContext.getImage(), "8x16_x4");
+      saveImage(imageContext.getResultSetting().getResultImage(), "8x16_x4");
     }
 
     @Test
@@ -304,9 +304,9 @@ public class ImageProcessingTest {
       assertEquals(imageContext.getColumnCount() * imageContext.getRowCount(),
           imageContext.getPixelList().size());
       assertEquals(8, imageContext.getPixelList().size());
-      assertImageEqualsWithSizes(input, imageContext.getImage());
+      assertImageEqualsWithSizes(input,imageContext.getResultSetting().getResultImage());
 
-      saveImage(imageContext.getImage(), "16x8_x4");
+      saveImage(imageContext.getResultSetting().getResultImage(), "16x8_x4");
     }
   }
 

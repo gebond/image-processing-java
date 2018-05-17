@@ -35,7 +35,7 @@ public class ResultItem extends JLabel {
     strBuilder.append("Method: " + resultSetting.getTransformSetting().getType().name() + "<br/>");
     strBuilder
         .append("Schema: " + resultSetting.getImageSetting().getImageSchema().toString() + "<br/>");
-    strBuilder.append("Compression: " + df2.format(resultSetting.getImageSetting().getImageValues()
+    strBuilder.append("Compression: " + df2.format(resultSetting.getImageSetting().getCompressionValues()
         .values().stream()
         .mapToDouble(CompressionSetting::getCompressionRate)
         .average().getAsDouble()) + "%<br/>");

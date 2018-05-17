@@ -20,9 +20,13 @@ public class ImageContext extends OperationContext {
   private int columnCount;
   private int rowCount;
   /**
-   * list of vectors where vector contains (x-red, y-green, z-blue, ...)
+   * List of vectors where vector contains (x-red, y-green, z-blue, ...)
    */
   private List<Vector<Array2D>> pixelList;
+  /**
+   * Determines whether single threaded operations will be used or not
+   */
+  public final boolean IS_SINGLE_THREAD = false;
 
   public ImageContext() {
     startTime = System.nanoTime();

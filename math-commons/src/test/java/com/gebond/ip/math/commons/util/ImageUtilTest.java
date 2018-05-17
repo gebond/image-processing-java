@@ -11,19 +11,16 @@ class ImageUtilTest {
 
   @Test
   void normalizePixelArrayTest() {
-    double[][] input = new double[][]{
-        {100, 256, 255, -2},
-        {-100, 200, 35, 41},
-        {1, 25, 300, 45},
-        {0, -20, 39, 400}
-    };
-    double[][] normalized = new double[][]{
+    assertArrayEqualsWithDelta(new double[][]{
         {100, 255, 255, 0},
         {0, 200, 35, 41},
         {1, 25, 255, 45},
         {0, 0, 39, 255}
-    };
-
-    assertArrayEqualsWithDelta(normalized, ImageUtil.normalizePixelArray(input));
+    }, ImageUtil.normalizePixelArray(new double[][]{
+        {100, 256, 255, -2},
+        {-100, 200, 35, 41},
+        {1, 25, 300, 45},
+        {0, -20, 39, 400}
+    }));
   }
 }

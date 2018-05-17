@@ -30,6 +30,7 @@
     <!-- Plugins -->
     <junit.surefire.provider.version>1.0.1</junit.surefire.provider.version>
     <plugin.maven.surfire.version>2.19.1</plugin.maven.surfire.version>
+    <plugin.maven.jar.version>3.1.0</plugin.maven.jar.version>
   </properties>
 
   <dependencyManagement>
