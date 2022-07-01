@@ -4,8 +4,12 @@ import static gebond.ip.domain.manager.LogManager.log;
 
 import com.gebond.ip.model.metric.Metrics;
 import com.gebond.ip.model.setting.CompressionSetting;
+import com.gebond.ip.model.setting.DiscreteSetting;
+import com.gebond.ip.model.setting.DiscreteSetting.DiscreteSettingBuilder;
 import com.gebond.ip.model.setting.ImageSetting;
+import com.gebond.ip.model.setting.ImageSetting.SegmentSize;
 import com.gebond.ip.model.setting.TransformSetting;
+import com.gebond.ip.model.setting.TransformSetting.TransformationType;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +56,7 @@ public class MainForm extends JFrame {
   protected JRadioButton sizeX8RadioButton;
   protected JRadioButton sizeX16RadioButton;
   protected JRadioButton sizeX32RadioButton;
-  protected JTextField a3TextField;
+  protected JTextField inputParamP;
   protected JButton cancelButton;
   protected JProgressBar progressBar1;
   protected JPanel emptyPanel;
@@ -65,10 +69,17 @@ public class MainForm extends JFrame {
   protected JLabel sliderLabel2;
   protected JLabel sliderLabel3;
   protected JLabel totalValue;
-  private JPanel metricsPanel;
-  private JCheckBox MSECheckBox;
-  private JCheckBox PSNRCheckBox;
-  private JLabel metricsLabel;
+  protected JPanel metricsPanel;
+  protected JCheckBox MSECheckBox;
+  protected JCheckBox PSNRCheckBox;
+  protected JLabel metricsLabel;
+  protected JTextField inputParamS;
+  protected JLabel labelParamS;
+  protected JLabel labelParamP;
+  protected JTextField inputParamN;
+  protected JLabel labelParamN;
+  protected JTextField inputParamSize;
+  protected JLabel labelParamSize;
 
   public MainForm() {
     super("Processing Form");
@@ -222,10 +233,28 @@ public class MainForm extends JFrame {
     }
     return builder
         .withType((TransformSetting.TransformationType) selectMethodBox.getSelectedItem())
+        .withDiscreteSettings(buildDiscreteSettings())
         .build();
   }
 
+  private DiscreteSetting buildDiscreteSettings() {
+    DiscreteSettingBuilder builder;
+    try {
+      builder = DiscreteSetting.newDiscreteBuilder()
+          .withS(Integer.valueOf(inputParamS.getText()))
+          .withP(Integer.valueOf(inputParamP.getText()))
+          .withN(Integer.valueOf(inputParamN.getText()))
+          .withSize(Integer.valueOf(inputParamSize.getText()));
+    } catch (NumberFormatException ex) {
+      throw new NumberFormatException("Not a number! " +  ex.getMessage());
+    }
+    return builder.build();
+  }
+
   private ImageSetting.SegmentSize buildSegmentSize() {
+    if (selectMethodBox.getSelectedItem().equals(TransformationType.DISCRETE_TRANSFORM)) {
+      return SegmentSize.CUSTOM;
+    }
     if (sizeX8RadioButton.isSelected()) {
       return ImageSetting.SegmentSize.X8;
     }

@@ -36,4 +36,14 @@ public class ArrayUtil {
     }
     return target;
   }
+
+  /**
+   * produces exception if source array is null
+   */
+  public static <T> T[] copyOf(T[] source) {
+    if (source == null) {
+      throw new IllegalArgumentException();
+    }
+    return Arrays.copyOf(source, source.length);
+  }
 }

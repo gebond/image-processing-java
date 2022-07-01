@@ -1,9 +1,8 @@
 package com.gebond.ip.math.func.image;
 
-import static com.gebond.ip.math.commons.util.ImageUtil.normalizePixelArray;
-import static com.gebond.ip.math.func.util.ProcessingUtil.buildTransformForType;
-import static com.gebond.ip.model.converter.ConverterUtil.converRGBToYCrCb;
+import static com.gebond.ip.math.commons.util.ImageUtil.normalizePixelArrayNoCopy;
 import static com.gebond.ip.model.converter.ConverterUtil.converYCrCbToRGB;
+import static com.gebond.ip.model.converter.ConverterUtil.convertRGBToYCrCb;
 import static com.gebond.ip.model.metric.Metrics.MetricsType.MSE;
 import static com.gebond.ip.model.metric.Metrics.MetricsType.PSNR;
 import static com.gebond.ip.model.setting.ImageSetting.RGB.BLUE;
@@ -13,13 +12,18 @@ import static org.apache.commons.math3.util.FastMath.abs;
 import static org.apache.commons.math3.util.FastMath.pow;
 
 import com.gebond.ip.math.func.context.FourierContext;
+import com.gebond.ip.math.func.context.FourierContext.FourierContext2D;
 import com.gebond.ip.math.func.context.ImageContext;
 import com.gebond.ip.math.func.operation.Operation;
 import com.gebond.ip.math.func.operation.OperationManager;
+import com.gebond.ip.math.func.transform.DiscreteTransformation2D;
+import com.gebond.ip.math.func.transform.HaartTransformation2D;
+import com.gebond.ip.math.func.transform.WalshTransformation2D;
 import com.gebond.ip.model.array.Array2D;
-import com.gebond.ip.model.array.Vector;
+import com.gebond.ip.model.array.Vector3D;
 import com.gebond.ip.model.setting.CompressionSetting;
 import com.gebond.ip.model.setting.ImageSetting;
+import com.gebond.ip.model.setting.ImageSetting.SegmentSize;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -38,10 +42,10 @@ public class ImageProcessing extends OperationManager<ImageContext> {
   public List<Operation<ImageContext>> getOperations() {
     return Arrays.asList(
         new ValidationOperation(),
+        new AdjustingContextOperation(),
         new SplittingOperation(),
         new PreProcessingOperation(),
-        new ConsistentProcessingOperation(),
-        new ConcurrentOperation(),
+        new ImageProcessingOperation(),
         new PostProcessingOperation(),
         new BuildingOperation(),
         new CalculateMetricsOperation(),
@@ -81,6 +85,43 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     }
   }
 
+  public static class AdjustingContextOperation implements Operation<ImageContext> {
+
+    @Override
+    public boolean validate(ImageContext context) throws IllegalArgumentException {
+      return true;
+    }
+
+    @Override
+    public void apply(ImageContext context) {
+      OperationManager<FourierContext2D> transformation2D;
+      switch (context.getResultSetting().getTransformSetting().getType()) {
+        case HAART_TRANSFORM:
+          transformation2D = new HaartTransformation2D();
+          break;
+        case WALSH_TRANSFORM:
+          transformation2D = new WalshTransformation2D();
+          break;
+        case DISCRETE_TRANSFORM:
+          transformation2D = new DiscreteTransformation2D();
+          break;
+        default:
+          throw new IllegalArgumentException("Unrecognized transformation type");
+      }
+      context.setTransformation2D(transformation2D);
+
+      int size;
+      if (context.getResultSetting().getImageSetting().getSegmentSize()
+          .equals(SegmentSize.CUSTOM)) {
+        size = context.getResultSetting().getTransformSetting().getDiscreteSetting().getSize();
+      } else {
+        size = context.getResultSetting().getImageSetting().getSegmentSize().getValue();
+      }
+      context.setSize(size);
+    }
+  }
+
+
   public static class SplittingOperation implements Operation<ImageContext> {
 
     @Override
@@ -93,9 +134,9 @@ public class ImageProcessing extends OperationManager<ImageContext> {
         throw new IllegalArgumentException("Segment size is null");
       }
       if (context.getResultSetting().getImageSetting().getSourceImage().getHeight() < context
-          .getResultSetting().getImageSetting().getSegmentSize().getValue()
+          .getSize()
           || context.getResultSetting().getImageSetting().getSourceImage().getWidth() < context
-          .getResultSetting().getImageSetting().getSegmentSize().getValue()) {
+          .getSize()) {
         throw new IllegalArgumentException("Height or Width must be more than segment size");
       }
       return true;
@@ -104,8 +145,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     @Override
     public void apply(ImageContext context) {
       BufferedImage bufferedImage = context.getResultSetting().getImageSetting().getSourceImage();
-
-      int size = context.getResultSetting().getImageSetting().getSegmentSize().getValue();
+      int size = context.getSize();
       context.setRowCount(bufferedImage.getHeight() / size);
       context.setColumnCount(bufferedImage.getWidth() / size);
 
@@ -116,7 +156,7 @@ public class ImageProcessing extends OperationManager<ImageContext> {
       }
     }
 
-    private Vector<Array2D> buildVector(BufferedImage bufferedImage, int rowCurrent,
+    private Vector3D<Array2D> buildVector(BufferedImage bufferedImage, int rowCurrent,
         int columnCurrent, int size) {
       double[][] arrayReds = new double[size][size];
       double[][] arrayGreens = new double[size][size];
@@ -131,29 +171,27 @@ public class ImageProcessing extends OperationManager<ImageContext> {
           arrayBlues[x][y] = color.getBlue();
         }
       }
-      Vector<Array2D> vector = new Vector<>(
-          new Array2D(arrayReds),
-          new Array2D(arrayGreens),
-          new Array2D(arrayBlues));
+      Vector3D<Array2D> vector = new Vector3D<>(
+          Array2D.ofNoCopy(arrayReds),
+          Array2D.ofNoCopy(arrayGreens),
+          Array2D.ofNoCopy(arrayBlues));
       return vector;
     }
   }
 
-  public static class PreProcessingOperation implements Operation<ImageContext> {
+  public static class PreProcessingOperation extends PixelVectorAsyncOperation {
 
     @Override
     public boolean validate(ImageContext context) throws IllegalArgumentException {
-      return context.getPixelList().size() > 0;
+      return context.getPixelList().size() > 0 && context.getResultSetting().getImageSetting()
+          .getImageSchema()
+          .equals(ImageSetting.ImageSchema.YCRCB);
     }
 
     @Override
-    public void apply(ImageContext context) {
-      if (context.getResultSetting().getImageSetting().getImageSchema()
-          .equals(ImageSetting.ImageSchema.YCRCB)) {
-        for (Vector<Array2D> vector : context.getPixelList()) {
-          converRGBToYCrCb(vector);
-        }
-      }
+    protected Vector3D<Array2D> applyAsync(Vector3D<Array2D> vector, ImageContext context) {
+      convertRGBToYCrCb(vector);
+      return vector;
     }
   }
 
@@ -176,10 +214,8 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     @Override
     public void apply(ImageContext context) {
       BufferedImage newImage = new BufferedImage(
-          context.getColumnCount() * context.getResultSetting().getImageSetting().getSegmentSize()
-              .getValue(),
-          context.getRowCount() * context.getResultSetting().getImageSetting().getSegmentSize()
-              .getValue(),
+          context.getColumnCount() * context.getSize(),
+          context.getRowCount() * context.getSize(),
           BufferedImage.TYPE_INT_RGB);
       for (int i = 0; i < context.getRowCount(); i++) {
         for (int j = 0; j < context.getColumnCount(); j++) {
@@ -188,17 +224,17 @@ public class ImageProcessing extends OperationManager<ImageContext> {
               context.getPixelList().get(i * context.getColumnCount() + j),
               i,
               j,
-              context.getResultSetting().getImageSetting().getSegmentSize().getValue());
+              context.getSize());
         }
       }
       context.getResultSetting().setResultImage(newImage);
     }
 
-    private void applyVector(BufferedImage image, Vector<Array2D> vector, int rowCurrent,
+    private void applyVector(BufferedImage image, Vector3D<Array2D> vector, int rowCurrent,
         int columnCurrent, int size) {
-      double[][] arrayReds = vector.getX().getArray2DCopy();
-      double[][] arrayGreens = vector.getY().getArray2DCopy();
-      double[][] arrayBlues = vector.getZ().getArray2DCopy();
+      double[][] arrayReds = vector.getX().getArray2DNoCopy();
+      double[][] arrayGreens = vector.getY().getArray2DNoCopy();
+      double[][] arrayBlues = vector.getZ().getArray2DNoCopy();
       for (int x = 0; x < size; x++) {
         for (int y = 0; y < size; y++) {
           Color color = new Color(
@@ -211,129 +247,64 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     }
   }
 
-  public static class ConcurrentOperation extends TransformationOperation {
+  public static class ImageProcessingOperation extends PixelVectorAsyncOperation {
 
     @Override
     public boolean validate(ImageContext context) throws IllegalArgumentException {
-      return !context.IS_SINGLE_THREAD;
+      return context.getPixelList().size() > 0 && context.getTransformation2D() != null;
     }
 
     @Override
-    public void apply(ImageContext context) {
-      OperationManager<FourierContext.FourierContext2D> transformation2D = buildTransformForType(
-          context.getResultSetting().getTransformSetting().getType());
+    protected Vector3D<Array2D> applyAsync(Vector3D<Array2D> vector, ImageContext context) {
+      OperationManager<FourierContext2D> transformation2D = context.getTransformation2D();
+      Map<Integer, CompressionSetting> compressionValues = context.getResultSetting()
+          .getImageSetting().getCompressionValues();
 
-      List<Vector<Array2D>> pixelList = context.getPixelList();
-      List<CompletableFuture<Vector<Array2D>>> futures =
-          pixelList.stream()
-              .map(v -> CompletableFuture.supplyAsync(() -> applyAsync(v, transformation2D,
-                  context.getResultSetting().getImageSetting().getCompressionValues())))
-              .collect(Collectors.toList());
-      List<Vector<Array2D>> result =
-          futures.stream()
-              .map(CompletableFuture::join)
-              .collect(Collectors.toList());
-      context.setPixelList(result);
-    }
-
-    private Vector<Array2D> applyAsync(Vector<Array2D> vector,
-        OperationManager<FourierContext.FourierContext2D> transformation2D,
-        Map<Integer, CompressionSetting> compressionSettingMap) {
-      vector.setX(new Array2D(transformation2D
-          .process(FourierContext.start2DBuilder(vector.getX().getArray2DCopy())
-              .withCompression(compressionSettingMap.get(RED.getOrder()))
-              .build())
-          .getFourierData().getArray2DCopy()));
-      vector.setY(new Array2D(transformation2D
+      System.out.println("Starts in thread# " + Thread.currentThread().getId());
+      vector.setX(Array2D.ofNoCopy(transformation2D
           .process(FourierContext
-              .start2DBuilder(vector.getY().getArray2DCopy())
-              .withCompression(compressionSettingMap.get(GREEN.getOrder()))
+              .start2DBuilder(vector.getX().getArray2DNoCopy())
+              .withCompression(compressionValues.get(RED.getOrder()))
+              .withDiscrete(context.getResultSetting().getTransformSetting().getDiscreteSetting())
               .build())
-          .getFourierData().getArray2DCopy()));
-      vector.setZ(new Array2D(transformation2D
+          .getFourierData().getArray2DNoCopy()));
+      vector.setY(Array2D.ofNoCopy(transformation2D
           .process(FourierContext
-              .start2DBuilder(vector.getZ().getArray2DCopy())
-              .withCompression(compressionSettingMap.get(ImageSetting.RGB.BLUE.getOrder()))
+              .start2DBuilder(vector.getY().getArray2DNoCopy())
+              .withCompression(compressionValues.get(GREEN.getOrder()))
+              .withDiscrete(context.getResultSetting().getTransformSetting().getDiscreteSetting())
               .build())
-          .getFourierData().getArray2DCopy()));
+          .getFourierData().getArray2DNoCopy()));
+      vector.setZ(Array2D.ofNoCopy(transformation2D
+          .process(FourierContext
+              .start2DBuilder(vector.getZ().getArray2DNoCopy())
+              .withCompression(compressionValues.get(BLUE.getOrder()))
+              .withDiscrete(context.getResultSetting().getTransformSetting().getDiscreteSetting())
+              .build())
+          .getFourierData().getArray2DNoCopy()));
       return vector;
     }
   }
 
-  public static abstract class TransformationOperation implements Operation<ImageContext> {
+  public static class PostProcessingOperation extends PixelVectorAsyncOperation {
 
     @Override
-    public boolean validate(ImageContext context) throws IllegalArgumentException {
-      if (context.getPixelList() == null || context.getPixelList().isEmpty()) {
-        throw new IllegalArgumentException("Pixel array = null or empty");
+    protected Vector3D<Array2D> applyAsync(Vector3D<Array2D> vector, ImageContext context) {
+      if (context.getResultSetting().getImageSetting().getImageSchema()
+          .equals(ImageSetting.ImageSchema.YCRCB)) {
+        converYCrCbToRGB(vector);
       }
-      if (context.getResultSetting().getTransformSetting().getType() == null) {
-        throw new IllegalArgumentException("Transformation type is null");
-      }
-      return true;
-    }
-  }
-
-  public static class ConsistentProcessingOperation extends TransformationOperation {
-
-    @Override
-    public boolean validate(ImageContext context) throws IllegalArgumentException {
-      return context.IS_SINGLE_THREAD;
-    }
-
-    @Override
-    public void apply(ImageContext context) {
-      OperationManager<FourierContext.FourierContext2D> transformation2D = buildTransformForType(
-          context.getResultSetting().getTransformSetting().getType());
-      for (Vector<Array2D> vector : context.getPixelList()) {
-        // TODO change hardcoded vector size to generic. Should depend on Schema.amount
-        vector.setX(new Array2D(transformation2D
-            .process(FourierContext.start2DBuilder(vector.getX().getArray2DCopy())
-                .withCompression(context.getResultSetting().getImageSetting().getCompressionValues()
-                    .get(RED.getOrder()))
-                .build())
-            .getFourierData().getArray2DCopy()));
-        vector.setY(new Array2D(transformation2D
-            .process(FourierContext
-                .start2DBuilder(vector.getY().getArray2DCopy())
-                .withCompression(context.getResultSetting().getImageSetting().getCompressionValues()
-                    .get(GREEN.getOrder()))
-                .build())
-            .getFourierData().getArray2DCopy()));
-        vector.setZ(new Array2D(transformation2D
-            .process(FourierContext
-                .start2DBuilder(vector.getZ().getArray2DCopy())
-                .withCompression(context.getResultSetting().getImageSetting().getCompressionValues()
-                    .get(ImageSetting.RGB.BLUE.getOrder()))
-                .build())
-            .getFourierData().getArray2DCopy()));
-      }
-    }
-  }
-
-  public static class PostProcessingOperation implements Operation<ImageContext> {
-
-    @Override
-    public boolean validate(ImageContext context) throws IllegalArgumentException {
-      return context.getPixelList().size() > 0;
-    }
-
-    @Override
-    public void apply(ImageContext context) {
-      for (Vector<Array2D> vector : context.getPixelList()) {
-        if (context.getResultSetting().getImageSetting().getImageSchema()
-            .equals(ImageSetting.ImageSchema.YCRCB)) {
-          converYCrCbToRGB(vector);
-        }
-        vector.setX(applyPostProcessing(vector.getX()));
-        vector.setY(applyPostProcessing(vector.getY()));
-        vector.setZ(applyPostProcessing(vector.getZ()));
-      }
+      vector.setX(applyPostProcessing(vector.getX()));
+      vector.setY(applyPostProcessing(vector.getY()));
+      vector.setZ(applyPostProcessing(vector.getZ()));
+      return vector;
     }
 
     private Array2D applyPostProcessing(Array2D sourceArray) {
-      double[][] array2D = normalizePixelArray(sourceArray.getArray2DCopy());
-      return new Array2D(array2D);
+      normalizePixelArrayNoCopy(sourceArray.getArray2DNoCopy());
+      return sourceArray;
+//      double[][] array2D = normalizePixelArray(sourceArray.getArray2DCopy());
+//      return new Array2D(array2D);
     }
   }
 
@@ -414,6 +385,31 @@ public class ImageProcessing extends OperationManager<ImageContext> {
     public void apply(ImageContext context) {
       final long actualTime = System.nanoTime();
       context.getResultSetting().setTimeInMilles(actualTime - context.getStartTime());
+    }
+  }
+
+  public static abstract class PixelVectorAsyncOperation implements Operation<ImageContext> {
+
+    protected abstract Vector3D<Array2D> applyAsync(Vector3D<Array2D> vector, ImageContext context);
+
+    @Override
+    public boolean validate(ImageContext context) throws IllegalArgumentException {
+      return context.getPixelList().size() > 0;
+    }
+
+    @Override
+    public void apply(ImageContext context) {
+      List<Vector3D<Array2D>> pixelList = context.getPixelList();
+      List<CompletableFuture<Vector3D<Array2D>>> futures =
+          pixelList.stream()
+              .map(v -> CompletableFuture
+                  .supplyAsync(() -> applyAsync(v, context)))
+              .collect(Collectors.toList());
+      List<Vector3D<Array2D>> result =
+          futures.stream()
+              .map(CompletableFuture::join)
+              .collect(Collectors.toList());
+      context.setPixelList(result);
     }
   }
 }

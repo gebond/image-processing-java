@@ -13,6 +13,7 @@ public class TransformSetting {
   private TransformationType type;
   @Deprecated
   private CompressionSetting compressionSetting;
+  private DiscreteSetting discreteSetting;
 
   public TransformSetting() {
     metricsTypes = new HashSet<>();
@@ -39,6 +40,13 @@ public class TransformSetting {
     return compressionSetting;
   }
 
+  public DiscreteSetting getDiscreteSetting() {
+    return discreteSetting;
+  }
+
+  public void setDiscreteSetting(DiscreteSetting discreteSetting) {
+    this.discreteSetting = discreteSetting;
+  }
 
   public enum TransformationType {
     HAART_TRANSFORM {
@@ -82,6 +90,11 @@ public class TransformSetting {
     @Deprecated
     public TransformSettingBuilder withCompression(CompressionSetting compression) {
       this.transformSetting.compressionSetting = compression;
+      return this;
+    }
+
+    public TransformSettingBuilder withDiscreteSettings(DiscreteSetting discreteSetting) {
+      this.transformSetting.discreteSetting = discreteSetting;
       return this;
     }
 

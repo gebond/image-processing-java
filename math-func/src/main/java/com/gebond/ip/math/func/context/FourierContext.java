@@ -1,5 +1,6 @@
 package com.gebond.ip.math.func.context;
 
+import com.gebond.ip.model.setting.DiscreteSetting;
 import com.gebond.ip.model.array.Array1D;
 import com.gebond.ip.model.array.Array2D;
 import com.gebond.ip.model.array.ArrayContainer;
@@ -14,6 +15,7 @@ public abstract class FourierContext<
 
   protected T fourierData;
   protected C compressionSetting;
+  protected DiscreteSetting discreteSettings;
 
   public static FourierContext1D fromArray(double[] array) {
     return new FourierContext1D(array);
@@ -66,6 +68,11 @@ public abstract class FourierContext<
       return this;
     }
 
+    public FourierContext2DBuilder withDiscrete(DiscreteSetting setting) {
+      fourierContext.discreteSettings = setting;
+      return this;
+    }
+
     public FourierContext2D build() {
       return fourierContext;
     }
@@ -91,7 +98,7 @@ public abstract class FourierContext<
   public static class FourierContext2D extends FourierContext<Array2D, CompressionSetting> {
 
     public FourierContext2D(double[][] array) {
-      this.fourierData = new Array2D(array);
+      this.fourierData = Array2D.ofNoCopy(array);
     }
 
     @Override
@@ -102,6 +109,10 @@ public abstract class FourierContext<
     @Override
     public CompressionSetting getCompressionSetting() {
       return super.compressionSetting;
+    }
+
+    public DiscreteSetting getDiscreteSetting() {
+      return super.discreteSettings;
     }
   }
 }

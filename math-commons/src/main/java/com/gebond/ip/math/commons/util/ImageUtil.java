@@ -58,4 +58,25 @@ public class ImageUtil {
     return result;
   }
 
+  /**
+   * Normalize pixel array
+   *
+   * @param pixelArray input array of pixel values
+   * @return normalized array
+   */
+  public static void normalizePixelArrayNoCopy(double[][] pixelArray) {
+    for (int i = 0; i < pixelArray.length; i++) {
+      for (int j = 0; j < pixelArray[0].length; j++) {
+        double val = pixelArray[i][j];
+        if (val < 0) {
+          pixelArray[i][j] = 0;
+          continue;
+        }
+        if (val > 255) {
+          pixelArray[i][j] = 255;
+        }
+      }
+    }
+  }
+
 }

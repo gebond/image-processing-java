@@ -1,7 +1,9 @@
 package com.gebond.ip.math.func.context;
 
+import com.gebond.ip.math.func.context.FourierContext.FourierContext2D;
+import com.gebond.ip.math.func.operation.OperationManager;
 import com.gebond.ip.model.array.Array2D;
-import com.gebond.ip.model.array.Vector;
+import com.gebond.ip.model.array.Vector3D;
 import com.gebond.ip.model.setting.ImageSetting;
 import com.gebond.ip.model.setting.ResultSetting;
 import com.gebond.ip.model.setting.TransformSetting;
@@ -19,14 +21,13 @@ public class ImageContext extends OperationContext {
   private BufferedImage image;
   private int columnCount;
   private int rowCount;
+  private int size;
+  private OperationManager<FourierContext2D> transformation2D;
+
   /**
    * List of vectors where vector contains (x-red, y-green, z-blue, ...)
    */
-  private List<Vector<Array2D>> pixelList;
-  /**
-   * Determines whether single threaded operations will be used or not
-   */
-  public final boolean IS_SINGLE_THREAD = false;
+  private List<Vector3D<Array2D>> pixelList;
 
   public ImageContext() {
     startTime = System.nanoTime();
@@ -68,16 +69,33 @@ public class ImageContext extends OperationContext {
     this.rowCount = rowCount;
   }
 
-  public List<Vector<Array2D>> getPixelList() {
+  public List<Vector3D<Array2D>> getPixelList() {
     return pixelList;
   }
 
-  public void setPixelList(List<Vector<Array2D>> pixelList) {
+  public void setPixelList(List<Vector3D<Array2D>> pixelList) {
     this.pixelList = pixelList;
   }
 
   public ResultSetting getResultSetting() {
     return resultSetting;
+  }
+
+  public OperationManager<FourierContext2D> getTransformation2D() {
+    return transformation2D;
+  }
+
+  public void setTransformation2D(
+      OperationManager<FourierContext2D> transformation2D) {
+    this.transformation2D = transformation2D;
+  }
+
+  public void setSize(int size) {
+    this.size = size;
+  }
+
+  public int getSize() {
+    return size;
   }
 
   public static class ImageContextBuilder {

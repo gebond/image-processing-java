@@ -5,6 +5,8 @@ import static org.apache.commons.math3.util.FastMath.abs;
 import static org.apache.commons.math3.util.FastMath.log;
 import static org.apache.commons.math3.util.FastMath.pow;
 
+import org.apache.commons.math3.util.FastMath;
+
 /**
  * Created by Gleb on 18.10.2017.
  */
@@ -116,5 +118,12 @@ public class Functions {
       x = 1 - (abs(x) - (int) abs(x));
     }
     return x;
+  }
+
+  /**
+   * Gets length using p, s, N
+   */
+  public static int discreteLength(int p, int s, int N) {
+    return (int) FastMath.pow(p, s * N);
   }
 }

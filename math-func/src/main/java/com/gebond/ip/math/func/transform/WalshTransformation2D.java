@@ -55,7 +55,7 @@ public class WalshTransformation2D extends OperationManager<FourierContext.Fouri
 
     @Override
     public void apply(FourierContext.FourierContext2D context) {
-      double[][] input = context.getFourierData().getArray2DCopy();
+      double[][] input = context.getFourierData().getArray2DNoCopy();
       int length = input.length;
       double[] unit = new double[length];
       // 1st step: applying transformation to cols
